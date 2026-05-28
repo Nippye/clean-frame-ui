@@ -1,4 +1,5 @@
 import { ChevronDown } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 import { Logo } from "./Logo";
 import { Button } from "@/components/ui/button";
 
@@ -25,9 +26,9 @@ export function Navbar() {
           </ul>
         </div>
         <div className="flex items-center gap-3">
-          <a href="#" className="hidden text-sm text-zinc-300 hover:text-white sm:inline">
-            Log in
-          </a>
+          <Link to="/app" className="hidden text-sm text-zinc-300 hover:text-white sm:inline">
+            Open app
+          </Link>
           <Button
             variant="outline"
             className="hidden h-9 rounded-md border-white/15 bg-transparent px-4 text-sm font-medium text-white hover:bg-white/5 sm:inline-flex"
