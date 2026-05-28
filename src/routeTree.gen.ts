@@ -9,38 +9,156 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as AppRouteImport } from './routes/app'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AppIndexRouteImport } from './routes/app.index'
+import { Route as AppRulesRouteImport } from './routes/app.rules'
+import { Route as AppRecoveryRouteImport } from './routes/app.recovery'
+import { Route as AppProofRouteImport } from './routes/app.proof'
+import { Route as AppIncidentsRouteImport } from './routes/app.incidents'
+import { Route as AppConnectorsRouteImport } from './routes/app.connectors'
+import { Route as AppEventsIndexRouteImport } from './routes/app.events.index'
+import { Route as AppEventsEventIdRouteImport } from './routes/app.events.$eventId'
 
+const AppRoute = AppRouteImport.update({
+  id: '/app',
+  path: '/app',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AppIndexRoute = AppIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppRulesRoute = AppRulesRouteImport.update({
+  id: '/rules',
+  path: '/rules',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppRecoveryRoute = AppRecoveryRouteImport.update({
+  id: '/recovery',
+  path: '/recovery',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppProofRoute = AppProofRouteImport.update({
+  id: '/proof',
+  path: '/proof',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppIncidentsRoute = AppIncidentsRouteImport.update({
+  id: '/incidents',
+  path: '/incidents',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppConnectorsRoute = AppConnectorsRouteImport.update({
+  id: '/connectors',
+  path: '/connectors',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppEventsIndexRoute = AppEventsIndexRouteImport.update({
+  id: '/events/',
+  path: '/events/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppEventsEventIdRoute = AppEventsEventIdRouteImport.update({
+  id: '/events/$eventId',
+  path: '/events/$eventId',
+  getParentRoute: () => AppRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/app': typeof AppRouteWithChildren
+  '/app/connectors': typeof AppConnectorsRoute
+  '/app/incidents': typeof AppIncidentsRoute
+  '/app/proof': typeof AppProofRoute
+  '/app/recovery': typeof AppRecoveryRoute
+  '/app/rules': typeof AppRulesRoute
+  '/app/': typeof AppIndexRoute
+  '/app/events/$eventId': typeof AppEventsEventIdRoute
+  '/app/events/': typeof AppEventsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/app/connectors': typeof AppConnectorsRoute
+  '/app/incidents': typeof AppIncidentsRoute
+  '/app/proof': typeof AppProofRoute
+  '/app/recovery': typeof AppRecoveryRoute
+  '/app/rules': typeof AppRulesRoute
+  '/app': typeof AppIndexRoute
+  '/app/events/$eventId': typeof AppEventsEventIdRoute
+  '/app/events': typeof AppEventsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/app': typeof AppRouteWithChildren
+  '/app/connectors': typeof AppConnectorsRoute
+  '/app/incidents': typeof AppIncidentsRoute
+  '/app/proof': typeof AppProofRoute
+  '/app/recovery': typeof AppRecoveryRoute
+  '/app/rules': typeof AppRulesRoute
+  '/app/': typeof AppIndexRoute
+  '/app/events/$eventId': typeof AppEventsEventIdRoute
+  '/app/events/': typeof AppEventsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/app'
+    | '/app/connectors'
+    | '/app/incidents'
+    | '/app/proof'
+    | '/app/recovery'
+    | '/app/rules'
+    | '/app/'
+    | '/app/events/$eventId'
+    | '/app/events/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/app/connectors'
+    | '/app/incidents'
+    | '/app/proof'
+    | '/app/recovery'
+    | '/app/rules'
+    | '/app'
+    | '/app/events/$eventId'
+    | '/app/events'
+  id:
+    | '__root__'
+    | '/'
+    | '/app'
+    | '/app/connectors'
+    | '/app/incidents'
+    | '/app/proof'
+    | '/app/recovery'
+    | '/app/rules'
+    | '/app/'
+    | '/app/events/$eventId'
+    | '/app/events/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AppRoute: typeof AppRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/app': {
+      id: '/app'
+      path: '/app'
+      fullPath: '/app'
+      preLoaderRoute: typeof AppRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,11 +166,92 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/app/': {
+      id: '/app/'
+      path: '/'
+      fullPath: '/app/'
+      preLoaderRoute: typeof AppIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/rules': {
+      id: '/app/rules'
+      path: '/rules'
+      fullPath: '/app/rules'
+      preLoaderRoute: typeof AppRulesRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/recovery': {
+      id: '/app/recovery'
+      path: '/recovery'
+      fullPath: '/app/recovery'
+      preLoaderRoute: typeof AppRecoveryRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/proof': {
+      id: '/app/proof'
+      path: '/proof'
+      fullPath: '/app/proof'
+      preLoaderRoute: typeof AppProofRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/incidents': {
+      id: '/app/incidents'
+      path: '/incidents'
+      fullPath: '/app/incidents'
+      preLoaderRoute: typeof AppIncidentsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/connectors': {
+      id: '/app/connectors'
+      path: '/connectors'
+      fullPath: '/app/connectors'
+      preLoaderRoute: typeof AppConnectorsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/events/': {
+      id: '/app/events/'
+      path: '/events'
+      fullPath: '/app/events/'
+      preLoaderRoute: typeof AppEventsIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/events/$eventId': {
+      id: '/app/events/$eventId'
+      path: '/events/$eventId'
+      fullPath: '/app/events/$eventId'
+      preLoaderRoute: typeof AppEventsEventIdRouteImport
+      parentRoute: typeof AppRoute
+    }
   }
 }
 
+interface AppRouteChildren {
+  AppConnectorsRoute: typeof AppConnectorsRoute
+  AppIncidentsRoute: typeof AppIncidentsRoute
+  AppProofRoute: typeof AppProofRoute
+  AppRecoveryRoute: typeof AppRecoveryRoute
+  AppRulesRoute: typeof AppRulesRoute
+  AppIndexRoute: typeof AppIndexRoute
+  AppEventsEventIdRoute: typeof AppEventsEventIdRoute
+  AppEventsIndexRoute: typeof AppEventsIndexRoute
+}
+
+const AppRouteChildren: AppRouteChildren = {
+  AppConnectorsRoute: AppConnectorsRoute,
+  AppIncidentsRoute: AppIncidentsRoute,
+  AppProofRoute: AppProofRoute,
+  AppRecoveryRoute: AppRecoveryRoute,
+  AppRulesRoute: AppRulesRoute,
+  AppIndexRoute: AppIndexRoute,
+  AppEventsEventIdRoute: AppEventsEventIdRoute,
+  AppEventsIndexRoute: AppEventsIndexRoute,
+}
+
+const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AppRoute: AppRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
