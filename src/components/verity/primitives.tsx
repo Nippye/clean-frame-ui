@@ -20,7 +20,7 @@ import type { SystemKey, Tone } from "@/lib/verity-fixtures";
 /* VerificationSurface — universal panel shell                         */
 /* ------------------------------------------------------------------ */
 
-type SurfaceProps = React.HTMLAttributes<HTMLDivElement> & {
+type SurfaceProps = Omit<React.HTMLAttributes<HTMLDivElement>, "title"> & {
   variant?: "default" | "inset" | "ledger";
   title?: React.ReactNode;
   eyebrow?: React.ReactNode;
