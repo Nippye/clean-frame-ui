@@ -60,27 +60,27 @@ export function CorrectnessCertificate({
       {/* Seal */}
       <div
         className={cn(
-          "absolute right-5 top-5 flex h-16 w-16 items-center justify-center rounded-full ring-2",
+          "absolute right-4 top-4 flex h-12 w-12 items-center justify-center rounded-full ring-2",
           sealStyles[status],
         )}
       >
         <div className="text-center">
-          <ShieldCheck className="mx-auto h-5 w-5" />
-          <div className="mt-0.5 text-[9px] font-semibold uppercase tracking-[0.12em]">
+          <ShieldCheck className="mx-auto h-4 w-4" />
+          <div className="mt-0.5 text-[8px] font-semibold uppercase tracking-[0.1em]">
             {status === "Verified" ? "Sealed" : status === "Divergent" ? "Flagged" : "Open"}
           </div>
         </div>
       </div>
 
-      <div className="border-b border-white/5 px-5 py-4">
+      <div className="border-b border-white/5 px-5 py-4 pr-20">
         <div className="text-[10px] font-medium uppercase tracking-[0.16em] text-indigo-300">
           Correctness Certificate
         </div>
-        <div className="mt-1 font-mono text-sm text-white">{verificationId}</div>
+        <div className="mt-1 truncate font-mono text-sm text-white">{verificationId}</div>
         <div className="mt-0.5 text-[11px] text-zinc-500">Issued {timestamp}</div>
       </div>
 
-      <dl className="grid grid-cols-2 gap-x-6 gap-y-3 px-5 py-4 text-[11px] sm:grid-cols-4">
+      <dl className="grid grid-cols-2 gap-x-6 gap-y-3 px-5 py-4 text-[11px]">
         <CertField label="Systems checked" value={String(systemsChecked)} />
         <CertField
           label="Divergences"
