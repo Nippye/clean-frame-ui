@@ -21,6 +21,7 @@ export function TrustMetric({
   icon,
   tone = "neutral",
   className,
+  valueClassName,
 }: TrustMetricProps) {
   const deltaTone =
     tone === "positive"
@@ -41,7 +42,7 @@ export function TrustMetric({
         </span>
         {icon && <span className="text-zinc-500">{icon}</span>}
       </div>
-      <div className="mt-2 text-2xl font-semibold tabular-nums text-white">{value}</div>
+      <div className={cn("mt-2 text-2xl font-semibold tabular-nums text-white", valueClassName)}>{value}</div>
       <div className="mt-1 flex items-center gap-2 text-[11px]">
         {delta && <span className={cn("font-medium", deltaTone)}>{delta}</span>}
         {sub && <span className="text-zinc-500">{sub}</span>}
