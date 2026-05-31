@@ -10,6 +10,7 @@ type TrustMetricProps = {
   icon?: React.ReactNode;
   tone?: "neutral" | "positive" | "negative";
   className?: string;
+  valueClassName?: string;
 };
 
 export function TrustMetric({
