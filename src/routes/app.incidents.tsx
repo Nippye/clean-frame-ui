@@ -46,9 +46,10 @@ function IncidentsPage() {
     <div className="mx-auto max-w-[1400px] px-6 py-8 lg:px-10">
       <PageHeader
         title="Active ledger drifts"
-        statusLabel={`${incidents.length} open`}
         meta={
           <>
+            <span className="font-medium text-rose-300">{incidents.length} open</span>
+            <span>·</span>
             <span>Production</span>
             <span>·</span>
             <span>{totalDivergences} divergences across {incidents.length} incidents</span>
