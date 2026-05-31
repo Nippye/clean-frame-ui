@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { ChevronRight } from "lucide-react";
 import {
   VerificationMetric,
   IntegrityMetric,
@@ -8,8 +9,7 @@ import {
   CorrectnessBadge,
   CorrectnessCertificate,
 } from "@/components/verity";
-import { events, trustKpis } from "@/lib/verity-fixtures";
-import { ChevronRight } from "lucide-react";
+import { verificationFeed, trustKpis } from "@/lib/verity-fixtures";
 
 export const Route = createFileRoute("/app/")({
   head: () => ({
@@ -17,7 +17,8 @@ export const Route = createFileRoute("/app/")({
       { title: "Operational trust overview · Verity" },
       {
         name: "description",
-        content: "Live operational correctness across every connector — verified events, divergences prevented, recovered revenue.",
+        content:
+          "Live operational correctness across every connector — verified events, divergences prevented, recovered revenue.",
       },
     ],
   }),
@@ -34,9 +35,7 @@ function DashboardPage() {
         <h1 className="mt-1 text-2xl font-semibold tracking-tight text-white">
           Every event, verified end-to-end.
         </h1>
-        <p className="mt-1 text-sm text-zinc-400">
-          Production · last 24 hours
-        </p>
+        <p className="mt-1 text-sm text-zinc-400">Production · last 24 hours</p>
       </div>
 
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
@@ -45,31 +44,37 @@ function DashboardPage() {
           value={trustKpis.verifiedToday.value}
           delta={trustKpis.verifiedToday.delta}
           sub={trustKpis.verifiedToday.sub}
+          valueClassName="font-mono"
         />
         <IntegrityMetric
           label="Divergences prevented"
           value={trustKpis.divergencesPrevented.value}
           delta={trustKpis.divergencesPrevented.delta}
           sub={trustKpis.divergencesPrevented.sub}
+          tone="negative"
+          className="border-rose-500/20 bg-rose-500/[0.04]"
+          valueClassName="text-rose-200"
         />
         <ReliabilityMetric
           label="Recovered revenue"
           value={trustKpis.recoveredRevenue.value}
           delta={trustKpis.recoveredRevenue.delta}
           sub={trustKpis.recoveredRevenue.sub}
+          valueClassName="font-mono text-emerald-100"
         />
         <CertificateMetric
           label="Certified events"
           value={trustKpis.certifiedEvents.value}
           delta={trustKpis.certifiedEvents.delta}
           sub={trustKpis.certifiedEvents.sub}
+          valueClassName="font-mono"
         />
       </div>
 
-      <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-[1fr_360px]">
+      <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-[1fr_380px]">
         <VerificationSurface
           eyebrow="Stream"
-          title="Recent verifications"
+          title="Verification feed"
           bodyClassName="p-0"
           trailing={
             <Link
@@ -81,16 +86,14 @@ function DashboardPage() {
           }
         >
           <ul className="divide-y divide-white/5">
-            {events.map((e) => (
+            {verificationFeed.map((e) => (
               <li key={e.id}>
                 <Link
                   to="/app/events/$eventId"
-                  params={{ eventId: e.id }}
-                  className="flex items-center gap-3 px-4 py-3 transition-colors hover:bg-white/[0.02]"
+                  params={{ eventId: "evt_mock_123" }}
+                  className="group flex items-center gap-3 px-4 py-3 transition-colors hover:bg-white/[0.02]"
                 >
-                  <CorrectnessBadge
-                    status={e.certificateStatus}
-                  />
+                  <CorrectnessBadge status={e.status} />
                   <div className="min-w-0 flex-1">
                     <div className="truncate font-mono text-sm text-white">{e.type}</div>
                     <div className="truncate text-[11px] text-zinc-500">
@@ -100,10 +103,12 @@ function DashboardPage() {
                   <div className="hidden text-right sm:block">
                     <div className="font-mono text-[11px] text-zinc-300">{e.id}</div>
                     <div className="text-[11px] text-zinc-500">
-                      {e.systemsChecked} systems · {e.divergenceCount} divergences
+                      {e.amount ? `${e.amount} · ` : ""}
+                      {e.systemsChecked} systems
+                      {e.divergenceCount > 0 ? ` · ${e.divergenceCount} divergent` : ""}
                     </div>
                   </div>
-                  <ChevronRight className="h-4 w-4 text-zinc-600" />
+                  <ChevronRight className="h-4 w-4 text-zinc-600 transition-colors group-hover:text-zinc-300" />
                 </Link>
               </li>
             ))}
@@ -111,26 +116,29 @@ function DashboardPage() {
         </VerificationSurface>
 
         <div className="space-y-4">
+          <div className="text-[10px] font-medium uppercase tracking-[0.16em] text-zinc-500">
+            Featured certificate
+          </div>
           <CorrectnessCertificate
-            verificationId={events[0].verificationId}
-            timestamp={events[0].receivedAt}
-            systemsChecked={events[0].systemsChecked}
-            divergenceCount={events[0].divergenceCount}
-            verifier={events[0].verifier}
-            hash={events[0].hash}
-            status={events[0].certificateStatus}
+            verificationId="ver_01J7XMOCK00000000123"
+            timestamp="May 31, 2026 at 09:14:02 UTC"
+            systemsChecked={6}
+            divergenceCount={0}
+            verifier="Verity Engine v2.4.1"
+            hash="9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08"
+            status="Verified"
           />
           <VerificationSurface eyebrow="Open the workflow" title="Inspect a verification">
             <p className="text-xs text-zinc-400">
-              Every event below opens the full Expected vs Actual diff, divergence summary, proof
-              timeline, and recovery plan — the same primitive language across the product.
+              Every event in the feed opens the full Expected vs Actual diff, divergence summary,
+              proof timeline, and recovery plan — the same primitive language across the product.
             </p>
             <Link
               to="/app/events/$eventId"
-              params={{ eventId: events[0].id }}
+              params={{ eventId: "evt_mock_123" }}
               className="mt-3 inline-flex items-center gap-1 text-xs font-medium text-indigo-300 hover:text-indigo-200"
             >
-              Open {events[0].type} <ChevronRight className="h-3.5 w-3.5" />
+              Open invoice.payment_succeeded <ChevronRight className="h-3.5 w-3.5" />
             </Link>
           </VerificationSurface>
         </div>
