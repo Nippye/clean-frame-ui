@@ -292,13 +292,158 @@ export const events: EventFixture[] = [
   },
 ];
 
+// Canonical mock event used by the dashboard verification feed.
+events.push({
+  id: "evt_mock_123",
+  type: "invoice.payment_succeeded",
+  impact: "HIGH",
+  status: "Succeeded",
+  source: "Stripe",
+  customer: "acme.com · cus_QzL08fK21",
+  amount: "$1,200.00 USD",
+  environment: "Production",
+  receivedAt: "May 31, 2026 at 09:14:02 UTC",
+  receivedAtIso: "2026-05-31T09:14:02Z",
+  revenueAtRisk: 1200,
+  verificationId: "ver_01J7XMOCK00000000123",
+  verifier: "Verity Engine v2.4.1",
+  hash: "9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08",
+  certificateStatus: "Verified",
+  systemsChecked: 6,
+  divergenceCount: 0,
+  rows: [
+    {
+      system: "stripe",
+      name: "Stripe Invoice",
+      check: "Payment status",
+      expectedTone: "ok",
+      expectedTitle: "paid",
+      expectedSub: "Amount: $1,200.00 USD",
+      actualTone: "ok",
+      actualTitle: "paid",
+      actualSub: "Amount: $1,200.00 USD",
+    },
+    {
+      system: "postgres",
+      name: "Database (Invoices)",
+      check: "Ledger entry",
+      expectedTone: "ok",
+      expectedTitle: "settled",
+      expectedSub: "Posted within 2s",
+      actualTone: "ok",
+      actualTitle: "settled",
+      actualSub: "Posted within 1.4s",
+    },
+    {
+      system: "entitlements",
+      name: "Entitlements (API)",
+      check: "Plan access",
+      expectedTone: "ok",
+      expectedTitle: "Active",
+      expectedSub: "Plan: Pro",
+      actualTone: "ok",
+      actualTitle: "Active",
+      actualSub: "Plan: Pro",
+    },
+  ],
+  timeline: [
+    { time: "09:14:02", title: "Invoice paid", system: "Stripe", tone: "ok" },
+    { time: "09:14:03", title: "Ledger row inserted", system: "Postgres", tone: "ok" },
+    { time: "09:14:04", title: "Entitlement reaffirmed", system: "API", tone: "ok" },
+    { time: "09:14:05", title: "Certificate sealed", system: "Verity", tone: "ok" },
+  ],
+  recovery: [],
+});
+
 export function getEvent(id: string) {
   return events.find((e) => e.id === id);
 }
 
 export const trustKpis = {
-  verifiedToday: { value: "14,820", delta: "+3.1%", sub: "Across 6 connectors" },
-  divergencesPrevented: { value: "37", delta: "-12% w/w", sub: "Last 24 hours" },
-  recoveredRevenue: { value: "$84,210", delta: "+$12.4k", sub: "Auto-recovered this week" },
-  certifiedEvents: { value: "99.84%", delta: "+0.04%", sub: "Certificates issued" },
+  verifiedToday: { value: "1,240,891", delta: "+12%", sub: "Last 24h · 6 connectors" },
+  divergencesPrevented: { value: "14", delta: "Alert", sub: "Auto-quarantined" },
+  recoveredRevenue: { value: "$42,105.00", delta: "+$8.2k", sub: "Auto-recovered today" },
+  certifiedEvents: { value: "99.998%", delta: "+0.002%", sub: "Sealed verifications" },
 };
+
+export type FeedItem = {
+  id: string;
+  type: string;
+  customer: string;
+  receivedAt: string;
+  status: "Verified" | "Divergent" | "Pending";
+  systemsChecked: number;
+  divergenceCount: number;
+  amount?: string;
+};
+
+export const verificationFeed: FeedItem[] = [
+  {
+    id: "evt_1N7X9A2eZvKYIo2C",
+    type: "invoice.payment_succeeded",
+    customer: "acme.com · cus_QzL08fK21",
+    receivedAt: "09:14:02 UTC",
+    status: "Verified",
+    systemsChecked: 6,
+    divergenceCount: 0,
+    amount: "$1,200.00",
+  },
+  {
+    id: "evt_2P8YQ3bJxLn4Tr9F",
+    type: "charge.refunded",
+    customer: "northwind.io · cus_RA118KbB2",
+    receivedAt: "09:12:48 UTC",
+    status: "Divergent",
+    systemsChecked: 5,
+    divergenceCount: 2,
+    amount: "$420.00",
+  },
+  {
+    id: "evt_3M2LK7eRfQp8Cn1A",
+    type: "customer.subscription.updated",
+    customer: "globex.app · cus_S22Aj0PpQ",
+    receivedAt: "09:11:30 UTC",
+    status: "Verified",
+    systemsChecked: 3,
+    divergenceCount: 0,
+  },
+  {
+    id: "evt_4Q9ZR4cKyMo5Us0G",
+    type: "payment_intent.succeeded",
+    customer: "initech.co · cus_T33Bk1QqR",
+    receivedAt: "09:10:11 UTC",
+    status: "Verified",
+    systemsChecked: 4,
+    divergenceCount: 0,
+    amount: "$3,499.00",
+  },
+  {
+    id: "evt_5R0AS5dLzNp6Vt1H",
+    type: "invoice.payment_failed",
+    customer: "umbrella.dev · cus_U44Cl2RrS",
+    receivedAt: "09:08:55 UTC",
+    status: "Divergent",
+    systemsChecked: 4,
+    divergenceCount: 1,
+    amount: "$89.00",
+  },
+  {
+    id: "evt_6S1BT6eM0Oq7Wu2I",
+    type: "customer.subscription.created",
+    customer: "hooli.ai · cus_V55Dm3SsT",
+    receivedAt: "09:07:21 UTC",
+    status: "Verified",
+    systemsChecked: 5,
+    divergenceCount: 0,
+  },
+  {
+    id: "evt_7T2CU7fN1Pr8Xv3J",
+    type: "checkout.session.completed",
+    customer: "soylent.corp · cus_W66En4TtU",
+    receivedAt: "09:05:09 UTC",
+    status: "Pending",
+    systemsChecked: 2,
+    divergenceCount: 0,
+    amount: "$249.00",
+  },
+];
