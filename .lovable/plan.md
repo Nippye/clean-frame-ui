@@ -1,59 +1,65 @@
-## Objective
-Rebuild the detection card in `src/components/site/SilentFailures.tsx` as an investigation artifact — the visual hero of the section — with evidence-style fields, a breakout width, and dimmed counterfactual cascade.
+# HowItWorks refinement plan
 
-## File
-`src/components/site/SilentFailures.tsx` only.
+Goal: push the section from "process grid" to "complete story" — Event → Verification → Finding.
 
-## Detection card layout
+## Changes to `src/components/site/HowItWorks.tsx`
 
+### 1. Asymmetric hierarchy (1 < 2 > 3)
+- Grid changes from `[1fr_28px_1.15fr_28px_1fr]` to roughly `[0.75fr_24px_1.4fr_24px_0.95fr]`.
+- Shrink `SideCard` internals: padding `p-8 → p-6`, icon area height `120px → 84px`, title `18px → 16px`, body `13.5px → 13px`, max-width `260px → 220px`.
+- Keep `VerificationCard` at current scale (it's the hero of the section).
+
+### 2. Delete the bottom benefits strip
+Remove the entire "Real-time detection / Complete visibility / Protect revenue" block and its `FeatureItem` component. The Security section downstream already carries that weight; repeating it here flattens the narrative.
+
+### 3. Stronger connection inside VerificationCard
+Make the center column read as a literal pipe rather than two rows of decorative tiles:
+- Top row label: small uppercase "Sources" caption above Stripe/Shopify/PayPal tiles.
+- Vertical dashed arrow down into the central "R" hub (replace the current horizontal dashed line — verification flows top→bottom, not left→right).
+- Hub stays as the green "R" pill but slightly larger with a subtle ring pulse (static CSS, no JS).
+- Vertical dashed arrow down into the bottom row.
+- Bottom row label: small uppercase "Destinations" caption above HubSpot / Salesforce / Segment / GA tiles (4 across instead of 3 + "& more"; drop the &more tile — it weakens the visual).
+- Add PayPal to top row using `SiPaypal` from react-icons/si for parity with the user's spec.
+
+### 4. Replace step 3 "Break detected" with a real finding artifact
+New `FindingCard` (still positioned as step 3, same outer slot):
 ```
-DETECTED BY REVTETHER                 (eyebrow • mono uppercase • primary • pulsing dot)
-
-CRM update missing                    (headline • larger, white)
-
-Expected                Actual        (two-column on desktop, stacked on mobile)
-HubSpot contact         No contact
-created                 record found
-
-Detected
-2 minutes after payment
-
-────────────────────────────────────  (subtle divider)
-
-WITHOUT DETECTION                     (small mono uppercase label, muted)
-
-Onboarding never triggered            (stacked, generous spacing, no bullets)
-
-Customer never activated
-
-Finance discovers issue
-23 days later
-
-────────────────────────────────────  (subtle divider)
-
-Affected system: HubSpot · Event: invoice.paid · Revenue at risk: $1,200/mo
-                                      (single muted metadata row)
+┌─────────────────────────┐
+│  ● CRM update missing   │   ← rose dot + title
+│                         │
+│  EXPECTED               │
+│  HubSpot contact created│
+│                         │
+│  ACTUAL                 │
+│  No contact record found│
+│                         │
+│  REVENUE AT RISK        │
+│  $1,200 / mo            │
+│                         │
+│  Detected 2 min after   │
+│  payment                │
+└─────────────────────────┘
 ```
+- Uses `divide-y divide-white/[0.06]` rows, mono for the dollar amount, rose accent on title dot only.
+- Keeps the `StepNum n={3}` badge floating at top.
+- Reuses the visual language of `FindingExample.tsx` so the section previews the investigation surface that appears elsewhere on the page.
 
-## Visual treatment
-- Breakout width: `-mx-8 lg:-mx-16` so the card visibly extends past the chain nodes.
-- Padding: `p-6 sm:p-8`.
-- Background: `bg-primary/[0.04]`, border `border-primary/40`, `ring-1 ring-primary/15`.
-- Pulsing dot beside the eyebrow (keep existing animation).
-- Expected/Actual: CSS grid `grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4`; labels in muted mono uppercase, values in `text-zinc-200`.
-- Impact lines: stacked, `space-y-3`, no glyphs, `text-zinc-300`.
-- Metadata row: `text-[11px] text-zinc-500`, single line on desktop, wraps on mobile.
+### 5. Reduce vertical height (~15–20%)
+- Section padding `py-16 lg:py-20` → `py-12 lg:py-16`.
+- Heading→grid gap `mt-14` → `mt-10`.
+- Grid→logo strip gap: after removing benefits strip, set `mt-10` directly on the logo strip block.
+- Logo strip top label `mt-10` stays; tighten internal `mt-5 → mt-4`.
 
-## Contrast hierarchy
-- Upstream nodes 01–02: opacity 100%.
-- Detection card: opacity 100%, full primary accent.
-- "WITHOUT DETECTION" label and downstream nodes 03–05: drop downstream node opacity from 40% to 25%.
-- Connector lines into/within downstream chain: `bg-white/[0.03]`.
+### 6. Logo strip touch-up
+- Add PayPal to the logo strip for consistency with the new top row.
+- Keep "& more" in the strip (it's contextually fine there, just not inside the verification card).
 
-## Copy rules
-- Use "DETECTED BY REVTETHER" — never "intervened" or any remediation language.
-- Keep the section headline unchanged: "Most revenue failures don't look like outages."
+## Files touched
+- `src/components/site/HowItWorks.tsx` — all changes above.
+- No other files. No new packages (PayPal icon already exists in `react-icons/si`).
 
-## Out of Scope
-- No changes to upstream/downstream `Node` markup beyond opacity tweak.
-- No changes to other sections, routes, or dependencies.
+## Out of scope
+- No changes to surrounding sections, spacing of the page, or routes.
+- No motion library work — any "pulse" is pure CSS.
+
+Result: the section reads Event → Verification → Finding, with a clear primary (center) and two supporting beats, ending on a concrete artifact instead of a generic alert.
