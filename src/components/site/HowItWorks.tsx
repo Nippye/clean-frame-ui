@@ -64,20 +64,27 @@ const SegmentLogo = ({ className = "h-6 w-6" }: { className?: string }) => (
   </svg>
 );
 const SegmentTile = () => (
-  <Tile bg="bg-[#52bd95]/15" ring="ring-1 ring-[#52bd95]/30">
-    <SegmentLogo className="h-6 w-6 text-[#52bd95]" />
+  <Tile bg="bg-[#52bd95]" ring="">
+    <SegmentLogo className="h-6 w-6 text-white" />
   </Tile>
 );
 
+const GA4Logo = ({ className = "h-6 w-6" }: { className?: string }) => (
+  <svg viewBox="0 0 192 192" className={className} aria-hidden>
+    <path fill="#F9AB00" d="M130 29v132c0 14.77 10.19 23 21 23 10 0 21-7 21-23V30c0-13.54-10-22-21-22s-21 9.33-21 21z"/>
+    <path fill="#E37400" d="M75 96v65c0 14.77 10.19 23 21 23 10 0 21-7 21-23V97c0-13.54-10-22-21-22s-21 9.33-21 21z"/>
+    <circle fill="#E37400" cx="21" cy="163" r="21"/>
+  </svg>
+);
 const GATile = () => (
-  <Tile bg="bg-[#f9ab00]/10" ring="ring-1 ring-[#f9ab00]/30">
-    <SiGoogleanalytics className="h-6 w-6 text-[#f9ab00]" />
+  <Tile bg="bg-white" ring="ring-1 ring-white/10">
+    <GA4Logo className="h-7 w-7" />
   </Tile>
 );
 
 const SalesforceTile = () => (
-  <Tile bg="bg-[#00a1e0]/15" ring="ring-1 ring-[#00a1e0]/30">
-    <SiSalesforce className="h-7 w-7 text-[#00a1e0]" />
+  <Tile bg="bg-[#00a1e0]" ring="">
+    <SiSalesforce className="h-7 w-7 text-white" />
   </Tile>
 );
 
