@@ -96,15 +96,18 @@ function ImpactItem({ icon, children }: { icon: ReactNode; children: ReactNode }
 
 export function RevenueFailures() {
   return (
-    <section className="mx-auto max-w-[760px] px-6 py-24 lg:px-8 lg:py-28">
-      <h2 className="text-center text-[32px] font-semibold tracking-[-0.02em] text-white sm:text-[40px]">
-        Most revenue failures{" "}
-        <span className="text-primary">don&apos;t look like outages.</span>
-      </h2>
+    <section className="mx-auto max-w-[1280px] px-6 py-24 lg:px-10 lg:py-28">
+      <div className="mx-auto max-w-[900px] text-center">
+        <h2 className="text-[32px] font-semibold tracking-[-0.02em] text-white sm:text-[40px]">
+          Most revenue failures{" "}
+          <span className="text-primary">don&apos;t look like outages.</span>
+        </h2>
+      </div>
 
-      <div className="relative mt-16">
+      <div className="relative mx-auto mt-16 max-w-[760px]">
         {/* Upstream */}
         <div className="mx-auto max-w-[620px]">
+
           <Node
             n="01"
             icon={<StripeMark />}
