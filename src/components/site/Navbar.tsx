@@ -21,6 +21,9 @@ export function Navbar() {
               </li>
             ))}
             <li>
+              <Link to="/how-it-works" className="hover:text-white">How it works</Link>
+            </li>
+            <li>
               <a href="#" className="hover:text-white">Pricing</a>
             </li>
           </ul>

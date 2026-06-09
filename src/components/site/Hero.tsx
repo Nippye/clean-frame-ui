@@ -24,6 +24,7 @@ import {
   Settings,
   Copy,
 } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
@@ -120,7 +121,7 @@ const timeline = [
   { time: "10:42:32", title: "CRM update failed", sub: "HubSpot", tone: "bad" as const },
   { time: "10:42:33", title: "Entitlement not activated", sub: "API", tone: "bad" as const },
   { time: "10:42:34", title: "Email delivery failed", sub: "SendGrid", tone: "bad" as const },
-  { time: "10:42:40", title: "Verification complete", sub: "Verity", tone: "ok" as const },
+  { time: "10:42:40", title: "Verification complete", sub: "RevTether", tone: "ok" as const },
 ];
 
 const sideIcons = [
@@ -133,7 +134,6 @@ export function DashboardMockup() {
   return (
     <div className="relative w-full overflow-hidden rounded-xl bg-[oklch(0.18_0.012_265)] ring-1 ring-white/10 shadow-2xl">
       <div className="flex">
-        {/* Sidebar */}
         <aside className="hidden w-12 shrink-0 flex-col items-center gap-1 border-r border-white/5 bg-[oklch(0.165_0.012_265)] py-4 md:flex">
           <div className="mb-2 flex h-7 w-7 items-center justify-center rounded-md bg-indigo-500/20 ring-1 ring-indigo-400/40">
             <ShieldCheck className="h-4 w-4 text-indigo-300" />
@@ -150,9 +150,7 @@ export function DashboardMockup() {
           ))}
         </aside>
 
-        {/* Main panel */}
         <div className="min-w-0 flex-1 p-4 sm:p-5">
-          {/* Top bar */}
           <div className="mb-4 flex flex-wrap items-start justify-between gap-3">
             <div className="min-w-0">
               <button className="mb-2 inline-flex items-center gap-1.5 text-xs text-zinc-400 hover:text-zinc-200">
@@ -197,7 +195,6 @@ export function DashboardMockup() {
           </div>
 
           <div className="grid grid-cols-1 gap-4 lg:grid-cols-[1fr_240px]">
-            {/* Left side - table + recovery */}
             <div className="space-y-4">
               <div className="rounded-lg border border-white/5 bg-[oklch(0.205_0.013_265)]">
                 <div className="flex items-center justify-between border-b border-white/5 px-4 py-3">
@@ -260,7 +257,6 @@ export function DashboardMockup() {
                 </div>
               </div>
 
-              {/* Recovery card */}
               <div className="rounded-lg border border-white/5 bg-[oklch(0.205_0.013_265)] p-4">
                 <div className="flex flex-wrap items-center justify-between gap-3">
                   <div className="min-w-0">
@@ -291,7 +287,6 @@ export function DashboardMockup() {
               </div>
             </div>
 
-            {/* Right side */}
             <div className="space-y-4">
               <div className="rounded-lg border border-white/5 bg-[oklch(0.205_0.013_265)] p-4">
                 <div className="mb-3 text-sm font-medium text-white">Event timeline</div>
@@ -328,7 +323,7 @@ export function DashboardMockup() {
                   {[
                     ["Verification ID", "ver_01J7X9A2EWK1Q2CA887"],
                     ["Verified At", "May 12, 2026 at 10:42:40 AM"],
-                    ["Verifier", "Verity Engine v2.4.1"],
+                    ["Verifier", "RevTether Engine v2.4.1"],
                     ["Hash", "a3f2b6...9d7c1e"],
                   ].map(([k, v]) => (
                     <div key={k} className="flex items-start justify-between gap-3">
@@ -351,53 +346,28 @@ export function DashboardMockup() {
 
 export function Hero() {
   return (
-    <section className="mx-auto max-w-[1400px] px-6 pb-10 pt-6 lg:px-10">
-      <div className="grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,420px)_minmax(0,1fr)] lg:gap-12">
-        <div className="flex flex-col justify-center">
-          <div className="inline-flex w-fit items-center gap-2 rounded-md border border-white/10 bg-white/[0.03] px-3 py-1.5">
-            <ShieldCheck className="h-3.5 w-3.5 text-indigo-300" />
-            <span className="text-[10px] font-semibold tracking-[0.14em] text-zinc-300">
-              OPERATIONAL CORRECTNESS VERIFICATION
-            </span>
-          </div>
-          <h1 className="mt-6 text-[44px] font-semibold leading-[1.05] tracking-tight text-white sm:text-[52px] lg:text-[58px]">
-            Revenue is <span className="text-[oklch(0.72_0.18_285)]">leaking</span> and your logs won't tell you where.
-          </h1>
-          <p className="mt-5 max-w-md text-[15px] leading-relaxed text-zinc-400">
-            Verity cross-references every payment across Stripe, CRM, entitlements, and databases. We catch the mismatches your monitoring tools miss — and show you exactly how much it's costing you.
-          </p>
-          <div className="mt-7 flex flex-wrap items-center gap-3">
-            <Button className="h-11 rounded-md bg-primary px-5 text-sm font-medium text-white hover:bg-primary/90">
-              Start free trial <ArrowRight className="ml-1.5 h-4 w-4" />
-            </Button>
-            <Button
-              variant="outline"
-              className="h-11 rounded-md border-white/15 bg-transparent px-5 text-sm font-medium text-white hover:bg-white/5"
-            >
-              Book a demo
-            </Button>
-          </div>
-          <div className="mt-7 flex flex-wrap items-center gap-x-6 gap-y-2 text-xs text-zinc-400">
-            <span className="inline-flex items-center gap-1.5">
-              <span className="flex h-4 w-4 items-center justify-center rounded-full ring-1 ring-zinc-600">
-                <span className="h-1.5 w-1.5 rounded-full bg-zinc-500" />
-              </span>
-              Stripe compatible
-            </span>
-            <span className="inline-flex items-center gap-1.5">
-              <CheckCircle2 className="h-4 w-4 text-emerald-400" />
-              SOC 2 Ready
-            </span>
-            <span className="inline-flex items-center gap-1.5">
-              <CheckCircle2 className="h-4 w-4 text-emerald-400" />
-              Audit-grade verification
-            </span>
-          </div>
-        </div>
-
-        <div className="min-w-0">
-          <DashboardMockup />
-        </div>
+    <section className="mx-auto flex min-h-[78vh] max-w-[1200px] flex-col items-center justify-center px-6 pb-12 pt-16 text-center lg:px-10">
+      <div className="text-[11px] font-semibold uppercase tracking-[0.22em] text-zinc-500">
+        Revenue Integrity Platform
+      </div>
+      <h1 className="mt-8 max-w-[18ch] text-[44px] font-bold leading-[1.02] tracking-[-0.02em] text-white sm:text-[56px] lg:text-[68px]">
+        Know when revenue breaks.
+        <br />
+        <span className="text-zinc-400">Before finance does.</span>
+      </h1>
+      <p className="mt-7 max-w-[34rem] text-[17px] leading-relaxed text-zinc-400 sm:text-[18px]">
+        Continuously verify payments, billing, webhooks, and downstream systems.
+      </p>
+      <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
+        <Button className="h-11 rounded-md bg-primary px-5 text-sm font-medium text-white hover:bg-primary/90">
+          Verify Revenue Flow <ArrowRight className="ml-1.5 h-4 w-4" />
+        </Button>
+        <Link
+          to="/how-it-works"
+          className="inline-flex h-11 items-center rounded-md border border-white/15 bg-transparent px-5 text-sm font-medium text-white hover:bg-white/5"
+        >
+          See Demo
+        </Link>
       </div>
     </section>
   );
