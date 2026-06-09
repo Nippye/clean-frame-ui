@@ -299,7 +299,7 @@ function LogoStripItem({ icon, label }: { icon: ReactNode; label: string }) {
 
 export function HowItWorks() {
   return (
-    <section className="mx-auto max-w-[1280px] px-6 py-12 lg:px-10 lg:py-16">
+    <section className="mx-auto max-w-[1280px] px-6 py-8 lg:px-10 lg:py-10">
       <div className="mx-auto max-w-[820px] text-center">
         <h2 className="text-[32px] font-semibold tracking-[-0.02em] text-white sm:text-[44px] sm:leading-[1.1]">
           RevTether <span className="text-primary">checks the chain</span>

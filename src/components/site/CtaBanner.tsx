@@ -2,7 +2,7 @@ import { ArrowRight } from "lucide-react";
 
 export function CtaBanner() {
   return (
-    <section className="mx-auto max-w-[1280px] px-6 py-16 lg:px-10 lg:py-20">
+    <section className="mx-auto max-w-[1280px] px-6 py-10 lg:px-10 lg:py-14">
       <div className="relative overflow-hidden rounded-2xl border border-primary/30 bg-gradient-to-br from-[oklch(0.22_0.06_155)] via-[oklch(0.18_0.04_160)] to-[oklch(0.16_0.02_165)] px-8 py-14 sm:px-14 sm:py-16">
         {/* decorative dots */}
         <div
