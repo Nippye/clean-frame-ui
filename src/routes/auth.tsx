@@ -90,7 +90,7 @@ type SystemCardProps = {
   name: string;
   role: string;
   status: "ok" | "err";
-  statusLabel: string;
+  statusLabel: React.ReactNode;
   time: string;
   highlight?: boolean;
 };
