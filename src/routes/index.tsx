@@ -33,6 +33,7 @@ function Index() {
     <main className="min-h-screen bg-background text-foreground">
       <Navbar />
       <Hero />
+      <IntegrationEcosystem />
       <RevenueFailures />
       <HowItWorks />
       <OperatorVisibility />
