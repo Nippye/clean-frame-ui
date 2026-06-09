@@ -65,7 +65,7 @@ function Arrow() {
 
 export function FeatureGrid() {
   return (
-    <section className="mx-auto max-w-[1280px] px-6 py-16 lg:px-10">
+    <section className="mx-auto max-w-[1280px] px-6 py-10 lg:px-10 lg:py-12">
       <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-4 lg:gap-8">
         <Column
           title={<>Why logs<br />aren't enough</>}
