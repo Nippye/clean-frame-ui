@@ -69,7 +69,7 @@ export function FeatureGrid() {
       <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-4 lg:gap-8">
         <Column
           title={<>Why logs<br />aren't enough</>}
-          description="Logs show you what happened. Verity tells you if it was correct."
+          description="Logs show you what happened. RevTether tells you if it was correct."
         >
           <ul className="space-y-2.5 text-[13px]">
             <li className="flex items-center gap-2 text-zinc-200">
@@ -89,7 +89,7 @@ export function FeatureGrid() {
 
         <Column
           title={<>Continuous verification<br />across every system</>}
-          description="Verity verifies the state of every system touched by a financial event."
+          description="RevTether verifies the state of every system touched by a financial event."
         >
           <div className="grid grid-cols-2 gap-2">
             <Pill icon={<CreditCard className="h-3.5 w-3.5 text-indigo-300" />} label="Stripe" />

@@ -14,7 +14,7 @@ import { events, type RecoveryStep } from "@/lib/verity-fixtures";
 export const Route = createFileRoute("/app/recovery")({
   head: () => ({
     meta: [
-      { title: "Recovery center · Verity" },
+      { title: "Recovery center · RevTether" },
       {
         name: "description",
         content:
@@ -148,7 +148,7 @@ function RecoveryPage() {
               </li>
               <li>
                 <div className="text-zinc-200">Automated rollback</div>
-                <div>Whether Verity has captured enough state to revert the action atomically.</div>
+                <div>Whether RevTether has captured enough state to revert the action atomically.</div>
               </li>
             </ul>
           </VerificationSurface>

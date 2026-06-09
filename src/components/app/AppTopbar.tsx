@@ -8,7 +8,7 @@ function Breadcrumbs() {
   const parts = pathname.replace(/^\//, "").split("/").filter(Boolean);
   // /app/events/evt_xxx → [app, events, evt_xxx]
   const labels: Record<string, string> = {
-    app: "Verity",
+    app: "RevTether",
     events: "Events",
     incidents: "Incidents",
     proof: "Proof timeline",

@@ -1,4 +1,4 @@
-// Verity mock fixtures — used across Event Detail, Dashboard, Command Palette.
+// RevTether mock fixtures — used across Event Detail, Dashboard, Command Palette.
 // No backend yet; this is the single source of truth for in-memory data.
 
 export type SystemKey =
@@ -80,7 +80,7 @@ export const events: EventFixture[] = [
     receivedAtIso: "2026-05-12T10:42:31Z",
     revenueAtRisk: 18240,
     verificationId: "ver_01J7X9A2EWK1Q2CA887",
-    verifier: "Verity Engine v2.4.1",
+    verifier: "RevTether Engine v2.4.1",
     hash: "a3f2b6c1d4e5f78901234567abcd9d7c1e",
     certificateStatus: "Divergent",
     systemsChecked: 5,
@@ -147,7 +147,7 @@ export const events: EventFixture[] = [
       { time: "10:42:32", title: "CRM update failed", system: "HubSpot", tone: "bad" },
       { time: "10:42:33", title: "Entitlement not activated", system: "API", tone: "bad" },
       { time: "10:42:34", title: "Email delivery failed", system: "SendGrid", tone: "bad" },
-      { time: "10:42:40", title: "Verification complete", system: "Verity", tone: "ok" },
+      { time: "10:42:40", title: "Verification complete", system: "RevTether", tone: "ok" },
     ],
     recovery: [
       {
@@ -195,7 +195,7 @@ export const events: EventFixture[] = [
     receivedAtIso: "2026-05-12T10:38:02Z",
     revenueAtRisk: 4200,
     verificationId: "ver_01J7X8Y9MB22A0CZ110",
-    verifier: "Verity Engine v2.4.1",
+    verifier: "RevTether Engine v2.4.1",
     hash: "b71c44e09a0caa3d2f6b8e0a7c11d2ea88",
     certificateStatus: "Divergent",
     systemsChecked: 4,
@@ -226,7 +226,7 @@ export const events: EventFixture[] = [
     ],
     timeline: [
       { time: "10:38:02", title: "Invoice payment failed", system: "Stripe", tone: "bad" },
-      { time: "10:38:05", title: "Verification started", system: "Verity", tone: "ok" },
+      { time: "10:38:05", title: "Verification started", system: "RevTether", tone: "ok" },
       { time: "10:38:08", title: "Database flag stale", system: "Postgres", tone: "bad" },
     ],
     recovery: [
@@ -255,7 +255,7 @@ export const events: EventFixture[] = [
     receivedAtIso: "2026-05-12T10:31:14Z",
     revenueAtRisk: 0,
     verificationId: "ver_01J7X7K4QYR4F0CD908",
-    verifier: "Verity Engine v2.4.1",
+    verifier: "RevTether Engine v2.4.1",
     hash: "9e44a07712dcab1f0998fe6b0c3344aa19",
     certificateStatus: "Verified",
     systemsChecked: 3,
@@ -286,7 +286,7 @@ export const events: EventFixture[] = [
     ],
     timeline: [
       { time: "10:31:14", title: "Subscription updated", system: "Stripe", tone: "ok" },
-      { time: "10:31:18", title: "Verification complete", system: "Verity", tone: "ok" },
+      { time: "10:31:18", title: "Verification complete", system: "RevTether", tone: "ok" },
     ],
     recovery: [],
   },
@@ -306,7 +306,7 @@ events.push({
   receivedAtIso: "2026-05-31T09:14:02Z",
   revenueAtRisk: 1200,
   verificationId: "ver_01J7XMOCK00000000123",
-  verifier: "Verity Engine v2.4.1",
+  verifier: "RevTether Engine v2.4.1",
   hash: "9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08",
   certificateStatus: "Verified",
   systemsChecked: 6,
@@ -350,7 +350,7 @@ events.push({
     { time: "09:14:02", title: "Invoice paid", system: "Stripe", tone: "ok" },
     { time: "09:14:03", title: "Ledger row inserted", system: "Postgres", tone: "ok" },
     { time: "09:14:04", title: "Entitlement reaffirmed", system: "API", tone: "ok" },
-    { time: "09:14:05", title: "Certificate sealed", system: "Verity", tone: "ok" },
+    { time: "09:14:05", title: "Certificate sealed", system: "RevTether", tone: "ok" },
   ],
   recovery: [],
 });

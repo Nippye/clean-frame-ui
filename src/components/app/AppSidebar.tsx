@@ -59,13 +59,13 @@ export function AppSidebar() {
         <Link
           to="/app"
           className="flex items-center gap-2 px-1.5 py-1.5"
-          aria-label="Verity"
+          aria-label="RevTether"
         >
           <span className="flex h-7 w-7 items-center justify-center rounded-md bg-indigo-500/20 ring-1 ring-indigo-400/40">
             <ShieldCheck className="h-4 w-4 text-indigo-300" />
           </span>
           {!collapsed && (
-            <span className="text-sm font-semibold tracking-tight text-white">Verity</span>
+            <span className="text-sm font-semibold tracking-tight text-white">RevTether</span>
           )}
         </Link>
       </SidebarHeader>

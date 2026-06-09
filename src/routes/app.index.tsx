@@ -14,7 +14,7 @@ import { verificationFeed, trustKpis } from "@/lib/verity-fixtures";
 export const Route = createFileRoute("/app/")({
   head: () => ({
     meta: [
-      { title: "Operational trust overview · Verity" },
+      { title: "Operational trust overview · RevTether" },
       {
         name: "description",
         content:
@@ -124,7 +124,7 @@ function DashboardPage() {
             timestamp="May 31, 2026 at 09:14:02 UTC"
             systemsChecked={6}
             divergenceCount={0}
-            verifier="Verity Engine v2.4.1"
+            verifier="RevTether Engine v2.4.1"
             hash="9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08"
             status="Verified"
           />
