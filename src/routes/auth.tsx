@@ -258,13 +258,13 @@ function AuthPage() {
             </div>
 
             <div className="mt-5 grid grid-cols-[1fr_auto_1fr_auto_1fr_auto_1fr] items-start">
-              <SystemCard icon={<StripeBadge />} name="Stripe" role="Source" status="ok" statusLabel={<>Event<br />captured</> as unknown as string} time="10:21:04 AM" />
+              <SystemCard icon={<StripeBadge />} name="Stripe" role="Source" status="ok" statusLabel={<>Event<br />captured</>} time="10:21:04 AM" />
               <Arrow />
-              <SystemCard icon={<HubSpotBadge />} name="HubSpot" role="CRM" status="err" statusLabel={<>Update<br />missing</> as unknown as string} time="10:21:06 AM" highlight />
+              <SystemCard icon={<HubSpotBadge />} name="HubSpot" role="CRM" status="err" statusLabel={<>Update<br />missing</>} time="10:21:06 AM" highlight />
               <Arrow />
-              <SystemCard icon={<SegmentBadge />} name="Segment" role="CDP" status="ok" statusLabel={<>Event<br />received</> as unknown as string} time="10:21:07 AM" />
+              <SystemCard icon={<SegmentBadge />} name="Segment" role="CDP" status="ok" statusLabel={<>Event<br />received</>} time="10:21:07 AM" />
               <Arrow />
-              <SystemCard icon={<GA4Badge />} name="Google Analytics 4" role="Analytics" status="ok" statusLabel={<>Event<br />received</> as unknown as string} time="10:21:08 AM" />
+              <SystemCard icon={<GA4Badge />} name="Google Analytics 4" role="Analytics" status="ok" statusLabel={<>Event<br />received</>} time="10:21:08 AM" />
             </div>
           </div>
 
