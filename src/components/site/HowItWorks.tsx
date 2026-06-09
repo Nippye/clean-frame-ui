@@ -306,9 +306,6 @@ export function HowItWorks() {
           <br />
           after every critical revenue event.
         </h2>
-        <p className="mt-5 text-[15px] text-zinc-400">
-          From capture to verification to investigation—automatically.
-        </p>
       </div>
 
       <div className="mt-10 grid grid-cols-1 items-stretch gap-6 lg:grid-cols-[0.75fr_64px_1.4fr_64px_0.95fr] lg:gap-3">
