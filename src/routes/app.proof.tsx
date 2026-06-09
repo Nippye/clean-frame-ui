@@ -3,7 +3,7 @@ import { Construction } from "lucide-react";
 import { VerificationSurface } from "@/components/verity";
 
 export const Route = createFileRoute("/app/proof")({
-  head: () => ({ meta: [{ title: "Proof timeline · Verity" }] }),
+  head: () => ({ meta: [{ title: "Proof timeline · RevTether" }] }),
   component: () => (
     <div className="mx-auto max-w-2xl px-6 py-16">
       <VerificationSurface eyebrow="Batch B" title="Proof timeline">

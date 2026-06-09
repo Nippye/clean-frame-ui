@@ -17,7 +17,7 @@ export function Logo({ className = "" }: { className?: string }) {
           fill="none"
         />
       </svg>
-      <span className="text-[22px] font-semibold tracking-tight text-white">Verity</span>
+      <span className="text-[22px] font-semibold tracking-tight text-white">RevTether</span>
     </div>
   );
 }

@@ -2,7 +2,7 @@ import { ArrowRight } from "lucide-react";
 
 export function ProductShot() {
   return (
-    <section className="mx-auto max-w-[1200px] px-6 py-24 lg:px-10 lg:py-32">
+    <section className="mx-auto max-w-[1200px] px-6 pb-24 pt-12 lg:px-10 lg:pb-32 lg:pt-16">
       <div className="mx-auto max-w-[920px] overflow-hidden rounded-xl border border-white/[0.08] bg-[oklch(0.19_0.012_265)] shadow-[0_30px_80px_-30px_rgba(0,0,0,0.6)]">
         <div className="flex items-center justify-between border-b border-white/[0.06] px-6 py-4">
           <div className="flex items-center gap-3">

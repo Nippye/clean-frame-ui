@@ -13,7 +13,7 @@ import { events } from "@/lib/verity-fixtures";
 export const Route = createFileRoute("/app/incidents")({
   head: () => ({
     meta: [
-      { title: "Incidents · Ledger drift · Verity" },
+      { title: "Incidents · Ledger drift · RevTether" },
       {
         name: "description",
         content:

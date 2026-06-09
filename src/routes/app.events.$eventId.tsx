@@ -23,8 +23,8 @@ export const Route = createFileRoute("/app/events/$eventId")({
     meta: [
       {
         title: loaderData
-          ? `${loaderData.event.type} · Event · Verity`
-          : "Event · Verity",
+          ? `${loaderData.event.type} · Event · RevTether`
+          : "Event · RevTether",
       },
       {
         name: "description",

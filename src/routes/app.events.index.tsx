@@ -8,7 +8,7 @@ import { events } from "@/lib/verity-fixtures";
 
 export const Route = createFileRoute("/app/events/")({
   head: () => ({
-    meta: [{ title: "Events · Verity" }],
+    meta: [{ title: "Events · RevTether" }],
   }),
   component: EventsListPage,
 });
@@ -22,7 +22,7 @@ function EventsListPage() {
         </div>
         <h1 className="mt-1 text-2xl font-semibold tracking-tight text-white">Events</h1>
         <p className="mt-1 text-sm text-zinc-400">
-          Every event Verity verified, with its certificate status and divergence count.
+          Every event RevTether verified, with its certificate status and divergence count.
         </p>
       </div>
 
