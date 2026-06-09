@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Navbar } from "@/components/site/Navbar";
-import { DashboardMockup } from "@/components/site/Hero";
+
 import { FeatureGrid } from "@/components/site/FeatureGrid";
 import { LogoStrip } from "@/components/site/LogoStrip";
 import { CtaBanner } from "@/components/site/CtaBanner";
@@ -87,17 +87,8 @@ function HowItWorksPage() {
         </ol>
       </section>
 
-      <section className="mx-auto max-w-[1280px] px-6 py-16 lg:px-10">
-        <div className="mb-6 text-center">
-          <div className="text-[11px] font-semibold uppercase tracking-[0.22em] text-zinc-500">
-            Investigation surface
-          </div>
-          <h2 className="mt-3 text-[28px] font-semibold tracking-[-0.01em] text-white sm:text-[36px]">
-            What every finding looks like.
-          </h2>
-        </div>
-        <DashboardMockup />
-      </section>
+
+
 
       <LogoStrip />
       <FeatureGrid />

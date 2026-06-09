@@ -1,46 +1,44 @@
-import { ChevronDown } from "lucide-react";
+import { ArrowRight, ChevronDown } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { Logo } from "./Logo";
-import { Button } from "@/components/ui/button";
 
-const links = ["Product", "Solutions", "Resources", "Company"];
+const linksWithMenu = ["Product", "Solutions", "Resources"];
 
 export function Navbar() {
   return (
-    <header className="w-full">
-      <nav className="mx-auto flex max-w-[1400px] items-center justify-between px-6 py-5 lg:px-10">
+    <header className="w-full border-b border-white/[0.04]">
+      <nav className="mx-auto flex max-w-[1280px] items-center justify-between px-6 py-4 lg:px-10">
         <div className="flex items-center gap-10">
-          <Logo />
-          <ul className="hidden items-center gap-7 text-sm text-zinc-300 lg:flex">
-            {links.map((l) => (
+          <Link to="/"><Logo /></Link>
+          <ul className="hidden items-center gap-7 text-[13.5px] text-zinc-300 lg:flex">
+            {linksWithMenu.slice(0, 1).map((l) => (
               <li key={l}>
-                <a href="#" className="flex items-center gap-1 hover:text-white">
-                  {l}
-                  <ChevronDown className="h-3.5 w-3.5 opacity-70" />
+                <a href="#" className="inline-flex items-center gap-1 hover:text-white">
+                  {l} <ChevronDown className="h-3.5 w-3.5 opacity-70" />
                 </a>
               </li>
             ))}
-            <li>
-              <Link to="/how-it-works" className="hover:text-white">How it works</Link>
-            </li>
-            <li>
-              <a href="#" className="hover:text-white">Pricing</a>
-            </li>
+            <li><a href="#" className="hover:text-white">Integrations</a></li>
+            {linksWithMenu.slice(1).map((l) => (
+              <li key={l}>
+                <a href="#" className="inline-flex items-center gap-1 hover:text-white">
+                  {l} <ChevronDown className="h-3.5 w-3.5 opacity-70" />
+                </a>
+              </li>
+            ))}
+            <li><a href="#" className="hover:text-white">Pricing</a></li>
           </ul>
         </div>
-        <div className="flex items-center gap-3">
-          <Link to="/app" className="hidden text-sm text-zinc-300 hover:text-white sm:inline">
-            Open app
-          </Link>
-          <Button
-            variant="outline"
-            className="hidden h-9 rounded-md border-white/15 bg-transparent px-4 text-sm font-medium text-white hover:bg-white/5 sm:inline-flex"
+        <div className="flex items-center gap-5">
+          <a href="#" className="hidden text-[13.5px] text-zinc-300 hover:text-white sm:inline">
+            Log in
+          </a>
+          <a
+            href="#"
+            className="inline-flex h-9 items-center rounded-md bg-primary px-3.5 text-[13px] font-semibold text-primary-foreground transition-colors hover:brightness-110"
           >
-            Book a demo
-          </Button>
-          <Button className="h-9 rounded-md bg-primary px-4 text-sm font-medium text-white hover:bg-primary/90">
-            Start free trial
-          </Button>
+            Verify Revenue Flow <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
+          </a>
         </div>
       </nav>
     </header>

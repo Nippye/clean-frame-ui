@@ -1,12 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Navbar } from "@/components/site/Navbar";
 import { Hero } from "@/components/site/Hero";
-import { ProductShot } from "@/components/site/ProductShot";
-import { FindingExample } from "@/components/site/FindingExample";
-import { SilentFailures } from "@/components/site/SilentFailures";
+import { RevenueFailures } from "@/components/site/SilentFailures";
 import { HowItWorks } from "@/components/site/HowItWorks";
-import { Security } from "@/components/site/Security";
+import { OperatorVisibility } from "@/components/site/Security";
 import { CtaBanner } from "@/components/site/CtaBanner";
+import { ClosingStatement, Footer } from "@/components/site/Footer";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -15,13 +14,13 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Know when revenue breaks. Before finance does. Continuously verify payments, billing, webhooks, and downstream systems.",
+          "Know when revenue breaks. Before finance does. RevTether verifies that payments, upgrades, refunds, and trial conversions propagate correctly across CRM, provisioning, analytics, and finance systems.",
       },
       { property: "og:title", content: "RevTether — Revenue Integrity Platform" },
       {
         property: "og:description",
         content:
-          "Continuously verify payments, billing, webhooks, and downstream systems.",
+          "Catch silent revenue failures before finance discovers them.",
       },
     ],
   }),
@@ -33,12 +32,12 @@ function Index() {
     <main className="min-h-screen bg-background text-foreground">
       <Navbar />
       <Hero />
-      <ProductShot />
-      <FindingExample />
-      <SilentFailures />
+      <RevenueFailures />
       <HowItWorks />
-      <Security />
+      <OperatorVisibility />
       <CtaBanner />
+      <ClosingStatement />
+      <Footer />
     </main>
   );
 }
