@@ -4,7 +4,7 @@ import {
   SiHubspot,
   SiSalesforce,
   SiShopify,
-  SiSegment,
+  
   SiGoogleanalytics,
 } from "react-icons/si";
 import type { ReactNode } from "react";
@@ -50,9 +50,16 @@ const HubSpotTile = () => (
   </Tile>
 );
 
+const SegmentLogo = ({ className = "h-7 w-7" }: { className?: string }) => (
+  <svg viewBox="0 0 24 24" className={className} fill="currentColor" aria-hidden>
+    <path d="M16.4 12.7H1.6a1.2 1.2 0 110-2.4h14.8a1.2 1.2 0 110 2.4zM22.4 7.1h-13a1.2 1.2 0 010-2.4h13a1.2 1.2 0 010 2.4zM14.6 18.3h-13a1.2 1.2 0 010-2.4h13a1.2 1.2 0 010 2.4z" />
+    <circle cx="20.5" cy="17.1" r="1.5" />
+    <circle cx="3.5" cy="6.9" r="1.5" />
+  </svg>
+);
 const SegmentTile = () => (
   <Tile bg="bg-[#52bd95]/15" ring="ring-1 ring-[#52bd95]/30">
-    <SiSegment className="h-7 w-7 text-[#52bd95]" />
+    <SegmentLogo className="h-6 w-6 text-[#52bd95]" />
   </Tile>
 );
 
