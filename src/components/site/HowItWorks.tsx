@@ -1,96 +1,88 @@
+import { AlertTriangle, Clock, Target, Shield, MoreHorizontal } from "lucide-react";
 import {
-  AlertTriangle,
-  Clock,
-  Target,
-  Shield,
-  MoreHorizontal,
-} from "lucide-react";
+  SiStripe,
+  SiHubspot,
+  SiSalesforce,
+  SiShopify,
+  SiSegment,
+  SiGoogleanalytics,
+} from "react-icons/si";
 import type { ReactNode } from "react";
 
-/* ---------- Brand icons ---------- */
+/* ---------- System tiles ---------- */
 
-function StripeIcon() {
+function Tile({
+  children,
+  bg,
+  ring,
+  size = 56,
+}: {
+  children: ReactNode;
+  bg: string;
+  ring: string;
+  size?: number;
+}) {
   return (
-    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#3b3fe4]">
-      <span className="text-xl font-bold italic text-white">S</span>
+    <div
+      className={`flex items-center justify-center rounded-xl ${bg} ${ring}`}
+      style={{ height: size, width: size }}
+    >
+      {children}
     </div>
   );
 }
 
-function ShopifyTile() {
-  return (
-    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#95bf47]">
-      <svg viewBox="0 0 24 24" className="h-6 w-6" fill="#1a1a1a">
-        <path d="M15.5 4.5c-.3 0-.6.1-.9.2-.4-1.1-1.2-2.2-2.6-2.2-.1 0-.2 0-.3.1C11.3 2 10.8 1.8 10.3 1.8 7.5 1.8 6.2 5.3 5.8 7.1l-2 .6c-.6.2-.6.2-.7.8L1.5 21.6l11 2.1V4.5h3zm-3 1.4v1c-.7.2-1.4.5-2.2.8 0-1 .2-1.9.5-2.6.3.2.6.5.8.8h.9zm-3.2-2.4c.2 0 .4.1.5.2-.5.4-.9 1-1.2 1.7-.3.7-.5 1.7-.6 2.7-.6.2-1.2.4-1.7.5.4-1.5 1.3-5.1 3-5.1z"/>
-      </svg>
-    </div>
-  );
-}
+const StripeTile = () => (
+  <Tile bg="bg-[#635bff]" ring="" size={48}>
+    <SiStripe className="h-6 w-6 text-white" />
+  </Tile>
+);
 
-function HubSpotIcon() {
-  return (
-    <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-[#ff7a59]/15 ring-1 ring-[#ff7a59]/30">
-      <svg viewBox="0 0 24 24" className="h-7 w-7" fill="none" stroke="#ff7a59" strokeWidth="2">
-        <circle cx="17" cy="14" r="4" />
-        <circle cx="6" cy="6" r="2" />
-        <circle cx="6" cy="18" r="2" />
-        <line x1="8" y1="7" x2="14" y2="12" />
-        <line x1="8" y1="17" x2="14" y2="15" />
-        <line x1="17" y1="10" x2="17" y2="6" />
-      </svg>
-    </div>
-  );
-}
+const ShopifyBrandTile = () => (
+  <Tile bg="bg-[#95bf47]" ring="" size={48}>
+    <SiShopify className="h-6 w-6 text-white" />
+  </Tile>
+);
 
-function SegmentIcon() {
-  return (
-    <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-[#5aa9ff]/15 ring-1 ring-[#5aa9ff]/30">
-      <span className="text-2xl font-black text-[#5aa9ff]">▌</span>
-    </div>
-  );
-}
+const HubSpotTile = () => (
+  <Tile bg="bg-[#ff7a59]/15" ring="ring-1 ring-[#ff7a59]/30">
+    <SiHubspot className="h-7 w-7 text-[#ff7a59]" />
+  </Tile>
+);
 
-function GAIcon() {
-  return (
-    <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-[#f9ab00]/10 ring-1 ring-[#f9ab00]/30">
-      <svg viewBox="0 0 24 24" className="h-7 w-7" fill="#f9ab00">
-        <rect x="3" y="14" width="4" height="7" rx="1" />
-        <rect x="10" y="9" width="4" height="12" rx="1" />
-        <rect x="17" y="4" width="4" height="17" rx="1" />
-      </svg>
-    </div>
-  );
-}
+const SegmentTile = () => (
+  <Tile bg="bg-[#52bd95]/15" ring="ring-1 ring-[#52bd95]/30">
+    <SiSegment className="h-7 w-7 text-[#52bd95]" />
+  </Tile>
+);
 
-function SalesforceIcon() {
-  return (
-    <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-[#00a1e0]/15 ring-1 ring-[#00a1e0]/30">
-      <svg viewBox="0 0 32 24" className="h-6 w-7" fill="#00a1e0">
-        <path d="M12 4c1.4-1.5 3.4-2.4 5.6-2.4 2.9 0 5.4 1.6 6.7 4 .9-.4 1.9-.6 2.9-.6 3.8 0 6.8 3.1 6.8 6.9s-3.1 6.9-6.8 6.9c-.5 0-.9 0-1.3-.1-1.2 2.1-3.4 3.5-6 3.5-1.1 0-2.1-.2-3-.7-1.2 2.7-3.9 4.6-7.1 4.6-3.3 0-6.2-2.1-7.3-5-.7.2-1.4.3-2.2.3C2 21.4-1 18.4-1 14.6s3-6.8 6.8-6.8c.4 0 .8 0 1.2.1C8.4 5.1 11.1 3 14.3 3c1.5 0 2.9.4 4 1.1L12 4z"/>
-      </svg>
-    </div>
-  );
-}
+const GATile = () => (
+  <Tile bg="bg-[#f9ab00]/10" ring="ring-1 ring-[#f9ab00]/30">
+    <SiGoogleanalytics className="h-6 w-6 text-[#f9ab00]" />
+  </Tile>
+);
 
-function ShopifyIcon() {
-  return (
-    <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-[#95bf47]/15 ring-1 ring-[#95bf47]/30">
-      <svg viewBox="0 0 24 24" className="h-7 w-7" fill="#95bf47">
-        <path d="M15.5 4.5c-.3 0-.6.1-.9.2-.4-1.1-1.2-2.2-2.6-2.2-.1 0-.2 0-.3.1C11.3 2 10.8 1.8 10.3 1.8 7.5 1.8 6.2 5.3 5.8 7.1l-2 .6c-.6.2-.6.2-.7.8L1.5 21.6l11 2.1V4.5h3z"/>
-      </svg>
-    </div>
-  );
-}
+const SalesforceTile = () => (
+  <Tile bg="bg-[#00a1e0]/15" ring="ring-1 ring-[#00a1e0]/30">
+    <SiSalesforce className="h-8 w-8 text-[#00a1e0]" />
+  </Tile>
+);
 
-function MoreIcon() {
-  return (
-    <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-white/[0.04] ring-1 ring-white/10">
-      <MoreHorizontal className="h-6 w-6 text-zinc-400" />
-    </div>
-  );
-}
+const ShopifyTile = () => (
+  <Tile bg="bg-[#95bf47]/15" ring="ring-1 ring-[#95bf47]/30">
+    <SiShopify className="h-7 w-7 text-[#95bf47]" />
+  </Tile>
+);
 
-function StepNum({ n }: { n: number; tone?: "default" | "primary" | "rose" }) {
+const MoreTile = () => (
+  <Tile bg="bg-white/[0.04]" ring="ring-1 ring-white/10">
+    <MoreHorizontal className="h-6 w-6 text-zinc-400" />
+  </Tile>
+);
+
+/* ---------- Step number badge ---------- */
+
+function StepNum({ n }: { n: number }) {
   return (
     <div className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-primary/50 bg-background text-[12px] font-semibold text-primary">
       {n}
@@ -120,37 +112,11 @@ function ArrowDashed() {
   );
 }
 
-/* ---------- Bottom feature row ---------- */
-
-function FeatureItem({ icon, title, children }: { icon: ReactNode; title: string; children: ReactNode }) {
-  return (
-    <div className="flex items-start gap-4">
-      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full ring-1 ring-primary/30 text-primary">
-        {icon}
-      </div>
-      <div>
-        <div className="text-[15px] font-semibold text-white">{title}</div>
-        <p className="mt-1 text-[13.5px] leading-relaxed text-zinc-400">{children}</p>
-      </div>
-    </div>
-  );
-}
-
-function LogoStripItem({ icon, label }: { icon: ReactNode; label: string }) {
-  return (
-    <div className="flex items-center gap-2 text-zinc-400">
-      <span className="text-zinc-500">{icon}</span>
-      <span className="text-[14px]">{label}</span>
-    </div>
-  );
-}
-
 /* ---------- Center verification card ---------- */
 
 function VerificationCard() {
   return (
     <div className="relative rounded-2xl border border-primary/40 bg-primary/[0.03] p-8 ring-1 ring-primary/20 shadow-[0_0_60px_-20px_oklch(0.7_0.18_145/0.35)]">
-      {/* Step number tab */}
       <div className="absolute -top-3.5 left-1/2 -translate-x-1/2">
         <StepNum n={2} />
       </div>
@@ -160,25 +126,22 @@ function VerificationCard() {
         RevTether checks that the event reached and updated each connected system as expected.
       </p>
 
-      {/* Top row systems */}
       <div className="mt-8 grid grid-cols-3 gap-6">
         <div className="flex flex-col items-center gap-2">
-          <HubSpotIcon />
+          <HubSpotTile />
           <span className="text-[12.5px] text-zinc-300">HubSpot</span>
         </div>
         <div className="flex flex-col items-center gap-2">
-          <SegmentIcon />
+          <SegmentTile />
           <span className="text-[12.5px] text-zinc-300">Segment</span>
         </div>
         <div className="flex flex-col items-center gap-2">
-          <GAIcon />
+          <GATile />
           <span className="text-[12.5px] text-zinc-300">Google Analytics</span>
         </div>
       </div>
 
-      {/* Hub connector */}
       <div className="relative my-5 flex items-center justify-center">
-        {/* horizontal dashed line */}
         <div
           className="absolute left-8 right-8 top-1/2 h-px -translate-y-1/2"
           style={{
@@ -193,18 +156,17 @@ function VerificationCard() {
         </div>
       </div>
 
-      {/* Bottom row systems */}
       <div className="grid grid-cols-3 gap-6">
         <div className="flex flex-col items-center gap-2">
-          <SalesforceIcon />
+          <SalesforceTile />
           <span className="text-[12.5px] text-zinc-300">Salesforce</span>
         </div>
         <div className="flex flex-col items-center gap-2">
-          <ShopifyIcon />
+          <ShopifyTile />
           <span className="text-[12.5px] text-zinc-300">Shopify</span>
         </div>
         <div className="flex flex-col items-center gap-2">
-          <MoreIcon />
+          <MoreTile />
           <span className="text-[12.5px] text-zinc-400">&amp; more</span>
         </div>
       </div>
@@ -239,6 +201,31 @@ function SideCard({
   );
 }
 
+/* ---------- Feature row ---------- */
+
+function FeatureItem({ icon, title, children }: { icon: ReactNode; title: string; children: ReactNode }) {
+  return (
+    <div className="flex items-start gap-4">
+      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full ring-1 ring-primary/30 text-primary">
+        {icon}
+      </div>
+      <div>
+        <div className="text-[15px] font-semibold text-white">{title}</div>
+        <p className="mt-1 text-[13.5px] leading-relaxed text-zinc-400">{children}</p>
+      </div>
+    </div>
+  );
+}
+
+function LogoStripItem({ icon, label }: { icon: ReactNode; label: string }) {
+  return (
+    <div className="flex items-center gap-2 text-zinc-400">
+      <span className="text-zinc-500">{icon}</span>
+      <span className="text-[14px]">{label}</span>
+    </div>
+  );
+}
+
 export function HowItWorks() {
   return (
     <section className="mx-auto max-w-[1280px] px-6 py-16 lg:px-10 lg:py-20">
@@ -260,8 +247,8 @@ export function HowItWorks() {
           body="We capture and normalize critical revenue events from your billing and payment systems."
           icon={
             <div className="flex items-center gap-3">
-              <StripeIcon />
-              <ShopifyTile />
+              <StripeTile />
+              <ShopifyBrandTile />
             </div>
           }
         />
@@ -284,7 +271,6 @@ export function HowItWorks() {
         />
       </div>
 
-      {/* Feature row */}
       <div className="mt-10 rounded-2xl border border-white/[0.07] bg-white/[0.015] px-8 py-7">
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-3">
           <FeatureItem icon={<Clock className="h-5 w-5" />} title="Real-time detection">
@@ -299,57 +285,15 @@ export function HowItWorks() {
         </div>
       </div>
 
-      {/* Logo strip */}
       <div className="mt-10 text-center">
         <p className="text-[14px] text-zinc-500">Works with the systems you already use.</p>
         <div className="mt-5 flex flex-wrap items-center justify-center gap-x-10 gap-y-4">
-          <LogoStripItem icon={<span className="font-bold italic">S</span>} label="Stripe" />
-          <LogoStripItem
-            icon={
-              <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2">
-                <circle cx="17" cy="14" r="4" />
-                <circle cx="6" cy="6" r="2" />
-                <circle cx="6" cy="18" r="2" />
-                <line x1="8" y1="7" x2="14" y2="12" />
-                <line x1="8" y1="17" x2="14" y2="15" />
-              </svg>
-            }
-            label="HubSpot"
-          />
-          <LogoStripItem
-            icon={
-              <svg viewBox="0 0 24 24" className="h-4 w-4" fill="currentColor">
-                <path d="M20 14c0-1.5-1-2.7-2.4-3 .2-.5.4-1 .4-1.6 0-2.2-1.8-4-4-4-1.3 0-2.5.6-3.2 1.6C10.1 6.4 9.1 6 8 6c-2.2 0-4 1.8-4 4 0 .2 0 .4.1.6C2.8 11 2 12.2 2 13.5 2 15.4 3.6 17 5.5 17h12c1.4 0 2.5-1.1 2.5-2.5z" />
-              </svg>
-            }
-            label="Salesforce"
-          />
-          <LogoStripItem
-            icon={
-              <svg viewBox="0 0 24 24" className="h-4 w-4" fill="currentColor">
-                <path d="M15.5 4.5c-.3 0-.6.1-.9.2-.4-1.1-1.2-2.2-2.6-2.2-2.8 0-4.1 3.5-4.5 5.3l-2 .6c-.6.2-.6.2-.7.8L1.5 21.6l11 2.1V4.5h3z"/>
-              </svg>
-            }
-            label="Shopify"
-          />
-          <LogoStripItem
-            icon={
-              <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M4 8h12M8 16h12" strokeLinecap="round" />
-              </svg>
-            }
-            label="Segment"
-          />
-          <LogoStripItem
-            icon={
-              <svg viewBox="0 0 24 24" className="h-4 w-4" fill="currentColor">
-                <rect x="3" y="14" width="4" height="7" rx="1" />
-                <rect x="10" y="9" width="4" height="12" rx="1" />
-                <rect x="17" y="4" width="4" height="17" rx="1" />
-              </svg>
-            }
-            label="Google Analytics"
-          />
+          <LogoStripItem icon={<SiStripe className="h-4 w-4" />} label="Stripe" />
+          <LogoStripItem icon={<SiHubspot className="h-4 w-4" />} label="HubSpot" />
+          <LogoStripItem icon={<SiSalesforce className="h-4 w-4" />} label="Salesforce" />
+          <LogoStripItem icon={<SiShopify className="h-4 w-4" />} label="Shopify" />
+          <LogoStripItem icon={<SiSegment className="h-4 w-4" />} label="Segment" />
+          <LogoStripItem icon={<SiGoogleanalytics className="h-4 w-4" />} label="Google Analytics" />
           <LogoStripItem icon={<MoreHorizontal className="h-4 w-4" />} label="& more" />
         </div>
       </div>
