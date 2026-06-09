@@ -41,23 +41,23 @@
 :root {
   --radius: 0.625rem;
 
-  /* Dark enterprise palette (single-mode) */
-  --background: oklch(0.16 0.012 265);          /* page bg #0d0f17 */
+  /* Near-black enterprise palette */
+  --background: oklch(0.14 0.008 250);
   --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0.013 265);                /* main card panel */
+  --card: oklch(0.18 0.009 250);
   --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0.013 265);
+  --popover: oklch(0.18 0.009 250);
   --popover-foreground: oklch(0.985 0 0);
 
-  --primary: oklch(0.62 0.21 264);               /* blue CTA #3b6cff */
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.245 0.012 265);
+  --primary: oklch(0.76 0.18 155);               /* green accent */
+  --primary-foreground: oklch(0.18 0.04 160);
+  --secondary: oklch(0.22 0.009 250);
   --secondary-foreground: oklch(0.985 0 0);
 
-  --muted: oklch(0.245 0.012 265);
-  --muted-foreground: oklch(0.66 0.012 265);
+  --muted: oklch(0.22 0.009 250);
+  --muted-foreground: oklch(0.66 0.012 250);
 
-  --accent: oklch(0.27 0.013 265);
+  --accent: oklch(0.24 0.011 250);
   --accent-foreground: oklch(0.985 0 0);
 
   --destructive: oklch(0.66 0.22 22);
@@ -65,14 +65,14 @@
 
   --border: oklch(1 0 0 / 8%);
   --input: oklch(1 0 0 / 12%);
-  --ring: oklch(0.62 0.21 264);
+  --ring: oklch(0.76 0.18 155);
 
-  --panel: oklch(0.205 0.013 265);               /* dashboard card */
-  --panel-2: oklch(0.235 0.013 265);             /* inner row hover */
+  --panel: oklch(0.18 0.009 250);
+  --panel-2: oklch(0.21 0.011 250);
 
-  --success: oklch(0.74 0.18 150);               /* green */
-  --danger: oklch(0.68 0.22 22);                 /* red */
-  --violet: oklch(0.7 0.19 290);                 /* purple accent for "leaking" */
+  --success: oklch(0.76 0.18 155);
+  --danger: oklch(0.68 0.22 22);
+  --violet: oklch(0.7 0.19 290);
 }
 
 html, body {
