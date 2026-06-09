@@ -346,7 +346,7 @@ export function DashboardMockup() {
 
 export function Hero() {
   return (
-    <section className="mx-auto flex min-h-[78vh] max-w-[1200px] flex-col items-center justify-center px-6 pb-12 pt-16 text-center lg:px-10">
+    <section className="mx-auto flex max-w-[1200px] flex-col items-center justify-center px-6 pb-4 pt-20 text-center lg:px-10 lg:pt-28">
       <div className="text-[11px] font-semibold uppercase tracking-[0.22em] text-zinc-500">
         Revenue Integrity Platform
       </div>
