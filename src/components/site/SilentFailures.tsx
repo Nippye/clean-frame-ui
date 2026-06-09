@@ -1,32 +1,40 @@
-import { CreditCard, ArrowUpCircle, RotateCcw, BarChart3, Calendar } from "lucide-react";
+import { Check } from "lucide-react";
 
-const items = [
-  { icon: CreditCard, label: "Customers are charged but provisioning fails" },
-  { icon: ArrowUpCircle, label: "Upgrades don't update access" },
-  { icon: RotateCcw, label: "Refunds never reach downstream systems" },
-  { icon: BarChart3, label: "Analytics misses trial conversions" },
-  { icon: Calendar, label: "Finance finds the problem weeks later" },
+const findings = [
+  { action: "Customer charged", failure: "provisioning failed" },
+  { action: "Upgrade completed", failure: "access unchanged" },
+  { action: "Refund issued", failure: "analytics missing" },
+  { action: "Trial converted", failure: "attribution lost" },
+  { action: "Finance discovers it", failure: "weeks late" },
 ];
 
 export function RevenueFailures() {
   return (
-    <section className="mx-auto max-w-[1280px] px-6 py-24 lg:px-10 lg:py-28">
-      <div className="rounded-2xl border border-white/[0.06] bg-white/[0.015] px-6 py-16 sm:px-12 sm:py-20">
-        <h2 className="text-center text-[28px] font-semibold tracking-[-0.01em] text-white sm:text-[36px]">
-          Most revenue failures <span className="text-primary">don't look like outages.</span>
-        </h2>
-        <div className="mt-14 grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-3 lg:grid-cols-5">
-          {items.map(({ icon: Icon, label }) => (
-            <div key={label} className="flex flex-col items-center text-center">
-              <div className="flex h-14 w-14 items-center justify-center rounded-lg border border-primary/25 bg-primary/[0.08]">
-                <Icon className="h-6 w-6 text-primary" strokeWidth={1.75} />
-              </div>
-              <p className="mt-5 max-w-[15ch] text-[13.5px] leading-relaxed text-zinc-300">
-                {label}
-              </p>
-            </div>
-          ))}
-        </div>
+    <section className="mx-auto max-w-[720px] px-6 py-24 text-center lg:px-10 lg:py-28">
+      <h2 className="text-[28px] font-semibold tracking-[-0.01em] text-white sm:text-[36px]">
+        Most revenue failures{" "}
+        <span className="text-primary">don&apos;t look like outages.</span>
+      </h2>
+
+      <p className="mx-auto mt-6 max-w-[52ch] text-[15px] leading-relaxed text-zinc-400">
+        No alarms. No incidents. No pages.
+        <br />
+        Just small failures that quietly spread between systems.
+      </p>
+
+      <div className="mt-14 space-y-0 border-t border-white/[0.06]">
+        {findings.map(({ action, failure }) => (
+          <div
+            key={action}
+            className="flex items-center gap-4 border-b border-white/[0.06] px-2 py-4 text-left sm:px-4 sm:py-5"
+          >
+            <Check className="h-4 w-4 shrink-0 text-zinc-500" strokeWidth={2} />
+            <span className="text-[15px] text-zinc-300">
+              {action},{" "}
+              <span className="text-zinc-500">{failure}</span>
+            </span>
+          </div>
+        ))}
       </div>
     </section>
   );
