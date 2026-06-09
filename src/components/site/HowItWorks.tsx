@@ -299,7 +299,7 @@ export function HowItWorks() {
           <LogoStripItem icon={<SiHubspot className="h-4 w-4" />} label="HubSpot" />
           <LogoStripItem icon={<SiSalesforce className="h-4 w-4" />} label="Salesforce" />
           <LogoStripItem icon={<SiShopify className="h-4 w-4" />} label="Shopify" />
-          <LogoStripItem icon={<SiSegment className="h-4 w-4" />} label="Segment" />
+          <LogoStripItem icon={<SegmentLogo className="h-4 w-4" />} label="Segment" />
           <LogoStripItem icon={<SiGoogleanalytics className="h-4 w-4" />} label="Google Analytics" />
           <LogoStripItem icon={<MoreHorizontal className="h-4 w-4" />} label="& more" />
         </div>
