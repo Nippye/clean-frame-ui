@@ -26,7 +26,7 @@ function LogoTile({ children, bg }: { children: React.ReactNode; bg: string }) {
 
 export function HowItWorks() {
   return (
-    <section className="mx-auto max-w-[1280px] px-6 py-20 lg:px-10 lg:py-24">
+    <section className="mx-auto max-w-[1280px] px-6 py-16 lg:px-10 lg:py-20">
       <div className="rounded-2xl border border-white/[0.06] bg-white/[0.015] px-6 py-16 sm:px-12 sm:py-20">
         <h2 className="text-center text-[28px] font-semibold tracking-[-0.01em] text-white sm:text-[36px]">
           RevTether <span className="text-primary">checks the chain</span> after every critical revenue event.

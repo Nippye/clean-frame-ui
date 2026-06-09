@@ -1,6 +1,6 @@
 export function IntegrationEcosystem() {
   return (
-    <section className="mx-auto max-w-[1280px] px-6 pt-10 pb-20 lg:px-10 lg:pt-12 lg:pb-24">
+    <section className="mx-auto max-w-[1280px] px-6 pt-8 pb-12 lg:px-10 lg:pt-10 lg:pb-16">
       {/* Eyebrow */}
       <div className="text-center text-[10px] font-semibold uppercase tracking-[0.22em] text-zinc-500">
         Built to verify workflows across
@@ -18,7 +18,7 @@ export function IntegrationEcosystem() {
       </div>
 
       {/* Supporting caption */}
-      <p className="mx-auto mt-12 max-w-[640px] text-center text-[13.5px] leading-relaxed text-zinc-400">
+      <p className="mx-auto mt-6 max-w-[640px] text-center text-[13.5px] leading-relaxed text-zinc-400">
         RevTether verifies that critical revenue events propagate correctly between billing, CRM, provisioning, analytics, and finance systems.
       </p>
     </section>
