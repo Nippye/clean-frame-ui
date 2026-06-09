@@ -3,7 +3,7 @@ import { Logo } from "./Logo";
 
 export function ClosingStatement() {
   return (
-    <section className="mx-auto max-w-[1100px] px-6 pb-16 pt-4 text-center lg:px-10">
+    <section className="mx-auto max-w-[1280px] px-6 pb-16 pt-4 text-center lg:px-10">
       <ShieldCheck className="mx-auto h-4 w-4 text-zinc-500" />
       <p className="mt-3 text-[14px] leading-relaxed text-zinc-400">
         Built for teams who run revenue across{" "}
