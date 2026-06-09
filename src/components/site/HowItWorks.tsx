@@ -83,8 +83,8 @@ const GATile = () => (
 );
 
 const SalesforceTile = () => (
-  <Tile bg="bg-[#00a1e0]" ring="">
-    <SiSalesforce className="h-7 w-7 text-white" />
+  <Tile bg="bg-white" ring="ring-1 ring-white/10">
+    <SiSalesforce className="h-7 w-7 text-[#00a1e0]" />
   </Tile>
 );
 
