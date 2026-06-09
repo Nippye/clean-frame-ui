@@ -1,98 +1,90 @@
-# Verity Product Architecture — Batch A (revised)
+## RevTether homepage — final plan (information architecture + visual direction locked)
 
-Build Verity as one continuous audit workflow. Primitives first, then pages. Every screen reinforces: **event → verification → divergence → proof → recovery → verified**.
+**Order:** Hero → Product shot → Finding example → Silent failures → How it works → Security → CTA
+**Narrative:** Problem → Proof → Evidence → Categories → Process → Trust → Action
 
-The landing page at `/` stays untouched. The product lives under `/app/*`.
+### Global design philosophy
 
-## Guiding rules (non-negotiable)
+RevTether should feel like infrastructure software, not a startup landing page. Communicate: reliability, operational clarity, financial trust, technical competence. Every component must justify its existence. If a visual element does not improve comprehension, remove it. Whitespace is a primary design element.
 
-- **Proof density over information density.** Timestamps, hashes, verification IDs, lineage — not charts and widgets.
-- **Custom surfaces for verification, proof, incident, recovery flows.** Shadcn `Card` is reserved for dialogs, dropdowns, inputs, low-level primitives only. Verity surfaces use a dedicated `VerificationSurface` shell.
-- **Mono everywhere it matters:** IDs, hashes, event types, timestamps.
-- **No generic dashboard tone.** If a section feels like analytics, replace with a verification artifact.
+**Layout rules**
+- Max content width: 1200–1280px
+- Vertical spacing between sections: 96–144px
+- No decorative illustrations, floating cards, oversized gradients, glowing blobs, parallax, animated backgrounds
+- Emphasis comes from typography, spacing, composition
 
-## Phase 1 — Primitives (`src/components/verity/`)
+**Typography (Inter throughout)**
+- Hero headline: 64–72px desktop, weight 700, tight tracking, tight line height
+- Section headlines: 36–48px, weight 600–700
+- Body: 18px, comfortable line height, max width ~600px
+- Short sentences. No marketing copy blocks.
 
-Core trust primitives:
+**Motion**
+- Fade + slight translate only, 300–500ms
+- No bounce, float, dramatic scale, parallax. Motion should feel invisible.
 
-- `VerificationSurface` — the universal panel shell (subtle border, panel bg, header slot, optional footer). Replaces ad-hoc `Card` usage across all Verity pages. Variants: `default`, `inset`, `ledger`.
-- `CorrectnessCertificate` — **the signature object.** Renders verification id, timestamp, systems checked count, divergence count, verifier (e.g. "Verity Engine v2.4.1"), verification hash (mono, truncated, copyable), status seal (Verified / Divergent / Pending). Compact + full variants. Designed to feel like an enterprise certificate, not a card.
-- `VerificationDiff` — Expected vs Actual table (the centerpiece, extracted from current `DashboardMockup`).
-- `ExpectedState` / `ActualState` — single state cell with tone, title, sub.
-- `DivergencePanel` — highlighted mismatch summary (system + delta + severity).
-- `VerifyDot` + `CorrectnessBadge` — Match / Mismatch / Pending semantics.
-- `SystemIcon` — Stripe / HubSpot / Salesforce / Auth0 / Firebase / Postgres / SendGrid icon chip with consistent tone.
-- `ProofTimeline` — vertical event log with tone dots, mono timestamps, system sublabel.
-- `ProofRecord` — verification id / hash / verifier dl block (used inside `CorrectnessCertificate` full variant too).
-- `RecoveryAction` — single suggested action with **confidence %**, **blast radius** (Low/Med/High), **rollback available** (Yes/No), estimated time, preview + execute buttons.
-- `RecoveryPlan` — ordered list of `RecoveryAction`s with aggregate confidence + approval state.
-- `RevenueImpact` — "$ at risk / recovered / net exposure" stat block.
-- `PageHeader` — back link, impact badge (HIGH/MED/LOW), mono title, meta row, right-aligned actions.
-- **Trust metrics** (renamed from MetricTile, no generic naming):
-  - `TrustMetric` — base primitive (label, value, delta, sublabel). No charts.
-  - `ReliabilityMetric`, `VerificationMetric`, `IntegrityMetric` — semantic wrappers with appropriate iconography and tone.
+**Tie-breakers**
+- Believable over beautiful · Clear over feature-rich · Less UI over more UI
 
-The existing landing-page `DashboardMockup` is refactored to consume these primitives so marketing and product never drift visually.
+### Sections
 
-## Phase 1 — App shell
+1. **Hero** (~70–80vh, centered hierarchy)
+   - Eyebrow: `REVENUE INTEGRITY PLATFORM`
+   - H1: "Know when revenue breaks. Before finance does."
+   - Sub: "Continuously verify payments, billing, webhooks, and downstream systems."
+   - Buttons: `Verify Revenue Flow`, `See Demo`
+   - Nothing else.
 
-Route-level layout at `src/routes/app.tsx` (`<Outlet />` parent). Contains:
+2. **Product shot** — single **investigation surface**, no browser chrome, no fake charts, no KPI grid, no marketing overlay. Quiet and credible. Issue #1 with Expected/Actual, Revenue at risk: $1,200, `View investigation`.
 
-- `AppSidebar` — shadcn `Sidebar` (`collapsible="icon"`), groups: Workflow (Dashboard, Events, Incidents), Trust (Proof, Recovery, Rules), Surfaces (Connectors). Active route via `useRouterState`.
-- `AppTopbar` — `SidebarTrigger`, breadcrumb, environment switcher (Production / Staging / Sandbox), `CommandPaletteTrigger` showing `⌘K`.
-- `CommandPalette` — shadcn `Command` in a `Dialog`, opened via `⌘K` / `Ctrl+K`. Actions:
-  - Search event IDs (fixtures)
-  - Jump to incidents
-  - Open recovery actions
-  - Jump to proof records by verification id / hash
-  - Navigate to any Tier-1 page
-- Page content area renders only workflow content — no chrome duplication.
+3. **Finding example** — looks like evidence (incident report / audit record).
+   - Label/value rows, strong alignment, minimal color:
+     - Expected event — Invoice paid
+     - Actual downstream result — Customer record missing
+     - Affected system — HubSpot
+     - Revenue at risk — $1,200
+     - Detected — 2 minutes ago
 
-## Phase 1 — Event Detail page (`/app/events/$eventId`)
+4. **Silent failures** — three equal-width cards. Title + one sentence. No icons-as-illustrations, no gradients, no animation. Almost boring.
+   - Missing payouts — "Revenue settled incorrectly, delayed, or never received."
+   - Broken webhooks — "Critical events fail silently between systems."
+   - Reconciliation gaps — "Expected records don't match actual records."
 
-The page that defines the product. Composition top-to-bottom:
+5. **How it works** — diagrammatic, single horizontal row on desktop, four steps, one sentence each. No large cards, no feature lists.
+   - Connect — "Read-only access to Stripe, Shopify, PayPal, and more."
+   - Verify — "Validate historical and real-time event flow."
+   - Monitor — "Continuously check for divergence and failures."
+   - Act — "Investigate findings before they impact finance."
 
-```text
-PageHeader (back · HIGH IMPACT · payment_intent.succeeded · evt id · View in Stripe)
-EventMetadata (type · source · customer · amount · environment · received at)
-VerificationSurface » VerificationDiff (Expected vs Actual, 5 systems)
-VerificationSurface » DivergencePanel (3 mismatches)
-RevenueImpact ($18,240 at risk)
-VerificationSurface » ProofTimeline
-CorrectnessCertificate (full variant — id, hash, verifier, systems checked, status seal)
-VerificationSurface » RecoveryPlan (confidence, blast radius, rollback availability, preview + execute)
-```
+6. **Security** — single horizontal strip, compact, utility-focused.
+   - ✓ Read-only access · ✓ Encrypted data flow · ✓ Complete audit trail · ✓ SOC 2 readiness
 
-Reference feel: GitHub PR diff + Stripe dispute + Sentry issue + Datadog trace.
+7. **CTA** — keep existing `CtaBanner`, reduce surrounding clutter. One decision, one action.
 
-## Phase 1 — Minimal Dashboard stub (`/app/`)
+### Removed from homepage
 
-Just enough to validate primitive reuse and KPI naming. Not the full dashboard (that's Batch B).
+Trust row, integration logo strip, feature grid, large dashboard mockup, and the full Environment → Connect Stripe → Initial Scan → Divergence → Investigation → Dashboard product-tour strip.
 
-Trust KPI row (no charts):
+### Moved, not deleted
 
-- `VerificationMetric` — Verified Today
-- `IntegrityMetric` — Divergences Prevented
-- `ReliabilityMetric` — Recovered Revenue
-- `TrustMetric` — Certified Events
+Product-tour sequence relocates to a new `/how-it-works` page (visual, product-heavy — users opted in). Hero's `See Demo` links here.
 
-Below: link list to recent events (each row = mini `CorrectnessBadge` + event type + timestamp), pointing to Event Detail. Full Dashboard sections (Reliability Score, Recovery Queue, Correctness Timeline, Verification Feed) come in Batch B.
+### Files
 
-## Out of scope for Batch A (deferred to Batch B)
+- edit `src/components/site/Hero.tsx` — strip to text + 2 buttons; keep `DashboardMockup` export for reuse on `/how-it-works`
+- edit `src/routes/index.tsx` — new section order; drop `LogoStrip` and `FeatureGrid` from homepage
+- edit `src/styles.css` — ensure Inter is the base font, define spacing scale tokens if needed
+- edit `src/routes/__root.tsx` — `<link>` for Inter if not already loaded
+- new `src/components/site/ProductShot.tsx` — investigation surface
+- new `src/components/site/FindingExample.tsx` — evidence-style label/value rows
+- new `src/components/site/SilentFailures.tsx` — 3 plain cards
+- new `src/components/site/HowItWorks.tsx` — 4 diagrammatic steps, single row
+- new `src/components/site/Security.tsx` — 1-row, 4 items
+- new `src/routes/how-it-works.tsx` — full product-tour sequence with own SEO metadata
 
-Incident Detail, full Dashboard, Proof Timeline ledger, Recovery Center, Verification Rules editor, Connectors page. All will compose from Batch A primitives — zero new ad-hoc components expected.
+### Notes
 
-## Technical notes
-
-- TanStack Start file-based routing, dot-notation: `src/routes/app.tsx`, `src/routes/app.index.tsx`, `src/routes/app.events.$eventId.tsx`.
-- Each route sets distinct `head()` (title + description).
-- Mock fixtures in `src/lib/verity-fixtures.ts`: a handful of events (incl. the `payment_intent.succeeded` from the landing mockup), connectors, verifier metadata. No backend yet.
-- Dynamic route uses `Route.useParams()` + fixture lookup; unknown id → `notFoundComponent`.
-- Tokens: keep OKLCH palette; add semantic aliases `--match`, `--mismatch`, `--pending`, `--certificate-seal` mapped to existing emerald/rose/zinc/indigo so primitives never hardcode colors.
-- Sidebar wrapped in `SidebarProvider` inside `app.tsx`; `min-h-screen flex w-full` shell.
-- Command palette: `cmdk` is already bundled via shadcn `Command`; no new deps.
-- Typography: Inter for UI, `font-mono` for IDs, hashes, timestamps, event-type names.
-
-## Deliverable
-
-Batch A optimizes for **fidelity**, not page count: app shell + command palette + complete `verity/` primitive set + refactored landing mockup + perfect Event Detail page + minimal Dashboard stub with the four trust KPIs. Batch B (the other six pages) follows once you've signed off on Batch A's visual language.
+- Dark theme, existing design tokens only.
+- `LogoStrip` and `FeatureGrid` files left in place, unlinked from homepage.
+- 10-second test: What is this? · What does it catch? · What happens when something breaks?
+- Benchmarks: Stripe, Mercury, Linear, Vercel, Supabase. Not generic SaaS templates.
