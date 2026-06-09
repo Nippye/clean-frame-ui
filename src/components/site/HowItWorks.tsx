@@ -115,19 +115,19 @@ function VArrow() {
 
 function ArrowDashed() {
   return (
-    <div className="hidden flex-1 items-center justify-center px-2 lg:flex" aria-hidden>
-      <div className="flex w-full items-center gap-2">
-        <span className="h-1.5 w-1.5 rounded-full bg-primary" />
+    <div className="hidden items-center justify-center self-center lg:flex" aria-hidden>
+      <div className="flex w-full items-center">
+        <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
         <div
           className="h-px flex-1"
           style={{
             backgroundImage:
-              "linear-gradient(to right, oklch(0.7 0.18 145 / 0.5) 50%, transparent 50%)",
-            backgroundSize: "8px 1px",
+              "linear-gradient(to right, oklch(0.7 0.18 145 / 0.6) 50%, transparent 50%)",
+            backgroundSize: "6px 1px",
           }}
         />
-        <svg width="10" height="10" viewBox="0 0 10 10" className="text-primary/70">
-          <path d="M1 5h7M5 2l3 3-3 3" stroke="currentColor" strokeWidth="1.2" fill="none" />
+        <svg width="10" height="10" viewBox="0 0 10 10" className="shrink-0 text-primary/80">
+          <path d="M1 5h7M5 2l3 3-3 3" stroke="currentColor" strokeWidth="1.4" fill="none" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
       </div>
     </div>
@@ -304,7 +304,7 @@ export function HowItWorks() {
         </p>
       </div>
 
-      <div className="mt-10 grid grid-cols-1 items-stretch gap-6 lg:grid-cols-[0.75fr_24px_1.4fr_24px_0.95fr] lg:gap-3">
+      <div className="mt-10 grid grid-cols-1 items-stretch gap-6 lg:grid-cols-[0.75fr_64px_1.4fr_64px_0.95fr] lg:gap-3">
         <SideCard
           step={1}
           title="Revenue event occurs"
