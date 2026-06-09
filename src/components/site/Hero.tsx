@@ -2,7 +2,7 @@ import { ArrowRight, Check, Zap, BarChart3, Clock, AlertCircle, ShieldCheck } fr
 
 export function Hero() {
   return (
-    <section className="mx-auto max-w-[1280px] px-6 pt-12 pb-20 lg:px-10 lg:pt-16 lg:pb-28">
+    <section className="mx-auto max-w-[1280px] px-6 pt-12 pb-6 lg:px-10 lg:pt-16 lg:pb-10">
       <div className="grid grid-cols-1 items-start gap-12 lg:grid-cols-[1.05fr_1fr] lg:gap-16">
         {/* Left: text */}
         <div>

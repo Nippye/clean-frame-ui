@@ -1,6 +1,6 @@
 export function IntegrationEcosystem() {
   return (
-    <section className="mx-auto max-w-[1280px] px-6 py-20 lg:px-10 lg:py-24">
+    <section className="mx-auto max-w-[1280px] px-6 pt-10 pb-20 lg:px-10 lg:pt-12 lg:pb-24">
       {/* Eyebrow */}
       <div className="text-center text-[10px] font-semibold uppercase tracking-[0.22em] text-zinc-500">
         Built to verify workflows across
