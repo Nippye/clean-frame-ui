@@ -16,10 +16,10 @@ export function ClosingStatement() {
 export function Footer() {
   return (
     <footer className="border-t border-white/[0.06]">
-      <div className="mx-auto flex max-w-[1280px] flex-col gap-8 px-6 py-10 lg:flex-row lg:items-start lg:justify-between lg:px-10">
+      <div className="mx-auto flex max-w-[1280px] flex-col gap-6 px-6 py-6 lg:flex-row lg:items-center lg:justify-between lg:px-10">
         <div className="max-w-xs">
           <Logo />
-          <p className="mt-3 text-[13px] leading-relaxed text-zinc-500">
+          <p className="mt-2 text-[12px] leading-relaxed text-zinc-500">
             Revenue integrity for<br />modern SaaS systems.
           </p>
         </div>
