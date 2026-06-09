@@ -304,7 +304,7 @@ export function HowItWorks() {
         </p>
       </div>
 
-      <div className="mt-10 grid grid-cols-1 items-stretch gap-6 lg:grid-cols-[0.75fr_24px_1.4fr_24px_0.95fr] lg:gap-3">
+      <div className="mt-10 grid grid-cols-1 items-stretch gap-6 lg:grid-cols-[0.75fr_64px_1.4fr_64px_0.95fr] lg:gap-3">
         <SideCard
           step={1}
           title="Revenue event occurs"
