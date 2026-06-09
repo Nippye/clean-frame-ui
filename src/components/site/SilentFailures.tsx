@@ -96,7 +96,7 @@ function ImpactItem({ icon, children }: { icon: ReactNode; children: ReactNode }
 
 export function RevenueFailures() {
   return (
-    <section className="mx-auto max-w-[1280px] px-6 py-24 lg:px-10 lg:py-28">
+    <section className="mx-auto max-w-[1280px] px-6 pt-12 pb-20 lg:px-10 lg:pt-16 lg:pb-24">
       <div className="mx-auto max-w-[900px] text-center">
         <h2 className="text-[32px] font-semibold tracking-[-0.02em] text-white sm:text-[40px]">
           Most revenue failures{" "}

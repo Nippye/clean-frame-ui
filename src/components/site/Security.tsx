@@ -25,7 +25,7 @@ const items = [
 
 export function OperatorVisibility() {
   return (
-    <section className="mx-auto max-w-[1280px] px-6 py-20 lg:px-10 lg:py-24">
+    <section className="mx-auto max-w-[1280px] px-6 py-16 lg:px-10 lg:py-20">
       <h2 className="text-center text-[28px] font-semibold tracking-[-0.01em] text-white sm:text-[36px]">
         From silent drift to <span className="text-primary">operator visibility</span>
       </h2>
