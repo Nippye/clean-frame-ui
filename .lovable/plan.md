@@ -1,72 +1,59 @@
-# Rebuild SilentFailures as a Failure Chain
+## Objective
+Rebuild the detection card in `src/components/site/SilentFailures.tsx` as an investigation artifact — the visual hero of the section — with evidence-style fields, a breakout width, and dimmed counterfactual cascade.
 
-Replace the current headline + subheadline + checklist with a single, premium visual artifact: a vertical cause-and-effect chain showing how one silent revenue failure cascades, with a RevTether detection marker inserted at the break point.
+## File
+`src/components/site/SilentFailures.tsx` only.
 
-## Section structure
+## Detection card layout
 
-1. **Headline (kept)**
-   `Most revenue failures don't look like outages.`
-   No subheadline. No paragraph. Let the visual carry the weight.
+```
+DETECTED BY REVTETHER                 (eyebrow • mono uppercase • primary • pulsing dot)
 
-2. **The failure chain** — a vertical stack of 5 nodes connected by thin vertical lines, centered, max-width ~560px.
+CRM update missing                    (headline • larger, white)
 
-   ```text
-   ┌──────────────────────────────────────┐
-   │  01  Payment succeeds                │
-   │      Stripe charge captured · $1,200 │
-   └──────────────────────────────────────┘
-                    │
-   ┌──────────────────────────────────────┐
-   │  02  CRM update missing              │
-   │      HubSpot contact never created   │
-   └──────────────────────────────────────┘
-                    │
-        ┌───────────────────────────┐
-        │  ● RevTether detected     │
-        │    the break here         │
-        │    2 min after payment    │
-        └───────────────────────────┘
-                    │  (dimmed below — what would have happened)
-   ┌──────────────────────────────────────┐
-   │  03  Onboarding never triggered      │
-   └──────────────────────────────────────┘
-                    │
-   ┌──────────────────────────────────────┐
-   │  04  Customer never activates        │
-   └──────────────────────────────────────┘
-                    │
-   ┌──────────────────────────────────────┐
-   │  05  Finance discovers it 23 days    │
-   │      later, at month-end recon       │
-   └──────────────────────────────────────┘
-   ```
+Expected                Actual        (two-column on desktop, stacked on mobile)
+HubSpot contact         No contact
+created                 record found
 
-   - Nodes 01–02: full opacity, normal border (`border-white/[0.08]`)
-   - **Detection marker**: highlighted — primary-colored left border or ring, small filled dot, eyebrow-style label "REVTETHER DETECTED THE BREAK HERE", supporting line "2 minutes after payment"
-   - Nodes 03–05: dimmed (`opacity-40`) to read as "what would have happened without detection" — the counterfactual cascade
+Detected
+2 minutes after payment
 
-3. **No CTA, no extra copy.** The chain is the story.
+────────────────────────────────────  (subtle divider)
 
-## Visual details
+WITHOUT DETECTION                     (small mono uppercase label, muted)
 
-- Card surface: same token palette already in use (`bg-white/[0.02]`, `border-white/[0.08]`, rounded-lg, generous padding)
-- Step numbers in `text-zinc-500 text-xs tabular-nums`
-- Primary line in `text-zinc-100`
-- Supporting line in `text-zinc-500 text-sm`
-- Connector lines: 1px `bg-white/[0.08]`, ~24px tall between nodes
-- Detection marker uses existing `--primary` token (the orange/amber currently used elsewhere in the site)
-- Section padding consistent with neighbors: `py-24 lg:py-28`
-- Fully responsive: chain narrows on mobile but layout stays vertical (no horizontal scroll)
+Onboarding never triggered            (stacked, generous spacing, no bullets)
 
-## Files
+Customer never activated
 
-- **Edit** `src/components/site/SilentFailures.tsx` — full rewrite. Remove the Check-icon list. Remove the subheadline. Build the headline + 5-node chain with the detection marker between nodes 02 and 03.
+Finance discovers issue
+23 days later
 
-No other files change. No new dependencies. No new routes.
+────────────────────────────────────  (subtle divider)
 
-## Out of scope
+Affected system: HubSpot · Event: invoice.paid · Revenue at risk: $1,200/mo
+                                      (single muted metadata row)
+```
 
-- No icon grid revival
-- No checklist
-- No additional sections, CTAs, or testimonials
-- No changes to neighboring sections (Hero, IntegrationEcosystem, HowItWorks)
+## Visual treatment
+- Breakout width: `-mx-8 lg:-mx-16` so the card visibly extends past the chain nodes.
+- Padding: `p-6 sm:p-8`.
+- Background: `bg-primary/[0.04]`, border `border-primary/40`, `ring-1 ring-primary/15`.
+- Pulsing dot beside the eyebrow (keep existing animation).
+- Expected/Actual: CSS grid `grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4`; labels in muted mono uppercase, values in `text-zinc-200`.
+- Impact lines: stacked, `space-y-3`, no glyphs, `text-zinc-300`.
+- Metadata row: `text-[11px] text-zinc-500`, single line on desktop, wraps on mobile.
+
+## Contrast hierarchy
+- Upstream nodes 01–02: opacity 100%.
+- Detection card: opacity 100%, full primary accent.
+- "WITHOUT DETECTION" label and downstream nodes 03–05: drop downstream node opacity from 40% to 25%.
+- Connector lines into/within downstream chain: `bg-white/[0.03]`.
+
+## Copy rules
+- Use "DETECTED BY REVTETHER" — never "intervened" or any remediation language.
+- Keep the section headline unchanged: "Most revenue failures don't look like outages."
+
+## Out of Scope
+- No changes to upstream/downstream `Node` markup beyond opacity tweak.
+- No changes to other sections, routes, or dependencies.
