@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Navbar } from "@/components/site/Navbar";
 import { Hero } from "@/components/site/Hero";
+import { IntegrationEcosystem } from "@/components/site/IntegrationEcosystem";
 import { RevenueFailures } from "@/components/site/SilentFailures";
 import { HowItWorks } from "@/components/site/HowItWorks";
 import { OperatorVisibility } from "@/components/site/Security";
@@ -32,6 +33,7 @@ function Index() {
     <main className="min-h-screen bg-background text-foreground">
       <Navbar />
       <Hero />
+      <IntegrationEcosystem />
       <RevenueFailures />
       <HowItWorks />
       <OperatorVisibility />
