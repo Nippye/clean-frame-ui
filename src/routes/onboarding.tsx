@@ -62,11 +62,11 @@ function BrandBadge({ icon }: { icon: SimpleIcon }) {
 const StripeLogo = () => <BrandBadge icon={siStripe} />;
 const ShopifyLogo = () => <BrandBadge icon={siShopify} />;
 const PayPalLogo = () => <BrandBadge icon={siPaypal} />;
-const ChargebeeLogo = () => <BrandBadge icon={siChargebee} />;
+const ChargebeeLogo = () => <TextBadge label="Cb" bg="#FF7A00" />;
 const HubSpotLogo = () => <BrandBadge icon={siHubspot} />;
-const SalesforceLogo = () => <BrandBadge icon={siSalesforce} />;
-const PipedriveLogo = () => <BrandBadge icon={siPipedrive} />;
-const SegmentLogo = () => <BrandBadge icon={siSegment} />;
+const SalesforceLogo = () => <TextBadge label="SF" bg="#00A1E0" />;
+const PipedriveLogo = () => <TextBadge label="Pd" bg="#0A0A0A" />;
+const SegmentLogo = () => <TextBadge label="Sg" bg="#49B881" />;
 const GA4Logo = () => <BrandBadge icon={siGoogleanalytics} />;
 const MixpanelLogo = () => <BrandBadge icon={siMixpanel} />;
 const MoreLogo = () => (
