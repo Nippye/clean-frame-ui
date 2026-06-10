@@ -26,43 +26,62 @@ export const Route = createFileRoute("/onboarding")({
   component: OnboardingPage,
 });
 
-/* ---------------- Brand badges ---------------- */
+/* ---------------- Brand badges (Simple Icons) ---------------- */
 
-function Badge({
-  bg,
-  children,
-  textColor = "white",
-}: {
-  bg: string;
-  children: React.ReactNode;
-  textColor?: string;
-}) {
+import {
+  siStripe,
+  siShopify,
+  siPaypal,
+  siHubspot,
+  siGoogleanalytics,
+  siMixpanel,
+} from "simple-icons/icons";
+
+type SimpleIcon = { path: string; hex: string; title: string };
+
+function BrandBadge({ icon }: { icon: SimpleIcon }) {
   return (
     <div
-      className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-[15px] font-semibold"
-      style={{ background: bg, color: textColor }}
+      className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl border border-white/[0.06] bg-[oklch(0.16_0.012_265)]"
+      aria-label={icon.title}
     >
-      {children}
+      <svg
+        role="img"
+        viewBox="0 0 24 24"
+        xmlns="http://www.w3.org/2000/svg"
+        className="h-7 w-7"
+        fill={`#${icon.hex}`}
+      >
+        <title>{icon.title}</title>
+        <path d={icon.path} />
+      </svg>
     </div>
   );
 }
 
-const StripeLogo = () => <Badge bg="#635BFF">S</Badge>;
-const ShopifyLogo = () => <Badge bg="#95BF47">S</Badge>;
-const PayPalLogo = () => (
-  <Badge bg="#003087">
-    <span style={{ color: "#009CDE" }}>P</span>
-  </Badge>
-);
-const ChargebeeLogo = () => <Badge bg="#FF7A00">C</Badge>;
-const HubSpotLogo = () => <Badge bg="#FF7A59">H</Badge>;
-const SalesforceLogo = () => <Badge bg="#00A1E0">SF</Badge>;
-const PipedriveLogo = () => <Badge bg="#0A0A0A">P</Badge>;
-const SegmentLogo = () => <Badge bg="#49B881">S</Badge>;
-const GA4Logo = () => <Badge bg="#F9AB00" textColor="#1a1a1a">G</Badge>;
-const MixpanelLogo = () => <Badge bg="#7856FF">M</Badge>;
+function TextBadge({ label, bg }: { label: string; bg: string }) {
+  return (
+    <div
+      className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl text-[16px] font-semibold text-white"
+      style={{ background: bg }}
+    >
+      {label}
+    </div>
+  );
+}
+
+const StripeLogo = () => <BrandBadge icon={siStripe} />;
+const ShopifyLogo = () => <BrandBadge icon={siShopify} />;
+const PayPalLogo = () => <BrandBadge icon={siPaypal} />;
+const ChargebeeLogo = () => <TextBadge label="Cb" bg="#FF7A00" />;
+const HubSpotLogo = () => <BrandBadge icon={siHubspot} />;
+const SalesforceLogo = () => <TextBadge label="SF" bg="#00A1E0" />;
+const PipedriveLogo = () => <TextBadge label="Pd" bg="#0A0A0A" />;
+const SegmentLogo = () => <TextBadge label="Sg" bg="#49B881" />;
+const GA4Logo = () => <BrandBadge icon={siGoogleanalytics} />;
+const MixpanelLogo = () => <BrandBadge icon={siMixpanel} />;
 const MoreLogo = () => (
-  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-dashed border-white/15 text-[15px] font-semibold text-zinc-400">
+  <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl border border-dashed border-white/15 text-[18px] font-semibold text-zinc-400">
     +
   </div>
 );
