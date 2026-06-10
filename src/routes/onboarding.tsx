@@ -32,11 +32,7 @@ import {
   siStripe,
   siShopify,
   siPaypal,
-  siChargebee,
   siHubspot,
-  siSalesforce,
-  siPipedrive,
-  siSegment,
   siGoogleanalytics,
   siMixpanel,
 } from "simple-icons/icons";
