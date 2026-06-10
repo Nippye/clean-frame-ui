@@ -59,6 +59,17 @@ function BrandBadge({ icon }: { icon: SimpleIcon }) {
   );
 }
 
+function TextBadge({ label, bg }: { label: string; bg: string }) {
+  return (
+    <div
+      className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl text-[16px] font-semibold text-white"
+      style={{ background: bg }}
+    >
+      {label}
+    </div>
+  );
+}
+
 const StripeLogo = () => <BrandBadge icon={siStripe} />;
 const ShopifyLogo = () => <BrandBadge icon={siShopify} />;
 const PayPalLogo = () => <BrandBadge icon={siPaypal} />;
