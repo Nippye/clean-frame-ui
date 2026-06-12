@@ -9,7 +9,9 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SolutionsRouteImport } from './routes/solutions'
 import { Route as OnboardingRouteImport } from './routes/onboarding'
+import { Route as IntegrationsRouteImport } from './routes/integrations'
 import { Route as HowItWorksRouteImport } from './routes/how-it-works'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AppRouteImport } from './routes/app'
@@ -23,9 +25,19 @@ import { Route as AppConnectorsRouteImport } from './routes/app.connectors'
 import { Route as AppEventsIndexRouteImport } from './routes/app.events.index'
 import { Route as AppEventsEventIdRouteImport } from './routes/app.events.$eventId'
 
+const SolutionsRoute = SolutionsRouteImport.update({
+  id: '/solutions',
+  path: '/solutions',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const OnboardingRoute = OnboardingRouteImport.update({
   id: '/onboarding',
   path: '/onboarding',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IntegrationsRoute = IntegrationsRouteImport.update({
+  id: '/integrations',
+  path: '/integrations',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HowItWorksRoute = HowItWorksRouteImport.update({
@@ -94,7 +106,9 @@ export interface FileRoutesByFullPath {
   '/app': typeof AppRouteWithChildren
   '/auth': typeof AuthRoute
   '/how-it-works': typeof HowItWorksRoute
+  '/integrations': typeof IntegrationsRoute
   '/onboarding': typeof OnboardingRoute
+  '/solutions': typeof SolutionsRoute
   '/app/connectors': typeof AppConnectorsRoute
   '/app/incidents': typeof AppIncidentsRoute
   '/app/proof': typeof AppProofRoute
@@ -108,7 +122,9 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/how-it-works': typeof HowItWorksRoute
+  '/integrations': typeof IntegrationsRoute
   '/onboarding': typeof OnboardingRoute
+  '/solutions': typeof SolutionsRoute
   '/app/connectors': typeof AppConnectorsRoute
   '/app/incidents': typeof AppIncidentsRoute
   '/app/proof': typeof AppProofRoute
@@ -124,7 +140,9 @@ export interface FileRoutesById {
   '/app': typeof AppRouteWithChildren
   '/auth': typeof AuthRoute
   '/how-it-works': typeof HowItWorksRoute
+  '/integrations': typeof IntegrationsRoute
   '/onboarding': typeof OnboardingRoute
+  '/solutions': typeof SolutionsRoute
   '/app/connectors': typeof AppConnectorsRoute
   '/app/incidents': typeof AppIncidentsRoute
   '/app/proof': typeof AppProofRoute
@@ -141,7 +159,9 @@ export interface FileRouteTypes {
     | '/app'
     | '/auth'
     | '/how-it-works'
+    | '/integrations'
     | '/onboarding'
+    | '/solutions'
     | '/app/connectors'
     | '/app/incidents'
     | '/app/proof'
@@ -155,7 +175,9 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/how-it-works'
+    | '/integrations'
     | '/onboarding'
+    | '/solutions'
     | '/app/connectors'
     | '/app/incidents'
     | '/app/proof'
@@ -170,7 +192,9 @@ export interface FileRouteTypes {
     | '/app'
     | '/auth'
     | '/how-it-works'
+    | '/integrations'
     | '/onboarding'
+    | '/solutions'
     | '/app/connectors'
     | '/app/incidents'
     | '/app/proof'
@@ -186,16 +210,32 @@ export interface RootRouteChildren {
   AppRoute: typeof AppRouteWithChildren
   AuthRoute: typeof AuthRoute
   HowItWorksRoute: typeof HowItWorksRoute
+  IntegrationsRoute: typeof IntegrationsRoute
   OnboardingRoute: typeof OnboardingRoute
+  SolutionsRoute: typeof SolutionsRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/solutions': {
+      id: '/solutions'
+      path: '/solutions'
+      fullPath: '/solutions'
+      preLoaderRoute: typeof SolutionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/onboarding': {
       id: '/onboarding'
       path: '/onboarding'
       fullPath: '/onboarding'
       preLoaderRoute: typeof OnboardingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/integrations': {
+      id: '/integrations'
+      path: '/integrations'
+      fullPath: '/integrations'
+      preLoaderRoute: typeof IntegrationsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/how-it-works': {
@@ -314,18 +354,10 @@ const rootRouteChildren: RootRouteChildren = {
   AppRoute: AppRouteWithChildren,
   AuthRoute: AuthRoute,
   HowItWorksRoute: HowItWorksRoute,
+  IntegrationsRoute: IntegrationsRoute,
   OnboardingRoute: OnboardingRoute,
+  SolutionsRoute: SolutionsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
