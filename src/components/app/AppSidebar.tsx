@@ -34,14 +34,14 @@ const groups = [
   {
     label: "Trust",
     items: [
-      { title: "Proof timeline", url: "/app/proof", icon: ScrollText },
+      { title: "Proof timeline", url: "/app/proof", icon: ScrollText, comingSoon: true },
       { title: "Recovery", url: "/app/recovery", icon: Wand2 },
-      { title: "Verification rules", url: "/app/rules", icon: ListChecks },
+      { title: "Verification rules", url: "/app/rules", icon: ListChecks, comingSoon: true },
     ],
   },
   {
     label: "Surfaces",
-    items: [{ title: "Connectors", url: "/app/connectors", icon: Plug }],
+    items: [{ title: "Connectors", url: "/app/connectors", icon: Plug, comingSoon: true }],
   },
 ];
 
@@ -52,6 +52,7 @@ export function AppSidebar() {
 
   const isActive = (url: string, match?: "exact") =>
     match === "exact" ? pathname === url : pathname === url || pathname.startsWith(url + "/");
+  const getMatch = (item: { match?: "exact" }) => item.match;
 
   return (
     <Sidebar collapsible="icon" className="border-r border-white/5">
@@ -83,12 +84,20 @@ export function AppSidebar() {
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton
                       asChild
-                      isActive={isActive(item.url, item.match)}
+                      isActive={isActive(item.url, getMatch(item as { match?: "exact" }))}
                       tooltip={item.title}
                     >
                       <Link to={item.url} className="flex items-center gap-2">
                         <item.icon className="h-4 w-4" />
-                        <span>{item.title}</span>
+                        <span className="flex-1">{item.title}</span>
+                        {!collapsed && "comingSoon" in item && item.comingSoon && (
+                          <span
+                            aria-label="Coming soon"
+                            className="rounded-full border border-white/10 bg-white/[0.04] px-1.5 py-0.5 text-[9px] font-medium uppercase tracking-wider text-zinc-400"
+                          >
+                            Soon
+                          </span>
+                        )}
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>

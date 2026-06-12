@@ -1,4 +1,5 @@
 import { ArrowRight } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 
 export function CtaBanner() {
   return (
@@ -31,12 +32,12 @@ export function CtaBanner() {
             </p>
           </div>
           <div className="flex flex-col items-start gap-3 lg:items-center">
-            <a
-              href="#"
+            <Link
+              to="/auth"
               className="inline-flex h-11 items-center rounded-md bg-primary px-5 text-sm font-semibold text-primary-foreground shadow-[0_0_0_1px_oklch(0.86_0.18_155_/_0.4),0_10px_30px_-10px_oklch(0.76_0.18_155_/_0.7)] hover:brightness-110"
             >
               Verify Revenue Flow <ArrowRight className="ml-1.5 h-4 w-4" />
-            </a>
+            </Link>
             <span className="text-[12px] text-zinc-400">No credit card required.</span>
           </div>
         </div>
