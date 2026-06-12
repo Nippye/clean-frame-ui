@@ -1,4 +1,5 @@
 import { ShieldCheck } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 import { Logo } from "./Logo";
 
 export function ClosingStatement() {
@@ -24,9 +25,8 @@ export function Footer() {
           </p>
         </div>
         <nav className="flex flex-wrap items-center gap-x-7 gap-y-3 text-[13px] text-zinc-400">
-          {["How It Works", "Pricing", "Security", "Privacy", "Terms", "Contact"].map((l) => (
-            <a key={l} href="#" className="hover:text-white">{l}</a>
-          ))}
+          <Link to="/how-it-works" className="hover:text-white">How It Works</Link>
+          <Link to="/auth" className="hover:text-white">Sign in</Link>
         </nav>
         <div className="text-[12px] text-zinc-500">© 2026 RevTether</div>
       </div>

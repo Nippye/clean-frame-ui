@@ -1,4 +1,5 @@
 import { ArrowRight, Check, Zap, BarChart3, Clock, AlertCircle, ShieldCheck } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 
 export function Hero() {
   return (
@@ -21,18 +22,18 @@ export function Hero() {
             systems.
           </p>
           <div className="mt-9 flex flex-wrap items-center gap-3">
-            <a
-              href="#"
+            <Link
+              to="/auth"
               className="inline-flex h-11 items-center rounded-md bg-primary px-5 text-sm font-semibold text-primary-foreground shadow-[0_0_0_1px_oklch(0.76_0.18_155_/_0.4),0_8px_24px_-8px_oklch(0.76_0.18_155_/_0.6)] transition hover:brightness-110"
             >
               Verify Revenue Flow <ArrowRight className="ml-1.5 h-4 w-4" />
-            </a>
-            <a
-              href="#"
+            </Link>
+            <Link
+              to="/onboarding"
               className="inline-flex h-11 items-center rounded-md border border-white/15 bg-transparent px-5 text-sm font-medium text-white hover:bg-white/5"
             >
               See Demo
-            </a>
+            </Link>
           </div>
           <div className="mt-7 flex flex-wrap items-center gap-x-6 gap-y-3 text-[13px] text-zinc-400">
             {["No credit card", "Read-only access", "Connects in 2 min"].map((t) => (
@@ -109,12 +110,12 @@ function InvestigationCard() {
             <span className="text-zinc-600">•</span>
             <span>23 days unnoticed</span>
           </div>
-          <a
-            href="#"
+          <Link
+            to="/app/incidents"
             className="inline-flex items-center gap-1.5 rounded-md border border-white/15 bg-white/[0.03] px-3 py-1.5 text-[12px] font-medium text-white hover:bg-white/[0.07]"
           >
             Investigate <ArrowRight className="h-3.5 w-3.5" />
-          </a>
+          </Link>
         </div>
       </div>
     </div>
