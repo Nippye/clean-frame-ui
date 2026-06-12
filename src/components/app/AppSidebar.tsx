@@ -52,6 +52,7 @@ export function AppSidebar() {
 
   const isActive = (url: string, match?: "exact") =>
     match === "exact" ? pathname === url : pathname === url || pathname.startsWith(url + "/");
+  const getMatch = (item: { match?: "exact" }) => item.match;
 
   return (
     <Sidebar collapsible="icon" className="border-r border-white/5">
@@ -83,7 +84,7 @@ export function AppSidebar() {
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton
                       asChild
-                      isActive={isActive(item.url, item.match)}
+                      isActive={isActive(item.url, getMatch(item as { match?: "exact" }))}
                       tooltip={item.title}
                     >
                       <Link to={item.url} className="flex items-center gap-2">
