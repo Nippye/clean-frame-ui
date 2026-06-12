@@ -26,6 +26,8 @@ export function Footer() {
         </div>
         <nav className="flex flex-wrap items-center gap-x-7 gap-y-3 text-[13px] text-zinc-400">
           <Link to="/how-it-works" className="hover:text-white">How It Works</Link>
+          <Link to="/solutions" className="hover:text-white">Solutions</Link>
+          <Link to="/integrations" className="hover:text-white">Integrations</Link>
           <Link to="/auth" className="hover:text-white">Sign in</Link>
         </nav>
         <div className="text-[12px] text-zinc-500">© 2026 RevTether</div>

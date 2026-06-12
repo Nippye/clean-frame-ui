@@ -9,9 +9,9 @@ export function Navbar() {
         <div className="flex items-center gap-10">
           <Link to="/"><Logo /></Link>
           <ul className="hidden items-center gap-7 text-[13.5px] text-zinc-300 lg:flex">
-            <li>
-              <Link to="/how-it-works" className="hover:text-white">How It Works</Link>
-            </li>
+            <li><Link to="/how-it-works" className="hover:text-white">How It Works</Link></li>
+            <li><Link to="/solutions" className="hover:text-white">Solutions</Link></li>
+            <li><Link to="/integrations" className="hover:text-white">Integrations</Link></li>
           </ul>
         </div>
         <div className="flex items-center gap-5">
