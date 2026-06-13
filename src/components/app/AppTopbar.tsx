@@ -60,8 +60,9 @@ export function AppTopbar() {
             ⌘K
           </kbd>
         </button>
-        <button className="inline-flex items-center gap-1.5 rounded-md border border-white/10 bg-white/[0.02] px-2.5 py-1.5 text-xs text-zinc-300 transition-colors hover:bg-white/5">
-          <Globe className="h-3.5 w-3.5 text-emerald-400" />
+        <button className="inline-flex items-center gap-1.5 rounded-md border border-white/[0.08] bg-white/[0.02] px-2.5 py-1.5 text-xs text-zinc-400 transition-colors hover:bg-white/5 hover:text-zinc-200">
+          <span className="h-1.5 w-1.5 rounded-full bg-emerald-400/80" />
+          <Globe className="h-3.5 w-3.5 text-zinc-500" />
           Production
         </button>
       </div>
