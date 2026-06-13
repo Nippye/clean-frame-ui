@@ -294,7 +294,7 @@ function StepSystems({ onAdvance }: { onAdvance: () => void }) {
         </Card>
 
         <Card selected={selected.has("salesforce")} onClick={() => toggle("salesforce")}>
-          <BrandMark icon={siSalesforce} />
+          <TextMark label="SF" bg="#00A1E0" />
           <div className="min-w-0 flex-1">
             <div className="text-[14px] font-medium text-white">Salesforce</div>
             <div className="mt-1 text-[12.5px] text-zinc-500">CRM · accounts & opportunities</div>
