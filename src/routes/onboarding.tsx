@@ -50,6 +50,17 @@ function BrandMark({ icon, size = 28 }: { icon: SimpleIcon; size?: number }) {
   );
 }
 
+function TextMark({ label, bg, size = 28 }: { label: string; bg: string; size?: number }) {
+  return (
+    <div
+      className="flex items-center justify-center rounded-md text-[12px] font-semibold text-white"
+      style={{ width: size, height: size, background: bg }}
+    >
+      {label}
+    </div>
+  );
+}
+
 const STEPS = [
   { id: 1, label: "Connect" },
   { id: 2, label: "Systems" },
