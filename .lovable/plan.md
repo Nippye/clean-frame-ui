@@ -1,50 +1,49 @@
-# Add Integrations and Solutions pages
 
-Skip Pricing for now (waiting on your numbers). Skip Resources entirely.
+# New /onboarding flow
 
-## New routes
+Replace the current single-page `/onboarding` with a 6-step guided experience. One route, one path. End state: navigate to `/app` with a success toast.
 
-### `src/routes/integrations.tsx` → `/integrations`
-Matches `/how-it-works` layout (Navbar, centered eyebrow + H1 + sub, grid section, `CtaBanner`, `Footer`).
-
-Sections:
-1. **Hero** — eyebrow "Integrations", H1 "Every system your revenue touches.", sub explaining read-only connectors.
-2. **Payment processors** — card grid: Stripe (live), Adyen, Braintree, Paddle, Chargebee, Recurly. Each card: name, one-line role, status badge (Live / Beta / Roadmap).
-3. **Databases & warehouses** — Postgres, MySQL, Snowflake, BigQuery, Redshift.
-4. **Downstream systems** — Salesforce, HubSpot, NetSuite, QuickBooks, Segment, internal webhooks.
-5. **"Don't see yours?"** — short block pointing to custom connector + contact CTA.
-6. `CtaBanner` + `Footer`.
-
-### `src/routes/solutions.tsx` → `/solutions`
-Same chrome. Audience-segmented use cases.
-
-Sections:
-1. **Hero** — eyebrow "Solutions", H1 "Built for teams where every event is revenue.", sub.
-2. **Three audience cards** (large, stacked on mobile, 3-col on lg):
-   - **FinTech & Payments** — drift detection across processor ↔ ledger ↔ core banking. Sample findings.
-   - **SaaS Billing** — invoice paid but entitlement not granted; subscription state drift.
-   - **Marketplaces** — split payments, payouts, and seller balance reconciliation.
-   Each: icon, headline, 3 bullet "what you catch" items, 2 sample finding rows.
-3. **Outcomes strip** — 3 stats (placeholder copy: "$X recovered in first 30 days" etc., clearly generic so you can swap).
-4. **Role-based fit** — short row: CFO / CTO / Platform Eng — one line each.
-5. `CtaBanner` + `Footer`.
-
-## Navbar update (`src/components/site/Navbar.tsx`)
-Restore link list, keeping it minimal and aligned with built routes only:
+## Steps
 
 ```
-How It Works · Solutions · Integrations
+○ Connect   ○ Systems   ○ Verify   ◉ Scan   ○ Results   ○ Live
 ```
 
-No dropdowns (every link goes to a real page). Pricing intentionally omitted until numbers arrive.
+Subtle, Linear/Vercel/Stripe-style stepper across the top — small dots + labels, current step filled, prior steps checked. No giant wizard chrome.
 
-## SEO
-Each route's `head()` sets unique `title`, `description`, `og:title`, `og:description` per `tanstack-route-architecture` rules. No `og:image` (no hero image asset for these pages).
+| # | Label   | Behavior |
+|---|---------|----------|
+| 1 | Connect | "Connect Stripe" primary CTA. On click: 800ms simulated OAuth, then headline "847 events detected" + small meta (last 30 days, charges/invoices/subscriptions). Auto-advance after ~1.2s. |
+| 2 | Systems | "Detected from your environment." HubSpot card pre-selected with green "Detected" badge + checkmark. Secondary muted cards: Salesforce, Segment (unselected, click to toggle). Primary CTA "Continue" — single click. Auto-advance on confirm. |
+| 3 | Verify  | Renamed from "Auto-verify". Static list of 4 checks, each with icon + one-line description, all pre-enabled (no toggles, no rule builder): Payment → Record, Payment → Access, Payment → Finance, Subscription → Entitlements. Footer line: "Zero configuration required." CTA: "Start verification". |
+| 4 | Scan    | 3-second scan animation: progress bar + rotating status lines ("Reading 847 Stripe events…", "Cross-checking HubSpot…", "Validating entitlements…", "Reconciling ledger…"). On complete, headline morphs to "3 mismatches found — $4,180 at risk". Auto-transition after ~800ms. |
+| 5 | Results | The aha moment. KPI bar: **847** events · **21** verified flows · **3** mismatches · **$4,180** at risk. Below: Expected vs Actual side-by-side comparison card for one canonical case (Stripe `invoice.paid` ✓ vs HubSpot deal stage ✗). Two short "problem story" rows: <br>• "Customer paid. Onboarding never happened. Finance won't know for 23 days." <br>• "Subscription upgraded in Stripe. Entitlement never granted in app." <br>CTA: "Set up monitoring". |
+| 6 | Monitoring | Renamed from "Configure" (sounds like value, not work). Heading: "How would you like to be notified?" Three equal cards: **Slack**, **Email**, **Both**. ONE live preview panel below that swaps content based on selection — shows a realistic alert ("RevTether · Mismatch detected · Stripe invoice paid → HubSpot deal not updated · $1,240 at risk"). CTA: "Launch RevTether ✅". |
 
-## Style/tokens
-Reuse existing semantic tokens (`bg-background`, `text-foreground`, `text-zinc-300/400/500`, `border-white/[0.04]`, `bg-primary`) and the same typography scale used in `how-it-works.tsx` and `Hero.tsx`. No new colors, no new components beyond simple cards built inline (consistent with how `how-it-works` does it).
+## Launch behavior
+
+`Launch RevTether` → `navigate({ to: "/app" })` then `toast.success("RevTether is now monitoring your revenue systems.")` via sonner.
+
+## Implementation
+
+Single rewrite of `src/routes/onboarding.tsx`.
+
+- Local `useState<Step>` (1–6) drives the flow; no URL params, no nested routes.
+- Keep existing imports/styling tokens already in the file (`bg-background`, emerald accents, `Logo`, lucide icons, `oklch(0.17_0.012_265)` cards). No new design tokens, no new shared components — all step bodies are inline subcomponents in the same file (matches current convention).
+- Auto-advance uses `setTimeout` with cleanup in `useEffect`.
+- Scan animation: CSS width transition on a progress bar + cycling status string on an interval (no extra deps).
+- Step transitions wrapped in `animate-fade-in` for a calm feel.
+- Stepper component is a single inline row; current step uses `bg-emerald-500`, completed steps show `Check` icon in muted emerald, future steps are zinc-500 outline dots. Labels visible on `sm:` and up, dots only on mobile.
+- Replace the current 5-step `Step` row and the integration-grid body entirely. Keep the top navbar (Logo + "Need help?") and overall page shell.
+- Pulls `useNavigate` from `@tanstack/react-router` and `toast` from `sonner`.
 
 ## Out of scope
-- Pricing page (waiting on numbers).
-- Docs/Blog/Changelog.
-- Backend wiring — all CTAs continue to point at `/auth`.
+
+- No backend wiring; all numbers/events are inline constants for the demo flow.
+- No real Stripe OAuth — simulated delay only.
+- No persistence across refreshes (state resets on reload, acceptable for demo).
+- No changes to `/app`, navbar links, or other routes.
+
+## Files touched
+
+- `src/routes/onboarding.tsx` — full rewrite of the page body; route registration and metadata preserved.
