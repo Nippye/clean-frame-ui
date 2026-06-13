@@ -30,6 +30,8 @@ export const Route = createFileRoute("/app/")({
 function DashboardPage() {
   return (
     <div className="mx-auto max-w-[1400px] px-6 py-8 lg:px-10">
+      <ReportCard />
+
       <div className="mb-6">
         <div className="text-[10px] font-medium uppercase tracking-[0.16em] text-indigo-300">
           Operational trust overview
@@ -39,6 +41,7 @@ function DashboardPage() {
         </h1>
         <p className="mt-1 text-sm text-zinc-400">Production · last 24 hours</p>
       </div>
+
 
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
         <VerificationMetric
