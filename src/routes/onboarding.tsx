@@ -835,6 +835,10 @@ function OnboardingPage() {
   }, []);
 
   const launch = () => {
+    try {
+      localStorage.setItem("rt_onboarded", "1");
+      localStorage.removeItem("rt_report_card_dismissed");
+    } catch {}
     toast.success("RevTether is now monitoring your revenue systems.");
     navigate({ to: "/app" });
   };
