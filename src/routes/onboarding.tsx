@@ -1,228 +1,747 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import * as React from "react";
 import {
   ArrowRight,
   Check,
   HelpCircle,
-  Lock,
-  Workflow,
-  Search,
-  ShieldCheck,
-  Quote,
+  CreditCard,
+  UserCheck,
+  Wallet,
+  KeyRound,
+  AlertTriangle,
+  Slack,
+  Mail,
+  Bell,
+  Loader2,
+  Sparkles,
 } from "lucide-react";
+import { toast } from "sonner";
 import { Logo } from "@/components/site/Logo";
+import { siStripe, siHubspot } from "simple-icons/icons";
 
 export const Route = createFileRoute("/onboarding")({
   head: () => ({
     meta: [
-      { title: "Connect your revenue stack — RevTether" },
+      { title: "Get started — RevTether" },
       {
         name: "description",
         content:
-          "Step 1 of RevTether onboarding. Connect the billing, CRM, and analytics systems that power your revenue workflows.",
+          "Connect Stripe, auto-verify your revenue workflows, and see your first mismatch in under a minute.",
       },
     ],
   }),
   component: OnboardingPage,
 });
 
-/* ---------------- Brand badges (Simple Icons) ---------------- */
-
-import {
-  siStripe,
-  siShopify,
-  siPaypal,
-  siHubspot,
-  siGoogleanalytics,
-  siMixpanel,
-} from "simple-icons/icons";
-
 type SimpleIcon = { path: string; hex: string; title: string };
 
-function BrandBadge({ icon }: { icon: SimpleIcon }) {
+function BrandMark({ icon, size = 28 }: { icon: SimpleIcon; size?: number }) {
   return (
-    <div
-      className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl border border-white/[0.06] bg-[oklch(0.16_0.012_265)]"
-      aria-label={icon.title}
+    <svg
+      role="img"
+      viewBox="0 0 24 24"
+      xmlns="http://www.w3.org/2000/svg"
+      style={{ width: size, height: size }}
+      fill={`#${icon.hex}`}
     >
-      <svg
-        role="img"
-        viewBox="0 0 24 24"
-        xmlns="http://www.w3.org/2000/svg"
-        className="h-7 w-7"
-        fill={`#${icon.hex}`}
-      >
-        <title>{icon.title}</title>
-        <path d={icon.path} />
-      </svg>
-    </div>
+      <title>{icon.title}</title>
+      <path d={icon.path} />
+    </svg>
   );
 }
 
-function TextBadge({ label, bg }: { label: string; bg: string }) {
+function TextMark({ label, bg, size = 28 }: { label: string; bg: string; size?: number }) {
   return (
     <div
-      className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl text-[16px] font-semibold text-white"
-      style={{ background: bg }}
+      className="flex items-center justify-center rounded-md text-[12px] font-semibold text-white"
+      style={{ width: size, height: size, background: bg }}
     >
       {label}
     </div>
   );
 }
 
-const StripeLogo = () => <BrandBadge icon={siStripe} />;
-const ShopifyLogo = () => <BrandBadge icon={siShopify} />;
-const PayPalLogo = () => <BrandBadge icon={siPaypal} />;
-const ChargebeeLogo = () => <TextBadge label="Cb" bg="#FF7A00" />;
-const HubSpotLogo = () => <BrandBadge icon={siHubspot} />;
-const SalesforceLogo = () => <TextBadge label="SF" bg="#00A1E0" />;
-const PipedriveLogo = () => <TextBadge label="Pd" bg="#0A0A0A" />;
-const SegmentLogo = () => <TextBadge label="Sg" bg="#49B881" />;
-const GA4Logo = () => <BrandBadge icon={siGoogleanalytics} />;
-const MixpanelLogo = () => <BrandBadge icon={siMixpanel} />;
-const MoreLogo = () => (
-  <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl border border-dashed border-white/15 text-[18px] font-semibold text-zinc-400">
-    +
-  </div>
-);
+const STEPS = [
+  { id: 1, label: "Connect" },
+  { id: 2, label: "Systems" },
+  { id: 3, label: "Verify" },
+  { id: 4, label: "Scan" },
+  { id: 5, label: "Results" },
+  { id: 6, label: "Live" },
+] as const;
 
-/* ---------------- Small components ---------------- */
+type StepId = (typeof STEPS)[number]["id"];
 
-type Integration = {
-  id: string;
-  name: string;
-  desc: string;
-  logo: React.ReactNode;
-  recommended?: boolean;
-  disabled?: boolean;
-};
+function Stepper({ current }: { current: StepId }) {
+  return (
+    <div className="flex items-center gap-2 sm:gap-3">
+      {STEPS.map((s, i) => {
+        const done = s.id < current;
+        const active = s.id === current;
+        return (
+          <React.Fragment key={s.id}>
+            <div className="flex items-center gap-2">
+              <div
+                className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[10px] font-semibold transition-colors ${
+                  active
+                    ? "bg-emerald-500 text-black"
+                    : done
+                      ? "border border-emerald-500/40 bg-emerald-500/10 text-emerald-400"
+                      : "border border-white/15 bg-transparent text-zinc-600"
+                }`}
+              >
+                {done ? <Check className="h-3 w-3" strokeWidth={3} /> : null}
+              </div>
+              <span
+                className={`hidden text-[12px] sm:inline ${
+                  active
+                    ? "font-medium text-white"
+                    : done
+                      ? "text-zinc-400"
+                      : "text-zinc-600"
+                }`}
+              >
+                {s.label}
+              </span>
+            </div>
+            {i < STEPS.length - 1 && (
+              <div className="h-px w-4 bg-white/10 sm:w-6" />
+            )}
+          </React.Fragment>
+        );
+      })}
+    </div>
+  );
+}
 
-function IntegrationCard({
-  item,
-  selected,
-  onToggle,
+function StepShell({
+  eyebrow,
+  title,
+  sub,
+  children,
 }: {
-  item: Integration;
-  selected: boolean;
-  onToggle: () => void;
+  eyebrow: string;
+  title: React.ReactNode;
+  sub?: React.ReactNode;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="animate-fade-in">
+      <div className="text-[11px] font-semibold uppercase tracking-[0.22em] text-emerald-400">
+        {eyebrow}
+      </div>
+      <h1 className="mt-3 text-[36px] font-semibold leading-[1.06] tracking-[-0.025em] text-white sm:text-[40px]">
+        {title}
+      </h1>
+      {sub && (
+        <p className="mt-3 max-w-[600px] text-[14.5px] leading-relaxed text-zinc-400">
+          {sub}
+        </p>
+      )}
+      <div className="mt-10">{children}</div>
+    </div>
+  );
+}
+
+function PrimaryButton({
+  children,
+  onClick,
+  disabled,
+  loading,
+}: {
+  children: React.ReactNode;
+  onClick?: () => void;
+  disabled?: boolean;
+  loading?: boolean;
 }) {
   return (
     <button
-      type="button"
-      onClick={onToggle}
-      disabled={item.disabled}
-      className={`group relative flex w-full items-start gap-3 rounded-xl border p-4 text-left transition-all ${
-        selected
-          ? "border-emerald-500/60 bg-emerald-500/[0.04] shadow-[0_0_0_1px_rgba(16,185,129,0.25)]"
-          : "border-white/[0.07] bg-[oklch(0.17_0.012_265)] hover:border-white/15 hover:bg-[oklch(0.19_0.012_265)]"
-      } ${item.disabled ? "cursor-default opacity-60" : "cursor-pointer"}`}
+      onClick={onClick}
+      disabled={disabled || loading}
+      className="inline-flex items-center justify-center gap-2 rounded-md bg-emerald-500 px-5 py-2.5 text-[14px] font-semibold text-black transition-colors hover:bg-emerald-400 disabled:cursor-not-allowed disabled:opacity-50"
     >
-      {item.logo}
-      <div className="min-w-0 flex-1">
-        <div className="flex items-center gap-2">
-          <div className="text-[14px] font-medium text-white">{item.name}</div>
-          {item.recommended && (
-            <span className="rounded-md border border-emerald-500/30 bg-emerald-500/10 px-1.5 py-0.5 text-[10px] font-medium text-emerald-400">
-              Recommended
-            </span>
-          )}
-        </div>
-        <div className="mt-1 text-[12.5px] leading-snug text-zinc-500">
-          {item.desc}
-        </div>
-      </div>
-      <div
-        className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-md border transition-colors ${
-          selected
-            ? "border-emerald-500 bg-emerald-500 text-black"
-            : "border-white/15 bg-transparent"
-        }`}
-      >
-        {selected && <Check className="h-3.5 w-3.5" strokeWidth={3} />}
-      </div>
+      {loading && <Loader2 className="h-4 w-4 animate-spin" />}
+      {children}
     </button>
   );
 }
 
-function GroupHeader({
-  index,
-  title,
-  count,
-  selectedCount,
+function Card({
+  selected,
+  onClick,
+  disabled,
+  children,
 }: {
-  index: number;
-  title: string;
-  count: number;
-  selectedCount: number;
+  selected?: boolean;
+  onClick?: () => void;
+  disabled?: boolean;
+  children: React.ReactNode;
 }) {
   return (
-    <div className="mb-3 flex items-center justify-between">
-      <div className="flex items-center gap-3">
-        <div className="flex h-6 w-6 items-center justify-center rounded-md border border-white/10 bg-white/[0.03] text-[11px] font-medium text-zinc-400">
-          {index}
+    <button
+      type="button"
+      onClick={onClick}
+      disabled={disabled}
+      className={`group flex w-full items-start gap-3 rounded-xl border p-4 text-left transition-all ${
+        selected
+          ? "border-emerald-500/60 bg-emerald-500/[0.04] shadow-[0_0_0_1px_rgba(16,185,129,0.25)]"
+          : "border-white/[0.07] bg-[oklch(0.17_0.012_265)] hover:border-white/15 hover:bg-[oklch(0.19_0.012_265)]"
+      } ${disabled ? "cursor-default opacity-60" : "cursor-pointer"}`}
+    >
+      {children}
+    </button>
+  );
+}
+
+/* ---------------- Step 1: Connect ---------------- */
+
+function StepConnect({ onAdvance }: { onAdvance: () => void }) {
+  const [phase, setPhase] = React.useState<"idle" | "connecting" | "done">("idle");
+
+  React.useEffect(() => {
+    if (phase !== "done") return;
+    const t = setTimeout(onAdvance, 1200);
+    return () => clearTimeout(t);
+  }, [phase, onAdvance]);
+
+  const connect = () => {
+    setPhase("connecting");
+    setTimeout(() => setPhase("done"), 800);
+  };
+
+  return (
+    <StepShell
+      eyebrow="Step 1 of 6"
+      title={
+        <>
+          Connect Stripe<span className="text-emerald-400">.</span>
+        </>
+      }
+      sub="We'll read your last 30 days of revenue events. Read-only — we never modify your data."
+    >
+      <div className="rounded-xl border border-white/[0.07] bg-[oklch(0.17_0.012_265)] p-6">
+        <div className="flex items-center gap-4">
+          <div className="flex h-14 w-14 items-center justify-center rounded-xl border border-white/[0.06] bg-[oklch(0.16_0.012_265)]">
+            <BrandMark icon={siStripe} />
+          </div>
+          <div className="min-w-0 flex-1">
+            <div className="text-[15px] font-medium text-white">Stripe</div>
+            <div className="text-[12.5px] text-zinc-500">
+              Payments, invoices, subscriptions
+            </div>
+          </div>
+          {phase === "idle" && (
+            <PrimaryButton onClick={connect}>
+              Connect Stripe <ArrowRight className="h-4 w-4" />
+            </PrimaryButton>
+          )}
+          {phase === "connecting" && (
+            <PrimaryButton loading disabled>
+              Connecting…
+            </PrimaryButton>
+          )}
+          {phase === "done" && (
+            <div className="inline-flex items-center gap-2 rounded-md border border-emerald-500/30 bg-emerald-500/10 px-3 py-2 text-[13px] font-medium text-emerald-400">
+              <Check className="h-4 w-4" strokeWidth={3} /> Connected
+            </div>
+          )}
         </div>
-        <div className="text-[13px] font-semibold text-white">{title}</div>
-        <div className="text-[12px] text-zinc-500">{count} integrations</div>
+
+        {phase === "done" && (
+          <div className="mt-6 animate-fade-in border-t border-white/[0.06] pt-6">
+            <div className="text-[32px] font-semibold tabular-nums tracking-tight text-white">
+              847 <span className="text-zinc-500">events detected</span>
+            </div>
+            <div className="mt-2 text-[12.5px] text-zinc-500">
+              Last 30 days · 612 charges · 184 invoices · 51 subscription updates
+            </div>
+          </div>
+        )}
       </div>
-      <div className="text-[12px] text-zinc-500">
-        {selectedCount} selected
-      </div>
-    </div>
+    </StepShell>
   );
 }
 
-function Step({
-  n,
-  label,
-  state,
-}: {
-  n: number;
-  label: string;
-  state: "done" | "active" | "todo";
-}) {
+/* ---------------- Step 2: Systems ---------------- */
+
+type SystemId = "hubspot" | "salesforce" | "segment";
+
+function StepSystems({ onAdvance }: { onAdvance: () => void }) {
+  const [selected, setSelected] = React.useState<Set<SystemId>>(
+    new Set(["hubspot"]),
+  );
+  const toggle = (id: SystemId) =>
+    setSelected((s) => {
+      const n = new Set(s);
+      n.has(id) ? n.delete(id) : n.add(id);
+      return n;
+    });
+
   return (
-    <div className="flex min-w-0 items-center gap-3">
-      <div
-        className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-[12px] font-semibold ${
-          state === "active"
-            ? "bg-emerald-500 text-black"
-            : state === "done"
-              ? "border border-emerald-500/40 bg-emerald-500/10 text-emerald-400"
-              : "border border-white/10 bg-white/[0.02] text-zinc-500"
-        }`}
-      >
-        {state === "done" ? <Check className="h-3.5 w-3.5" strokeWidth={3} /> : n}
+    <StepShell
+      eyebrow="Step 2 of 6"
+      title={
+        <>
+          Detected from your environment<span className="text-emerald-400">.</span>
+        </>
+      }
+      sub="We saw outbound traffic to HubSpot. Add more downstream systems if you want them monitored."
+    >
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+        <Card selected={selected.has("hubspot")} onClick={() => toggle("hubspot")}>
+          <BrandMark icon={siHubspot} />
+          <div className="min-w-0 flex-1">
+            <div className="flex items-center gap-2">
+              <div className="text-[14px] font-medium text-white">HubSpot</div>
+              <span className="rounded-md border border-emerald-500/30 bg-emerald-500/10 px-1.5 py-0.5 text-[10px] font-medium text-emerald-400">
+                Detected
+              </span>
+            </div>
+            <div className="mt-1 text-[12.5px] text-zinc-500">CRM · deals & contacts</div>
+          </div>
+          <div className="flex h-5 w-5 items-center justify-center rounded-md border border-emerald-500 bg-emerald-500 text-black">
+            <Check className="h-3.5 w-3.5" strokeWidth={3} />
+          </div>
+        </Card>
+
+        <Card selected={selected.has("salesforce")} onClick={() => toggle("salesforce")}>
+          <TextMark label="SF" bg="#00A1E0" />
+          <div className="min-w-0 flex-1">
+            <div className="text-[14px] font-medium text-white">Salesforce</div>
+            <div className="mt-1 text-[12.5px] text-zinc-500">CRM · accounts & opportunities</div>
+          </div>
+          <div
+            className={`flex h-5 w-5 items-center justify-center rounded-md border ${
+              selected.has("salesforce")
+                ? "border-emerald-500 bg-emerald-500 text-black"
+                : "border-white/15"
+            }`}
+          >
+            {selected.has("salesforce") && <Check className="h-3.5 w-3.5" strokeWidth={3} />}
+          </div>
+        </Card>
+
+        <Card selected={selected.has("segment")} onClick={() => toggle("segment")}>
+          <TextMark label="Sg" bg="#49B881" />
+          <div className="min-w-0 flex-1">
+            <div className="text-[14px] font-medium text-white">Segment</div>
+            <div className="mt-1 text-[12.5px] text-zinc-500">Customer data platform</div>
+          </div>
+          <div
+            className={`flex h-5 w-5 items-center justify-center rounded-md border ${
+              selected.has("segment")
+                ? "border-emerald-500 bg-emerald-500 text-black"
+                : "border-white/15"
+            }`}
+          >
+            {selected.has("segment") && <Check className="h-3.5 w-3.5" strokeWidth={3} />}
+          </div>
+        </Card>
       </div>
-      <div
-        className={`truncate text-[13px] ${
-          state === "active"
-            ? "font-medium text-white"
-            : state === "done"
-              ? "text-zinc-300"
-              : "text-zinc-500"
-        }`}
-      >
-        {label}
+
+      <div className="mt-8 flex items-center justify-end">
+        <PrimaryButton onClick={onAdvance} disabled={selected.size === 0}>
+          Continue <ArrowRight className="h-4 w-4" />
+        </PrimaryButton>
       </div>
-    </div>
+    </StepShell>
   );
 }
 
-function StackRow({ logos, names }: { logos: React.ReactNode[]; names: string[] }) {
+/* ---------------- Step 3: Verify ---------------- */
+
+function StepVerify({ onAdvance }: { onAdvance: () => void }) {
+  const checks = [
+    {
+      icon: CreditCard,
+      title: "Payment → Record",
+      desc: "Every Stripe charge lands in your CRM as a deal or contact update.",
+    },
+    {
+      icon: KeyRound,
+      title: "Payment → Access",
+      desc: "Every successful payment grants the right product entitlement.",
+    },
+    {
+      icon: Wallet,
+      title: "Payment → Finance",
+      desc: "Every invoice.paid is reflected in your finance system within SLA.",
+    },
+    {
+      icon: UserCheck,
+      title: "Subscription → Entitlements",
+      desc: "Plan upgrades, downgrades, and cancels stay in sync with app access.",
+    },
+  ];
   return (
-    <div className="rounded-lg border border-white/[0.06] bg-[oklch(0.16_0.012_265)] p-3">
-      <div className="flex items-center gap-2">
-        {logos.map((l, i) => (
-          <React.Fragment key={i}>
-            <div className="scale-[0.72]">{l}</div>
-            {i < logos.length - 1 && (
-              <ArrowRight className="h-3 w-3 text-zinc-600" />
-            )}
-          </React.Fragment>
+    <StepShell
+      eyebrow="Step 3 of 6"
+      title={
+        <>
+          Four checks, ready to run<span className="text-emerald-400">.</span>
+        </>
+      }
+      sub="We generated these verification rules from your stack. No configuration required."
+    >
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+        {checks.map(({ icon: Icon, title, desc }) => (
+          <div
+            key={title}
+            className="flex items-start gap-3 rounded-xl border border-white/[0.07] bg-[oklch(0.17_0.012_265)] p-4"
+          >
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-emerald-500/30 bg-emerald-500/5">
+              <Icon className="h-4 w-4 text-emerald-400" />
+            </div>
+            <div className="min-w-0">
+              <div className="flex items-center gap-2">
+                <div className="text-[14px] font-medium text-white">{title}</div>
+                <Check className="h-3.5 w-3.5 text-emerald-400" strokeWidth={3} />
+              </div>
+              <div className="mt-1 text-[12.5px] leading-snug text-zinc-500">{desc}</div>
+            </div>
+          </div>
         ))}
       </div>
-      <div className="mt-2 text-[11.5px] leading-snug text-zinc-500">
-        {names.join(" → ")}
+
+      <div className="mt-8 flex items-center justify-between">
+        <div className="text-[12.5px] text-zinc-500">Zero configuration required.</div>
+        <PrimaryButton onClick={onAdvance}>
+          Start verification <ArrowRight className="h-4 w-4" />
+        </PrimaryButton>
+      </div>
+    </StepShell>
+  );
+}
+
+/* ---------------- Step 4: Scan ---------------- */
+
+const SCAN_LINES = [
+  "Reading 847 Stripe events…",
+  "Cross-checking HubSpot deals…",
+  "Validating entitlements…",
+  "Reconciling ledger writes…",
+];
+
+function StepScan({ onAdvance }: { onAdvance: () => void }) {
+  const [progress, setProgress] = React.useState(0);
+  const [lineIdx, setLineIdx] = React.useState(0);
+  const [done, setDone] = React.useState(false);
+
+  React.useEffect(() => {
+    const start = Date.now();
+    const duration = 3000;
+    const tick = setInterval(() => {
+      const p = Math.min(100, ((Date.now() - start) / duration) * 100);
+      setProgress(p);
+      if (p >= 100) {
+        clearInterval(tick);
+        setDone(true);
+      }
+    }, 60);
+    const lineInt = setInterval(() => {
+      setLineIdx((i) => (i + 1) % SCAN_LINES.length);
+    }, 750);
+    return () => {
+      clearInterval(tick);
+      clearInterval(lineInt);
+    };
+  }, []);
+
+  React.useEffect(() => {
+    if (!done) return;
+    const t = setTimeout(onAdvance, 900);
+    return () => clearTimeout(t);
+  }, [done, onAdvance]);
+
+  return (
+    <StepShell
+      eyebrow="Step 4 of 6"
+      title={
+        done ? (
+          <span className="animate-fade-in">
+            3 mismatches found —{" "}
+            <span className="text-rose-300">$4,180 at risk</span>
+          </span>
+        ) : (
+          <>
+            Scanning your revenue events
+            <span className="text-emerald-400">…</span>
+          </>
+        )
+      }
+      sub={
+        done
+          ? "Reconciliation complete. Here's what we found across the last 30 days."
+          : "Replaying every event end-to-end across your stack."
+      }
+    >
+      <div className="rounded-xl border border-white/[0.07] bg-[oklch(0.17_0.012_265)] p-6">
+        <div className="h-1.5 w-full overflow-hidden rounded-full bg-white/[0.05]">
+          <div
+            className="h-full rounded-full bg-emerald-500 transition-[width] duration-100 ease-linear"
+            style={{ width: `${progress}%` }}
+          />
+        </div>
+        <div className="mt-4 flex items-center gap-2 text-[13px] text-zinc-400">
+          {done ? (
+            <>
+              <Check className="h-4 w-4 text-emerald-400" strokeWidth={3} />
+              Scan complete
+            </>
+          ) : (
+            <>
+              <Loader2 className="h-3.5 w-3.5 animate-spin text-emerald-400" />
+              <span className="animate-fade-in" key={lineIdx}>
+                {SCAN_LINES[lineIdx]}
+              </span>
+            </>
+          )}
+        </div>
+      </div>
+    </StepShell>
+  );
+}
+
+/* ---------------- Step 5: Results ---------------- */
+
+function StepResults({ onAdvance }: { onAdvance: () => void }) {
+  const kpis = [
+    { label: "Events", value: "847" },
+    { label: "Verified flows", value: "21" },
+    { label: "Mismatches", value: "3", tone: "bad" as const },
+    { label: "At risk", value: "$4,180", tone: "bad" as const },
+  ];
+
+  return (
+    <StepShell
+      eyebrow="Step 5 of 6"
+      title={
+        <>
+          Here's the drift we caught<span className="text-emerald-400">.</span>
+        </>
+      }
+      sub="Three silent failures your dashboards never showed you."
+    >
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+        {kpis.map((k) => (
+          <div
+            key={k.label}
+            className="rounded-xl border border-white/[0.07] bg-[oklch(0.17_0.012_265)] p-4"
+          >
+            <div className="text-[10px] font-medium uppercase tracking-[0.16em] text-zinc-500">
+              {k.label}
+            </div>
+            <div
+              className={`mt-2 text-[22px] font-semibold tabular-nums ${
+                k.tone === "bad" ? "text-rose-300" : "text-white"
+              }`}
+            >
+              {k.value}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-2">
+        <div className="rounded-xl border border-white/[0.07] bg-[oklch(0.17_0.012_265)] p-5">
+          <div className="text-[11px] font-medium uppercase tracking-[0.16em] text-zinc-500">
+            Expected
+          </div>
+          <div className="mt-3 space-y-2 font-mono text-[12px]">
+            <Row tone="ok" k="stripe.invoice.paid" v="cus_O9k · $1,240" />
+            <Row tone="ok" k="hubspot.deal.stage" v="Closed Won" />
+            <Row tone="ok" k="app.entitlement" v="pro · granted" />
+          </div>
+        </div>
+        <div className="rounded-xl border border-rose-500/20 bg-rose-500/[0.03] p-5">
+          <div className="flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.16em] text-rose-300">
+            <AlertTriangle className="h-3.5 w-3.5" /> Actual
+          </div>
+          <div className="mt-3 space-y-2 font-mono text-[12px]">
+            <Row tone="ok" k="stripe.invoice.paid" v="cus_O9k · $1,240" />
+            <Row tone="bad" k="hubspot.deal.stage" v="— never updated" />
+            <Row tone="bad" k="app.entitlement" v="free · drift" />
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-6 space-y-2">
+        <StoryRow text="Customer paid. Onboarding never happened. Finance won't know for 23 days." />
+        <StoryRow text="Subscription upgraded in Stripe. Entitlement never granted in app." />
+      </div>
+
+      <div className="mt-8 flex items-center justify-end">
+        <PrimaryButton onClick={onAdvance}>
+          Set up monitoring <ArrowRight className="h-4 w-4" />
+        </PrimaryButton>
+      </div>
+    </StepShell>
+  );
+}
+
+function Row({ tone, k, v }: { tone: "ok" | "bad"; k: string; v: string }) {
+  return (
+    <div className="flex items-center justify-between gap-3">
+      <span className="text-zinc-500">{k}</span>
+      <span className={tone === "bad" ? "text-rose-300" : "text-zinc-200"}>{v}</span>
+    </div>
+  );
+}
+
+function StoryRow({ text }: { text: string }) {
+  return (
+    <div className="flex items-start gap-3 rounded-lg border border-white/[0.05] bg-white/[0.015] p-3">
+      <AlertTriangle className="mt-0.5 h-3.5 w-3.5 shrink-0 text-rose-300" />
+      <div className="text-[13px] leading-relaxed text-zinc-300">{text}</div>
+    </div>
+  );
+}
+
+/* ---------------- Step 6: Monitoring ---------------- */
+
+type Channel = "slack" | "email" | "both";
+
+function StepMonitoring({ onLaunch }: { onLaunch: () => void }) {
+  const [channel, setChannel] = React.useState<Channel>("slack");
+
+  return (
+    <StepShell
+      eyebrow="Step 6 of 6"
+      title={
+        <>
+          How would you like to be notified<span className="text-emerald-400">?</span>
+        </>
+      }
+      sub="We'll send you a single, evidence-grade alert the moment drift happens."
+    >
+      <div className="grid grid-cols-3 gap-3">
+        <ChannelCard
+          active={channel === "slack"}
+          onClick={() => setChannel("slack")}
+          icon={<Slack className="h-4 w-4" />}
+          label="Slack"
+          sub="#revenue-alerts"
+        />
+        <ChannelCard
+          active={channel === "email"}
+          onClick={() => setChannel("email")}
+          icon={<Mail className="h-4 w-4" />}
+          label="Email"
+          sub="On-call rotation"
+        />
+        <ChannelCard
+          active={channel === "both"}
+          onClick={() => setChannel("both")}
+          icon={<Bell className="h-4 w-4" />}
+          label="Both"
+          sub="Maximum coverage"
+        />
+      </div>
+
+      <div className="mt-5 rounded-xl border border-white/[0.07] bg-[oklch(0.17_0.012_265)] p-5">
+        <div className="text-[11px] font-medium uppercase tracking-[0.16em] text-zinc-500">
+          Live preview
+        </div>
+        <div className="mt-3 animate-fade-in" key={channel}>
+          {channel === "email" ? (
+            <EmailPreview />
+          ) : channel === "both" ? (
+            <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
+              <SlackPreview />
+              <EmailPreview />
+            </div>
+          ) : (
+            <SlackPreview />
+          )}
+        </div>
+      </div>
+
+      <div className="mt-8 flex items-center justify-end">
+        <PrimaryButton onClick={onLaunch}>
+          Launch RevTether <Sparkles className="h-4 w-4" />
+        </PrimaryButton>
+      </div>
+    </StepShell>
+  );
+}
+
+function ChannelCard({
+  active,
+  onClick,
+  icon,
+  label,
+  sub,
+}: {
+  active: boolean;
+  onClick: () => void;
+  icon: React.ReactNode;
+  label: string;
+  sub: string;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={`flex flex-col items-start gap-2 rounded-xl border p-4 text-left transition-all ${
+        active
+          ? "border-emerald-500/60 bg-emerald-500/[0.04] shadow-[0_0_0_1px_rgba(16,185,129,0.25)]"
+          : "border-white/[0.07] bg-[oklch(0.17_0.012_265)] hover:border-white/15"
+      }`}
+    >
+      <div
+        className={`flex h-8 w-8 items-center justify-center rounded-md ${
+          active
+            ? "bg-emerald-500/15 text-emerald-300"
+            : "border border-white/10 bg-white/[0.02] text-zinc-400"
+        }`}
+      >
+        {icon}
+      </div>
+      <div className="text-[14px] font-medium text-white">{label}</div>
+      <div className="text-[12px] text-zinc-500">{sub}</div>
+    </button>
+  );
+}
+
+function SlackPreview() {
+  return (
+    <div className="rounded-lg border border-white/[0.06] bg-[oklch(0.13_0.01_265)] p-4">
+      <div className="flex items-center gap-2">
+        <div className="flex h-6 w-6 items-center justify-center rounded bg-emerald-500/15 text-emerald-300">
+          <Slack className="h-3.5 w-3.5" />
+        </div>
+        <div className="text-[12.5px] font-semibold text-white">RevTether</div>
+        <div className="text-[11px] text-zinc-500">APP · 12:04 PM</div>
+      </div>
+      <div className="mt-2 border-l-2 border-rose-400/60 pl-3">
+        <div className="text-[13px] font-medium text-white">
+          Mismatch detected · $1,240 at risk
+        </div>
+        <div className="mt-1 text-[12px] text-zinc-400">
+          <span className="text-emerald-300">stripe.invoice.paid</span> →{" "}
+          <span className="text-rose-300">hubspot.deal.stage never updated</span>
+        </div>
+        <div className="mt-2 text-[11px] text-zinc-500">
+          customer · cus_O9k · evt_3PqK… · 23s ago
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function EmailPreview() {
+  return (
+    <div className="rounded-lg border border-white/[0.06] bg-[oklch(0.13_0.01_265)] p-4">
+      <div className="text-[11px] uppercase tracking-[0.14em] text-zinc-500">From</div>
+      <div className="text-[12.5px] text-zinc-200">alerts@revtether.org</div>
+      <div className="mt-2 text-[11px] uppercase tracking-[0.14em] text-zinc-500">Subject</div>
+      <div className="text-[13px] font-medium text-white">
+        [RevTether] Mismatch · $1,240 at risk
+      </div>
+      <div className="mt-3 border-t border-white/[0.05] pt-3 text-[12px] leading-relaxed text-zinc-400">
+        A Stripe invoice was paid but the corresponding HubSpot deal was never moved
+        to Closed Won. Customer <span className="text-zinc-200">cus_O9k</span> may not
+        be onboarded.
       </div>
     </div>
   );
@@ -230,191 +749,46 @@ function StackRow({ logos, names }: { logos: React.ReactNode[]; names: string[] 
 
 /* ---------------- Page ---------------- */
 
-const billing: Integration[] = [
-  { id: "stripe", name: "Stripe", desc: "Payments, invoices, subscriptions", logo: <StripeLogo />, recommended: true },
-  { id: "shopify", name: "Shopify", desc: "Orders, checkouts, refunds", logo: <ShopifyLogo /> },
-  { id: "paypal", name: "PayPal", desc: "Payments and payouts", logo: <PayPalLogo /> },
-  { id: "chargebee", name: "Chargebee", desc: "Subscription billing", logo: <ChargebeeLogo /> },
-];
-const crm: Integration[] = [
-  { id: "hubspot", name: "HubSpot", desc: "Contacts, deals, pipelines", logo: <HubSpotLogo />, recommended: true },
-  { id: "salesforce", name: "Salesforce", desc: "Accounts, opportunities", logo: <SalesforceLogo /> },
-  { id: "pipedrive", name: "Pipedrive", desc: "Sales pipeline & deals", logo: <PipedriveLogo /> },
-  { id: "more-crm", name: "More CRMs", desc: "Zoho, Close, Attio & others", logo: <MoreLogo />, disabled: true },
-];
-const analytics: Integration[] = [
-  { id: "segment", name: "Segment", desc: "Customer data platform", logo: <SegmentLogo /> },
-  { id: "ga4", name: "Google Analytics 4", desc: "Web & product analytics", logo: <GA4Logo /> },
-  { id: "mixpanel", name: "Mixpanel", desc: "Product analytics events", logo: <MixpanelLogo /> },
-  { id: "more-analytics", name: "More tools", desc: "Amplitude, PostHog & others", logo: <MoreLogo />, disabled: true },
-];
-
 function OnboardingPage() {
-  const [selected, setSelected] = React.useState<Set<string>>(
-    new Set(["stripe", "hubspot", "segment"]),
-  );
-  const toggle = (id: string) =>
-    setSelected((s) => {
-      const n = new Set(s);
-      n.has(id) ? n.delete(id) : n.add(id);
-      return n;
-    });
+  const [step, setStep] = React.useState<StepId>(1);
+  const navigate = useNavigate();
 
-  const count = (group: Integration[]) =>
-    group.filter((g) => selected.has(g.id)).length;
-  const totalSelected = selected.size;
+  const advance = React.useCallback(() => {
+    setStep((s) => (s < 6 ? ((s + 1) as StepId) : s));
+  }, []);
+
+  const launch = () => {
+    toast.success("RevTether is now monitoring your revenue systems.");
+    navigate({ to: "/app" });
+  };
 
   return (
-    <main className="min-h-screen bg-background text-foreground" style={{ fontFamily: "Inter, ui-sans-serif, system-ui" }}>
-      {/* Top navbar */}
+    <main
+      className="min-h-screen bg-background text-foreground"
+      style={{ fontFamily: "Inter, ui-sans-serif, system-ui" }}
+    >
       <header className="border-b border-white/[0.06]">
-        <div className="mx-auto flex max-w-[1280px] items-center justify-between px-6 py-4 lg:px-10">
-          <Link to="/" className="flex items-center"><Logo /></Link>
+        <div className="mx-auto flex max-w-[1100px] items-center justify-between px-6 py-4 lg:px-10">
+          <Logo />
           <button className="inline-flex items-center gap-1.5 rounded-md border border-white/10 bg-white/[0.02] px-3 py-1.5 text-[12.5px] text-zinc-300 hover:bg-white/[0.05]">
             <HelpCircle className="h-3.5 w-3.5" /> Need help?
           </button>
         </div>
       </header>
 
-      {/* Progress */}
       <div className="border-b border-white/[0.06]">
-        <div className="mx-auto max-w-[1280px] px-6 py-5 lg:px-10">
-          <div className="grid grid-cols-2 gap-x-6 gap-y-3 sm:grid-cols-3 lg:grid-cols-5">
-            <Step n={1} label="Connect systems" state="active" />
-            <Step n={2} label="Configure events" state="todo" />
-            <Step n={3} label="Connect channel" state="todo" />
-            <Step n={4} label="Run verification" state="todo" />
-            <Step n={5} label="See your first finding" state="todo" />
-          </div>
-          <div className="mt-4 h-1 w-full overflow-hidden rounded-full bg-white/[0.05]">
-            <div className="h-full w-1/5 rounded-full bg-emerald-500" />
-          </div>
+        <div className="mx-auto flex max-w-[1100px] items-center justify-center px-6 py-5 lg:px-10">
+          <Stepper current={step} />
         </div>
       </div>
 
-      {/* Body */}
-      <section className="mx-auto grid max-w-[1280px] grid-cols-1 gap-10 px-6 pb-24 pt-10 lg:grid-cols-[minmax(0,1fr)_360px] lg:gap-12 lg:px-10">
-        {/* LEFT */}
-        <div>
-          <div className="text-[11px] font-semibold uppercase tracking-[0.22em] text-emerald-400">
-            Step 1 of 5
-          </div>
-          <h1 className="mt-3 text-[40px] font-semibold leading-[1.05] tracking-[-0.025em] text-white">
-            Connect your revenue stack<span className="text-emerald-400">.</span>
-          </h1>
-          <p className="mt-3 max-w-[560px] text-[14.5px] leading-relaxed text-zinc-400">
-            Connect the systems that power your revenue workflows. We'll monitor how events flow across your stack.
-          </p>
-
-          <div className="mt-10 space-y-10">
-            <div>
-              <GroupHeader index={1} title="Billing & Payments" count={billing.length} selectedCount={count(billing)} />
-              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                {billing.map((i) => (
-                  <IntegrationCard key={i.id} item={i} selected={selected.has(i.id)} onToggle={() => toggle(i.id)} />
-                ))}
-              </div>
-            </div>
-
-            <div>
-              <GroupHeader index={2} title="CRM" count={crm.length} selectedCount={count(crm)} />
-              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                {crm.map((i) => (
-                  <IntegrationCard key={i.id} item={i} selected={selected.has(i.id)} onToggle={() => toggle(i.id)} />
-                ))}
-              </div>
-            </div>
-
-            <div>
-              <GroupHeader index={3} title="Analytics & Data" count={analytics.length} selectedCount={count(analytics)} />
-              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                {analytics.map((i) => (
-                  <IntegrationCard key={i.id} item={i} selected={selected.has(i.id)} onToggle={() => toggle(i.id)} />
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* Continue */}
-          <div className="mt-12 rounded-xl border border-white/[0.07] bg-[oklch(0.17_0.012_265)] p-5">
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-              <div>
-                <div className="text-[13px] font-medium text-white">
-                  {totalSelected} {totalSelected === 1 ? "integration" : "integrations"} selected
-                </div>
-                <div className="mt-1 inline-flex items-center gap-1.5 text-[12px] text-zinc-500">
-                  <Lock className="h-3 w-3" /> All connections are read-only. We never modify your data.
-                </div>
-              </div>
-              <button
-                disabled={totalSelected === 0}
-                className="inline-flex items-center justify-center gap-2 rounded-md bg-emerald-500 px-5 py-2.5 text-[14px] font-semibold text-black transition-colors hover:bg-emerald-400 disabled:cursor-not-allowed disabled:opacity-40"
-              >
-                Continue <ArrowRight className="h-4 w-4" />
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* RIGHT */}
-        <aside className="space-y-5 lg:sticky lg:top-6 lg:self-start">
-          <div className="rounded-xl border border-white/[0.07] bg-[oklch(0.17_0.012_265)] p-5">
-            <div className="text-[13px] font-semibold text-white">What happens next?</div>
-            <div className="mt-4 space-y-4">
-              {[
-                { Icon: Workflow, t: "We'll map your event flow", d: "Trace invoice.paid, checkout.completed and more across your stack." },
-                { Icon: Search, t: "We'll find what's missing", d: "Surface CRM updates, ledger writes and webhooks that never landed." },
-                { Icon: ShieldCheck, t: "You'll protect revenue", d: "Get evidence-grade findings before customers feel the impact." },
-              ].map(({ Icon, t, d }) => (
-                <div key={t} className="flex items-start gap-3">
-                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-emerald-500/30 bg-emerald-500/5">
-                    <Icon className="h-4 w-4 text-emerald-400" />
-                  </div>
-                  <div>
-                    <div className="text-[13px] font-medium text-white">{t}</div>
-                    <div className="mt-0.5 text-[12px] leading-snug text-zinc-500">{d}</div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="rounded-xl border border-white/[0.07] bg-[oklch(0.17_0.012_265)] p-5">
-            <div className="text-[11px] font-medium uppercase tracking-[0.18em] text-zinc-500">
-              Popular stacks connected by RevTether
-            </div>
-            <div className="mt-4 space-y-2.5">
-              <StackRow
-                logos={[<StripeLogo />, <HubSpotLogo />, <SegmentLogo />, <GA4Logo />]}
-                names={["Stripe", "HubSpot", "Segment", "GA4"]}
-              />
-              <StackRow
-                logos={[<ShopifyLogo />, <HubSpotLogo />, <SalesforceLogo />, <SegmentLogo />]}
-                names={["Shopify", "HubSpot", "Salesforce", "Segment"]}
-              />
-              <StackRow
-                logos={[<StripeLogo />, <HubSpotLogo />, <SegmentLogo />, <MixpanelLogo />]}
-                names={["Stripe", "HubSpot", "Segment", "Mixpanel"]}
-              />
-            </div>
-          </div>
-
-          <div className="rounded-xl border border-white/[0.07] bg-[oklch(0.17_0.012_265)] p-5">
-            <Quote className="h-4 w-4 text-emerald-400" />
-            <p className="mt-3 text-[13px] leading-relaxed text-zinc-300">
-              "RevTether caught $42k in silent CRM drift in our first week. It's now the first thing we check when revenue numbers look off."
-            </p>
-            <div className="mt-4 flex items-center gap-3">
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-emerald-500/30 to-emerald-500/10 text-[12px] font-semibold text-emerald-300">
-                MR
-              </div>
-              <div>
-                <div className="text-[12.5px] font-medium text-white">Maya Reyes</div>
-                <div className="text-[11.5px] text-zinc-500">Head of RevOps, Northwind</div>
-              </div>
-            </div>
-          </div>
-        </aside>
+      <section className="mx-auto max-w-[1100px] px-6 pb-24 pt-12 lg:px-10">
+        {step === 1 && <StepConnect key="1" onAdvance={advance} />}
+        {step === 2 && <StepSystems key="2" onAdvance={advance} />}
+        {step === 3 && <StepVerify key="3" onAdvance={advance} />}
+        {step === 4 && <StepScan key="4" onAdvance={advance} />}
+        {step === 5 && <StepResults key="5" onAdvance={advance} />}
+        {step === 6 && <StepMonitoring key="6" onLaunch={launch} />}
       </section>
     </main>
   );
