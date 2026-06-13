@@ -14,6 +14,8 @@ import {
   Bell,
   Loader2,
   Sparkles,
+  Clock,
+  X,
 } from "lucide-react";
 import { toast } from "sonner";
 import { Logo } from "@/components/site/Logo";
