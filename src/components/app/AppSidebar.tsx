@@ -27,23 +27,19 @@ const groups = [
     label: "Workflow",
     items: [
       { title: "Dashboard", url: "/app", icon: LayoutDashboard, match: "exact" as const },
-      { title: "Events", url: "/app/events", icon: Activity },
       { title: "Incidents", url: "/app/incidents", icon: AlertOctagon },
+      { title: "Events", url: "/app/events", icon: Activity },
     ],
   },
   {
     label: "Trust",
     items: [
-      { title: "Proof timeline", url: "/app/proof", icon: ScrollText, comingSoon: true },
       { title: "Recovery", url: "/app/recovery", icon: Wand2 },
-      { title: "Verification rules", url: "/app/rules", icon: ListChecks, comingSoon: true },
     ],
   },
-  {
-    label: "Surfaces",
-    items: [{ title: "Connectors", url: "/app/connectors", icon: Plug, comingSoon: true }],
-  },
 ];
+// Unused imports retained for future menu items
+void ScrollText; void ListChecks; void Plug;
 
 export function AppSidebar() {
   const { state } = useSidebar();
