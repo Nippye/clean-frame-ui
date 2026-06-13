@@ -1,5 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ChevronRight } from "lucide-react";
+import * as React from "react";
+import { ChevronRight, Check, X, FileText, Share2 } from "lucide-react";
+import { toast } from "sonner";
 import {
   VerificationMetric,
   IntegrityMetric,
