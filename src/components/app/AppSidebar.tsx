@@ -86,14 +86,6 @@ export function AppSidebar() {
                       <Link to={item.url} className="flex items-center gap-2">
                         <item.icon className="h-4 w-4" />
                         <span className="flex-1">{item.title}</span>
-                        {!collapsed && "comingSoon" in item && item.comingSoon && (
-                          <span
-                            aria-label="Coming soon"
-                            className="rounded-full border border-white/10 bg-white/[0.04] px-1.5 py-0.5 text-[9px] font-medium uppercase tracking-wider text-zinc-400"
-                          >
-                            Soon
-                          </span>
-                        )}
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
