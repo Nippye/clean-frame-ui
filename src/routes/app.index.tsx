@@ -1,5 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ChevronRight } from "lucide-react";
+import * as React from "react";
+import { ChevronRight, Check, X, FileText, Share2 } from "lucide-react";
+import { toast } from "sonner";
 import {
   VerificationMetric,
   IntegrityMetric,
@@ -28,6 +30,8 @@ export const Route = createFileRoute("/app/")({
 function DashboardPage() {
   return (
     <div className="mx-auto max-w-[1400px] px-6 py-8 lg:px-10">
+      <ReportCard />
+
       <div className="mb-6">
         <div className="text-[10px] font-medium uppercase tracking-[0.16em] text-indigo-300">
           Operational trust overview
@@ -37,6 +41,7 @@ function DashboardPage() {
         </h1>
         <p className="mt-1 text-sm text-zinc-400">Production · last 24 hours</p>
       </div>
+
 
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
         <VerificationMetric
@@ -146,3 +151,112 @@ function DashboardPage() {
     </div>
   );
 }
+
+function ReportCard() {
+  const [visible, setVisible] = React.useState(false);
+
+  React.useEffect(() => {
+    try {
+      const onboarded = localStorage.getItem("rt_onboarded") === "1";
+      const dismissed = localStorage.getItem("rt_report_card_dismissed") === "1";
+      setVisible(onboarded && !dismissed);
+    } catch {}
+  }, []);
+
+  if (!visible) return null;
+
+  const dismiss = () => {
+    try {
+      localStorage.setItem("rt_report_card_dismissed", "1");
+    } catch {}
+    setVisible(false);
+  };
+
+  const summary =
+    "RevTether — Revenue Integrity Report\n\n847 events analyzed\n21 verified flows\n3 mismatches detected\n$4,180 at risk";
+
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(summary);
+      toast.success("Summary copied to clipboard.");
+    } catch {
+      toast.error("Couldn't copy summary.");
+    }
+  };
+
+  const stats = [
+    { label: "Events analyzed", value: "847" },
+    { label: "Verified flows", value: "21" },
+    { label: "Mismatches", value: "3", tone: "bad" as const },
+    { label: "At risk", value: "$4,180", tone: "bad" as const },
+  ];
+
+  return (
+    <div className="mb-6 overflow-hidden rounded-xl border border-emerald-500/20 bg-[oklch(0.18_0.012_265)]">
+      <div className="h-0.5 w-full bg-gradient-to-r from-emerald-500/60 via-emerald-400/40 to-transparent" />
+      <div className="p-5">
+        <div className="flex items-start justify-between gap-4">
+          <div className="min-w-0">
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[12px] text-emerald-300">
+              <span className="inline-flex items-center gap-1.5">
+                <Check className="h-3.5 w-3.5" strokeWidth={3} /> Monitoring active
+              </span>
+              <span className="inline-flex items-center gap-1.5">
+                <Check className="h-3.5 w-3.5" strokeWidth={3} /> First scan complete
+              </span>
+            </div>
+            <div className="mt-2 text-[10px] font-medium uppercase tracking-[0.18em] text-zinc-500">
+              Revenue integrity report ready
+            </div>
+            <h2 className="mt-1 text-lg font-semibold tracking-tight text-white">
+              Your first reconciliation is ready to share.
+            </h2>
+          </div>
+          <button
+            onClick={dismiss}
+            aria-label="Dismiss"
+            className="rounded-md p-1.5 text-zinc-500 transition-colors hover:bg-white/[0.04] hover:text-zinc-300"
+          >
+            <X className="h-4 w-4" />
+          </button>
+        </div>
+
+        <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
+          {stats.map((s) => (
+            <div
+              key={s.label}
+              className="rounded-lg border border-white/[0.06] bg-[oklch(0.16_0.012_265)] p-3"
+            >
+              <div className="text-[10px] font-medium uppercase tracking-[0.14em] text-zinc-500">
+                {s.label}
+              </div>
+              <div
+                className={`mt-1 text-[18px] font-semibold tabular-nums ${
+                  s.tone === "bad" ? "text-rose-300" : "text-white"
+                }`}
+              >
+                {s.value}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-4 flex flex-wrap items-center gap-2">
+          <button
+            onClick={() => toast.info("PDF export is rolling out next week.")}
+            className="inline-flex items-center gap-1.5 rounded-md bg-emerald-500 px-3 py-1.5 text-[12.5px] font-semibold text-black transition-colors hover:bg-emerald-400"
+          >
+            <FileText className="h-3.5 w-3.5" /> Download PDF
+          </button>
+          <button
+            onClick={copy}
+            className="inline-flex items-center gap-1.5 rounded-md border border-white/10 bg-white/[0.02] px-3 py-1.5 text-[12.5px] font-medium text-zinc-200 transition-colors hover:bg-white/[0.05]"
+          >
+            <Share2 className="h-3.5 w-3.5" /> Share summary
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+

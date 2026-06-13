@@ -1,49 +1,72 @@
+# Onboarding Step 5 polish + post-launch report card
 
-# New /onboarding flow
+Tighten the Results step around a single CTA (`Set up monitoring`) with three narrative additions, and surface the Revenue Integrity Report as a reward on first `/app` load.
 
-Replace the current single-page `/onboarding` with a 6-step guided experience. One route, one path. End state: navigate to `/app` with a success toast.
+## Step 5 — Results (additions, single CTA preserved)
 
-## Steps
+Order inside the step:
 
 ```
-○ Connect   ○ Systems   ○ Verify   ◉ Scan   ○ Results   ○ Live
+KPI bar  →  Timestamps  →  Affected Systems  →  Problem Stories  →  What Happens Next  →  [ Set up monitoring ]
 ```
 
-Subtle, Linear/Vercel/Stripe-style stepper across the top — small dots + labels, current step filled, prior steps checked. No giant wizard chrome.
+1. **Timestamps** — appended to the existing "3 mismatches found — $4,180 at risk" headline as a muted sub-line:
+   ```
+   Detected in 2m 14s · Earliest issue dates back 23 days
+   ```
+   `text-sm text-zinc-500`, single line, tabular-nums on the durations.
 
-| # | Label   | Behavior |
-|---|---------|----------|
-| 1 | Connect | "Connect Stripe" primary CTA. On click: 800ms simulated OAuth, then headline "847 events detected" + small meta (last 30 days, charges/invoices/subscriptions). Auto-advance after ~1.2s. |
-| 2 | Systems | "Detected from your environment." HubSpot card pre-selected with green "Detected" badge + checkmark. Secondary muted cards: Salesforce, Segment (unselected, click to toggle). Primary CTA "Continue" — single click. Auto-advance on confirm. |
-| 3 | Verify  | Renamed from "Auto-verify". Static list of 4 checks, each with icon + one-line description, all pre-enabled (no toggles, no rule builder): Payment → Record, Payment → Access, Payment → Finance, Subscription → Entitlements. Footer line: "Zero configuration required." CTA: "Start verification". |
-| 4 | Scan    | 3-second scan animation: progress bar + rotating status lines ("Reading 847 Stripe events…", "Cross-checking HubSpot…", "Validating entitlements…", "Reconciling ledger…"). On complete, headline morphs to "3 mismatches found — $4,180 at risk". Auto-transition after ~800ms. |
-| 5 | Results | The aha moment. KPI bar: **847** events · **21** verified flows · **3** mismatches · **$4,180** at risk. Below: Expected vs Actual side-by-side comparison card for one canonical case (Stripe `invoice.paid` ✓ vs HubSpot deal stage ✗). Two short "problem story" rows: <br>• "Customer paid. Onboarding never happened. Finance won't know for 23 days." <br>• "Subscription upgraded in Stripe. Entitlement never granted in app." <br>CTA: "Set up monitoring". |
-| 6 | Monitoring | Renamed from "Configure" (sounds like value, not work). Heading: "How would you like to be notified?" Three equal cards: **Slack**, **Email**, **Both**. ONE live preview panel below that swaps content based on selection — shows a realistic alert ("RevTether · Mismatch detected · Stripe invoice paid → HubSpot deal not updated · $1,240 at risk"). CTA: "Launch RevTether ✅". |
+2. **Affected Systems** — new compact panel below the Expected vs Actual card. Reuses `VerificationSurface` + `SystemIcon` from `src/components/verity/primitives.tsx`:
+   | System | Role | Status |
+   |---|---|---|
+   | Stripe | Source | `✓` emerald |
+   | HubSpot | CRM sync | `✕ Missing update` rose |
+   | Internal App | Entitlements | `✕ Missing entitlement` rose |
+   | QuickBooks | Finance | `✓ Healthy` emerald |
+   Establishes that RevTether checks propagation across systems, not just Stripe.
 
-## Launch behavior
+3. **What Happens Next** — checklist block placed directly above the CTA. Bridges problem → monitoring:
+   ```
+   What happens next?
+   ✓ We'll monitor invoice.paid
+   ✓ We'll monitor subscription.updated
+   ✓ Alerts arrive within minutes
+   ✓ No code changes required
+   ```
+   Inline subcomponent, emerald check icons, no surface chrome — keeps it light.
 
-`Launch RevTether` → `navigate({ to: "/app" })` then `toast.success("RevTether is now monitoring your revenue systems.")` via sonner.
+CTA stays exactly one button: `Set up monitoring`. No share, no download, no secondary action in onboarding.
 
-## Implementation
+## Step 6 — Monitoring
 
-Single rewrite of `src/routes/onboarding.tsx`.
+Unchanged. Slack / Email / Both + live preview + `Launch RevTether ✅`.
 
-- Local `useState<Step>` (1–6) drives the flow; no URL params, no nested routes.
-- Keep existing imports/styling tokens already in the file (`bg-background`, emerald accents, `Logo`, lucide icons, `oklch(0.17_0.012_265)` cards). No new design tokens, no new shared components — all step bodies are inline subcomponents in the same file (matches current convention).
-- Auto-advance uses `setTimeout` with cleanup in `useEffect`.
-- Scan animation: CSS width transition on a progress bar + cycling status string on an interval (no extra deps).
-- Step transitions wrapped in `animate-fade-in` for a calm feel.
-- Stepper component is a single inline row; current step uses `bg-emerald-500`, completed steps show `Check` icon in muted emerald, future steps are zinc-500 outline dots. Labels visible on `sm:` and up, dots only on mobile.
-- Replace the current 5-step `Step` row and the integration-grid body entirely. Keep the top navbar (Logo + "Need help?") and overall page shell.
-- Pulls `useNavigate` from `@tanstack/react-router` and `toast` from `sonner`.
+## /app first-load — Revenue Integrity Report card
+
+New dismissible card pinned at the top of `src/routes/app.index.tsx`, shown only on the first visit after onboarding completion. Frames the report as a reward for activation.
+
+Layout:
+```
+✓ Monitoring active     ✓ First scan complete
+
+Revenue Integrity Report Ready
+847 events analyzed · 21 verified flows · 3 mismatches detected · $4,180 at risk
+
+[ Download PDF ]   [ Share Summary ]                              ✕ dismiss
+```
+
+- Visual: emerald top border, `VerificationSurface` shell, KPI row uses the same tokens as Step 5 so the user recognizes the artifact.
+- Dismiss: `localStorage.setItem("rt_report_card_dismissed", "1")` — card hidden on subsequent loads.
+- Trigger: shown when `localStorage.getItem("rt_onboarded") === "1"` AND not dismissed. The Launch CTA in Step 6 sets `rt_onboarded` right before `navigate({ to: "/app" })` + toast.
+- Buttons are stubs for now (`Download PDF` → `toast.info("Report download coming soon")`, `Share Summary` → copies a plain-text summary to clipboard via `navigator.clipboard.writeText`). No PDF generation, no backend.
 
 ## Out of scope
 
-- No backend wiring; all numbers/events are inline constants for the demo flow.
-- No real Stripe OAuth — simulated delay only.
-- No persistence across refreshes (state resets on reload, acceptable for demo).
-- No changes to `/app`, navbar links, or other routes.
+- Real PDF generation, share links, email delivery.
+- Persisting onboarding state server-side (localStorage only — acceptable for the demo).
+- Any change to Steps 1–4 or Step 6.
 
 ## Files touched
 
-- `src/routes/onboarding.tsx` — full rewrite of the page body; route registration and metadata preserved.
+- `src/routes/onboarding.tsx` — Step 5 body: add timestamps sub-line, Affected Systems panel, What Happens Next block. Step 6: set `localStorage` flag on Launch.
+- `src/routes/app.index.tsx` — render dismissible Revenue Integrity Report card at top when flag is set.

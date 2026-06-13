@@ -14,6 +14,8 @@ import {
   Bell,
   Loader2,
   Sparkles,
+  Clock,
+  X,
 } from "lucide-react";
 import { toast } from "sonner";
 import { Logo } from "@/components/site/Logo";
@@ -542,6 +544,18 @@ function StepResults({ onAdvance }: { onAdvance: () => void }) {
         ))}
       </div>
 
+      <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-1 text-[12.5px] text-zinc-500">
+        <span className="inline-flex items-center gap-1.5">
+          <Clock className="h-3.5 w-3.5 text-zinc-600" />
+          Detected in <span className="tabular-nums text-zinc-300">2m 14s</span>
+        </span>
+        <span className="text-zinc-700">·</span>
+        <span>
+          Earliest issue dates back{" "}
+          <span className="tabular-nums text-zinc-300">23 days</span>
+        </span>
+      </div>
+
       <div className="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-2">
         <div className="rounded-xl border border-white/[0.07] bg-[oklch(0.17_0.012_265)] p-5">
           <div className="text-[11px] font-medium uppercase tracking-[0.16em] text-zinc-500">
@@ -565,9 +579,40 @@ function StepResults({ onAdvance }: { onAdvance: () => void }) {
         </div>
       </div>
 
+      <div className="mt-6 rounded-xl border border-white/[0.07] bg-[oklch(0.17_0.012_265)] p-5">
+        <div className="text-[11px] font-medium uppercase tracking-[0.16em] text-zinc-500">
+          Affected systems
+        </div>
+        <div className="mt-3 divide-y divide-white/[0.05]">
+          <SystemRow name="Stripe" role="Source of truth" status="ok" detail="Healthy" />
+          <SystemRow name="HubSpot" role="CRM sync" status="bad" detail="Missing update" />
+          <SystemRow name="Internal App" role="Entitlements" status="bad" detail="Missing entitlement" />
+          <SystemRow name="QuickBooks" role="Finance" status="ok" detail="Healthy" />
+        </div>
+      </div>
+
       <div className="mt-6 space-y-2">
         <StoryRow text="Customer paid. Onboarding never happened. Finance won't know for 23 days." />
         <StoryRow text="Subscription upgraded in Stripe. Entitlement never granted in app." />
+      </div>
+
+      <div className="mt-6 rounded-xl border border-emerald-500/20 bg-emerald-500/[0.03] p-5">
+        <div className="text-[11px] font-medium uppercase tracking-[0.16em] text-emerald-300">
+          What happens next
+        </div>
+        <ul className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2">
+          {[
+            "We'll monitor invoice.paid",
+            "We'll monitor subscription.updated",
+            "Alerts arrive within minutes",
+            "No code changes required",
+          ].map((t) => (
+            <li key={t} className="flex items-start gap-2 text-[13px] text-zinc-200">
+              <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-emerald-400" strokeWidth={3} />
+              {t}
+            </li>
+          ))}
+        </ul>
       </div>
 
       <div className="mt-8 flex items-center justify-end">
@@ -576,6 +621,38 @@ function StepResults({ onAdvance }: { onAdvance: () => void }) {
         </PrimaryButton>
       </div>
     </StepShell>
+  );
+}
+
+function SystemRow({
+  name,
+  role,
+  status,
+  detail,
+}: {
+  name: string;
+  role: string;
+  status: "ok" | "bad";
+  detail: string;
+}) {
+  const ok = status === "ok";
+  return (
+    <div className="flex items-center justify-between gap-3 py-2.5">
+      <div className="min-w-0">
+        <div className="text-[13.5px] font-medium text-white">{name}</div>
+        <div className="text-[12px] text-zinc-500">{role}</div>
+      </div>
+      <div
+        className={`inline-flex items-center gap-1.5 rounded-md border px-2 py-1 text-[11.5px] font-medium ${
+          ok
+            ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-300"
+            : "border-rose-500/30 bg-rose-500/10 text-rose-300"
+        }`}
+      >
+        {ok ? <Check className="h-3 w-3" strokeWidth={3} /> : <X className="h-3 w-3" strokeWidth={3} />}
+        {detail}
+      </div>
+    </div>
   );
 }
 
@@ -758,6 +835,10 @@ function OnboardingPage() {
   }, []);
 
   const launch = () => {
+    try {
+      localStorage.setItem("rt_onboarded", "1");
+      localStorage.removeItem("rt_report_card_dismissed");
+    } catch {}
     toast.success("RevTether is now monitoring your revenue systems.");
     navigate({ to: "/app" });
   };
