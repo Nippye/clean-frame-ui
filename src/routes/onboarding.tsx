@@ -17,12 +17,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { Logo } from "@/components/site/Logo";
-import {
-  siStripe,
-  siHubspot,
-  siSalesforce,
-  siSegment,
-} from "simple-icons/icons";
+import { siStripe, siHubspot } from "simple-icons/icons";
 
 export const Route = createFileRoute("/onboarding")({
   head: () => ({
