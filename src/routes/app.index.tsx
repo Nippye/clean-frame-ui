@@ -37,8 +37,6 @@ function DashboardPage() {
 
   return (
     <div className="mx-auto max-w-[1400px] px-6 py-10 lg:px-10">
-      <ReportCard />
-
       <Header
         atRisk={totalAtRisk}
         divergences={divergent.length}
@@ -51,7 +49,7 @@ function DashboardPage() {
         <ImpactBySystem events={divergent} />
       </section>
 
-      <WhyThisMatters />
+      <PotentialImpact events={divergent} />
 
       <CorrectnessTimeline />
 
@@ -130,21 +128,29 @@ function ExpectedVsActualHero({ event }: { event: (typeof events)[number] }) {
         <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 text-[12px]">
           <span className="inline-flex items-center gap-1.5 text-rose-300">
             <span className="h-1.5 w-1.5 rounded-full bg-rose-400" />
-            Divergent
+            Mismatch detected
           </span>
           <span className="text-zinc-600">·</span>
           <span className="font-mono text-zinc-300">{event.type}</span>
           <span className="text-zinc-600">·</span>
           <span className="text-zinc-400">{event.source} → {customer}</span>
-          <span className="text-zinc-600">·</span>
-          <span className="text-zinc-500">detected 17m ago</span>
         </div>
 
-        <div className="mt-4 flex flex-wrap items-baseline gap-x-6 gap-y-2">
-          <div className="text-[40px] font-semibold leading-none tracking-tight text-rose-300 tabular-nums">
-            ${event.revenueAtRisk.toLocaleString("en-US")}
+        <div className="mt-4 flex flex-wrap items-end gap-x-8 gap-y-3">
+          <div>
+            <div className="text-[40px] font-semibold leading-none tracking-tight text-rose-300 tabular-nums">
+              ${event.revenueAtRisk.toLocaleString("en-US")}
+            </div>
+            <div className="mt-2 text-[13px] text-zinc-500">revenue at risk on this event</div>
           </div>
-          <div className="text-[13px] text-zinc-500">revenue at risk on this event</div>
+          <div className="text-[12px] leading-relaxed text-zinc-500">
+            <div>
+              Detected in <span className="text-zinc-300 tabular-nums">2m 14s</span>
+            </div>
+            <div>
+              Issue active for <span className="text-zinc-300 tabular-nums">17m</span>
+            </div>
+          </div>
         </div>
 
         <div className="mt-8 grid grid-cols-1 gap-x-12 gap-y-3 md:grid-cols-2">
@@ -225,6 +231,19 @@ function actualBadLabel(system: SystemKey, check: string) {
   return `${systemLabel(system)} · ${verbs[system] ?? "mismatch"}`;
 }
 
+function incidentReason(system: SystemKey) {
+  const reasons: Partial<Record<SystemKey, string>> = {
+    hubspot: "CRM record missing",
+    salesforce: "CRM record missing",
+    entitlements: "Entitlement not granted",
+    auth0: "Access not granted",
+    sendgrid: "Onboarding email not sent",
+    postgres: "Ledger row stale",
+    firebase: "Profile not synced",
+  };
+  return reasons[system] ?? "Downstream system out of sync";
+}
+
 /* ------------------------------------------------------------------ */
 /* Active incidents — compact list                                     */
 /* ------------------------------------------------------------------ */
@@ -250,7 +269,11 @@ function ActiveIncidents({ events: list }: { events: typeof events }) {
                   <div className="truncate text-[13px] text-zinc-100">
                     {e.source} → {failedSystem ? systemLabel(failedSystem.system) : "downstream"}
                   </div>
-                  <div className="truncate text-[11.5px] text-zinc-500">{customer}</div>
+                  <div className="truncate text-[11.5px] text-zinc-500">
+                    {failedSystem ? incidentReason(failedSystem.system) : "Downstream system out of sync"}
+                    <span className="px-1.5 text-zinc-700">·</span>
+                    {customer}
+                  </div>
                 </div>
                 <div className="text-right">
                   <div className="font-mono text-[13px] tabular-nums text-zinc-200">
@@ -320,25 +343,47 @@ function ImpactBySystem({ events: list }: { events: typeof events }) {
 }
 
 /* ------------------------------------------------------------------ */
-/* Why this matters — 3 bullets, no card                               */
+/* Potential impact — derived from active incidents                    */
 /* ------------------------------------------------------------------ */
 
-function WhyThisMatters() {
-  const items = [
-    "Onboarding blocked — customers paid but can't access the product.",
-    "Entitlements missing — paid features stay locked behind a free plan.",
-    "Finance reconciliation delayed — ledger drifts from the source of truth.",
-  ];
+function PotentialImpact({ events: list }: { events: typeof events }) {
+  // Aggregate by failing system family
+  const counts = { crm: 0, entitlement: 0, email: 0, ledger: 0 };
+  let financeDelta = 0;
+  for (const e of list) {
+    for (const r of e.rows.filter((x) => x.actualTone === "bad")) {
+      if (r.system === "hubspot" || r.system === "salesforce") counts.crm += 1;
+      else if (r.system === "entitlements" || r.system === "auth0") counts.entitlement += 1;
+      else if (r.system === "sendgrid") counts.email += 1;
+      else if (r.system === "postgres" || r.system === "firebase") {
+        counts.ledger += 1;
+        financeDelta += e.revenueAtRisk;
+      }
+    }
+  }
+
+  const items: string[] = [];
+  if (counts.email > 0)
+    items.push(`${counts.email} ${counts.email === 1 ? "customer" : "customers"} may not receive onboarding emails`);
+  if (counts.entitlement > 0)
+    items.push(`${counts.entitlement} upgraded ${counts.entitlement === 1 ? "customer lacks entitlements" : "customers lack entitlements"}`);
+  if (counts.crm > 0)
+    items.push(`${counts.crm} ${counts.crm === 1 ? "deal is" : "deals are"} missing from the CRM pipeline`);
+  if (financeDelta > 0)
+    items.push(`Finance reconciliation may be off by $${financeDelta.toLocaleString("en-US")}`);
+
+  if (items.length === 0) return null;
+
   return (
     <section className="mb-14">
       <div className="text-[10px] font-medium uppercase tracking-[0.18em] text-zinc-500">
-        Why this matters
+        Potential impact
       </div>
       <ul className="mt-3 space-y-2">
         {items.map((t) => (
           <li
             key={t}
-            className="flex items-start gap-3 text-[13.5px] text-zinc-400"
+            className="flex items-start gap-3 text-[13.5px] text-zinc-300"
           >
             <span className="mt-[9px] h-[3px] w-[3px] shrink-0 rounded-full bg-zinc-500" />
             <span>{t}</span>
@@ -494,63 +539,3 @@ function SectionHeader({
   );
 }
 
-/* ------------------------------------------------------------------ */
-/* Post-onboarding report card — single quiet line                     */
-/* ------------------------------------------------------------------ */
-
-function ReportCard() {
-  const [visible, setVisible] = React.useState(false);
-
-  React.useEffect(() => {
-    try {
-      const onboarded = localStorage.getItem("rt_onboarded") === "1";
-      const dismissed = localStorage.getItem("rt_report_card_dismissed") === "1";
-      setVisible(onboarded && !dismissed);
-    } catch {
-      /* noop */
-    }
-  }, []);
-
-  if (!visible) return null;
-
-  const dismiss = () => {
-    try {
-      localStorage.setItem("rt_report_card_dismissed", "1");
-    } catch {
-      /* noop */
-    }
-    setVisible(false);
-  };
-
-  return (
-    <div className="mb-8 flex items-center justify-between gap-4 rounded-md bg-white/[0.03] px-4 py-2.5 text-[12.5px]">
-      <div className="flex flex-wrap items-baseline gap-x-3 text-zinc-400">
-        <span className="inline-flex items-center gap-1.5 text-emerald-400/90">
-          <Check className="h-3.5 w-3.5" /> Monitoring active
-        </span>
-        <span className="text-zinc-600">·</span>
-        <span>
-          First scan complete —{" "}
-          <span className="font-mono tabular-nums text-zinc-200">847</span> events,{" "}
-          <span className="font-mono tabular-nums text-rose-300">3</span> mismatches,{" "}
-          <span className="font-mono tabular-nums text-rose-300">$4,180</span> at risk.
-        </span>
-      </div>
-      <div className="flex items-center gap-1">
-        <Link
-          to="/app/incidents"
-          className="text-[12px] font-medium text-zinc-300 transition-colors hover:text-white"
-        >
-          View report →
-        </Link>
-        <button
-          onClick={dismiss}
-          aria-label="Dismiss"
-          className="rounded-md p-1 text-zinc-500 transition-colors hover:bg-white/[0.04] hover:text-zinc-300"
-        >
-          <X className="h-3.5 w-3.5" />
-        </button>
-      </div>
-    </div>
-  );
-}
