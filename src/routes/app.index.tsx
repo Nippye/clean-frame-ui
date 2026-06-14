@@ -231,6 +231,19 @@ function actualBadLabel(system: SystemKey, check: string) {
   return `${systemLabel(system)} · ${verbs[system] ?? "mismatch"}`;
 }
 
+function incidentReason(system: SystemKey) {
+  const reasons: Partial<Record<SystemKey, string>> = {
+    hubspot: "CRM record missing",
+    salesforce: "CRM record missing",
+    entitlements: "Entitlement not granted",
+    auth0: "Access not granted",
+    sendgrid: "Onboarding email not sent",
+    postgres: "Ledger row stale",
+    firebase: "Profile not synced",
+  };
+  return reasons[system] ?? "Downstream system out of sync";
+}
+
 /* ------------------------------------------------------------------ */
 /* Active incidents — compact list                                     */
 /* ------------------------------------------------------------------ */
