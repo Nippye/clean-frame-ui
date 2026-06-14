@@ -128,21 +128,29 @@ function ExpectedVsActualHero({ event }: { event: (typeof events)[number] }) {
         <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 text-[12px]">
           <span className="inline-flex items-center gap-1.5 text-rose-300">
             <span className="h-1.5 w-1.5 rounded-full bg-rose-400" />
-            Divergent
+            Mismatch detected
           </span>
           <span className="text-zinc-600">·</span>
           <span className="font-mono text-zinc-300">{event.type}</span>
           <span className="text-zinc-600">·</span>
           <span className="text-zinc-400">{event.source} → {customer}</span>
-          <span className="text-zinc-600">·</span>
-          <span className="text-zinc-500">detected 17m ago</span>
         </div>
 
-        <div className="mt-4 flex flex-wrap items-baseline gap-x-6 gap-y-2">
-          <div className="text-[40px] font-semibold leading-none tracking-tight text-rose-300 tabular-nums">
-            ${event.revenueAtRisk.toLocaleString("en-US")}
+        <div className="mt-4 flex flex-wrap items-end gap-x-8 gap-y-3">
+          <div>
+            <div className="text-[40px] font-semibold leading-none tracking-tight text-rose-300 tabular-nums">
+              ${event.revenueAtRisk.toLocaleString("en-US")}
+            </div>
+            <div className="mt-2 text-[13px] text-zinc-500">revenue at risk on this event</div>
           </div>
-          <div className="text-[13px] text-zinc-500">revenue at risk on this event</div>
+          <div className="text-[12px] leading-relaxed text-zinc-500">
+            <div>
+              Detected in <span className="text-zinc-300 tabular-nums">2m 14s</span>
+            </div>
+            <div>
+              Issue active for <span className="text-zinc-300 tabular-nums">17m</span>
+            </div>
+          </div>
         </div>
 
         <div className="mt-8 grid grid-cols-1 gap-x-12 gap-y-3 md:grid-cols-2">
