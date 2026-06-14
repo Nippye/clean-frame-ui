@@ -1,72 +1,78 @@
-# Onboarding Step 5 polish + post-launch report card
 
-Tighten the Results step around a single CTA (`Set up monitoring`) with three narrative additions, and surface the Revenue Integrity Report as a reward on first `/app` load.
+# /app Dashboard Redesign
 
-## Step 5 — Results (additions, single CTA preserved)
+Anchor the dashboard on one question: **"Is revenue breaking right now?"** The signature moat is the **Expected vs Actual** outcome view nobody else shows.
 
-Order inside the step:
+## Final structure
 
-```
-KPI bar  →  Timestamps  →  Affected Systems  →  Problem Stories  →  What Happens Next  →  [ Set up monitoring ]
-```
-
-1. **Timestamps** — appended to the existing "3 mismatches found — $4,180 at risk" headline as a muted sub-line:
-   ```
-   Detected in 2m 14s · Earliest issue dates back 23 days
-   ```
-   `text-sm text-zinc-500`, single line, tabular-nums on the durations.
-
-2. **Affected Systems** — new compact panel below the Expected vs Actual card. Reuses `VerificationSurface` + `SystemIcon` from `src/components/verity/primitives.tsx`:
-   | System | Role | Status |
-   |---|---|---|
-   | Stripe | Source | `✓` emerald |
-   | HubSpot | CRM sync | `✕ Missing update` rose |
-   | Internal App | Entitlements | `✕ Missing entitlement` rose |
-   | QuickBooks | Finance | `✓ Healthy` emerald |
-   Establishes that RevTether checks propagation across systems, not just Stripe.
-
-3. **What Happens Next** — checklist block placed directly above the CTA. Bridges problem → monitoring:
-   ```
-   What happens next?
-   ✓ We'll monitor invoice.paid
-   ✓ We'll monitor subscription.updated
-   ✓ Alerts arrive within minutes
-   ✓ No code changes required
-   ```
-   Inline subcomponent, emerald check icons, no surface chrome — keeps it light.
-
-CTA stays exactly one button: `Set up monitoring`. No share, no download, no secondary action in onboarding.
-
-## Step 6 — Monitoring
-
-Unchanged. Slack / Email / Both + live preview + `Launch RevTether ✅`.
-
-## /app first-load — Revenue Integrity Report card
-
-New dismissible card pinned at the top of `src/routes/app.index.tsx`, shown only on the first visit after onboarding completion. Frames the report as a reward for activation.
-
-Layout:
-```
-✓ Monitoring active     ✓ First scan complete
-
-Revenue Integrity Report Ready
-847 events analyzed · 21 verified flows · 3 mismatches detected · $4,180 at risk
-
-[ Download PDF ]   [ Share Summary ]                              ✕ dismiss
+```text
+┌──────────────────────────────────────────────────────────────┐
+│  Revenue Integrity              [Run audit] [Report] [+ Sys] │
+│  $5,980 at risk · 3 active divergences · 287 days verified   │
+├──────────────────────────────────────────────────────────────┤
+│  HERO — Highest Impact Incident                              │
+│  Stripe payment_succeeded · 17 min ago · $3,140              │
+│                                                              │
+│  Expected             Actual                                 │
+│  ✓ CRM contact        ✕ CRM missing                          │
+│  ✓ Access granted     ✓ Access granted                       │
+│  ✓ Invoice synced     ✕ Invoice not synced                   │
+│                                            [ Investigate ]   │
+├────────────────────────────┬─────────────────────────────────┤
+│  Active incidents (3)      │  Impact by system               │
+│  compact list              │  bars: Stripe / HubSpot / QB    │
+├────────────────────────────┴─────────────────────────────────┤
+│  Why this matters                                            │
+│  • Onboarding blocked                                        │
+│  • Entitlements missing                                      │
+│  • Finance reconciliation delayed                            │
+├──────────────────────────────────────────────────────────────┤
+│  Correctness timeline · 30 days                              │
+├──────────────────────────────────────────────────────────────┤
+│  Recent verification evidence                                │
+└──────────────────────────────────────────────────────────────┘
 ```
 
-- Visual: emerald top border, `VerificationSurface` shell, KPI row uses the same tokens as Step 5 so the user recognizes the artifact.
-- Dismiss: `localStorage.setItem("rt_report_card_dismissed", "1")` — card hidden on subsequent loads.
-- Trigger: shown when `localStorage.getItem("rt_onboarded") === "1"` AND not dismissed. The Launch CTA in Step 6 sets `rt_onboarded` right before `navigate({ to: "/app" })` + toast.
-- Buttons are stubs for now (`Download PDF` → `toast.info("Report download coming soon")`, `Share Summary` → copies a plain-text summary to clipboard via `navigator.clipboard.writeText`). No PDF generation, no backend.
+## Sections
+
+1. **Header** — "Revenue Integrity" title; single-line subhead `$5,980 at risk · 3 active divergences · 287 days verified` (lock-in stated plainly, no "retained"). Quick actions (`Run audit`, `Generate report`, `Add system`) demoted to small ghost buttons top-right.
+
+2. **Expected vs Actual hero (the moat)** — Two-column checklist for the top divergent event with revenue impact, detection age, source event, single `Investigate` CTA. Only section permitted to use red emphasis. Replaces the current `FlowDiagram`.
+
+3. **Active incidents** + **Impact by system** — Side-by-side. Left: compact 3-row list of unresolved divergences (source → target, $ at risk, age) linking to `/app/incidents`. Right: horizontal bars per system (Stripe, HubSpot, Auth0, QuickBooks) showing $ verified vs $ at risk — answers "where is the leak concentrated?"
+
+4. **Why this matters** — Three muted bullets, no card chrome, placed between the incident grid and the timeline. Translates technical drift into business consequences:
+   - Onboarding blocked
+   - Entitlements missing
+   - Finance reconciliation delayed
+
+5. **Correctness timeline** — Lightweight 30-day daily bars (verified vs divergent), no chart library.
+
+6. **Recent verification evidence** — Quiet table of last ~8 events. "Evidence" language, not "Events".
+
+## Visual language (premium restraint)
+
+- Remove ~70% of visible borders; lean on 2–4% background tone lifts and spacing.
+- Only **one** red element on screen at a time (the hero ✕ rows / $ impact).
+- No colored card backgrounds, no neon, no glows. Near-black surfaces, zinc text scale.
+- Typography does hierarchy: tighter tracking on numbers, larger hero number, chrome labels in `uppercase tracking-[0.16em] text-zinc-500`.
+- Strip the post-onboarding `ReportCard` to one neutral line so it doesn't compete with the hero.
+
+## Navigation update (`AppSidebar`)
+
+Final items: **Dashboard, Incidents, Evidence, Rules, Resolution, Systems**.
+- Rename `Events` label → `Evidence` (route stays `/app/events`).
+- Rename `Recovery` label → `Resolution` (route stays `/app/recovery`).
+- Add `Rules` (`/app/rules`) and `Systems` (`/app/connectors`) back into the nav.
+
+## Files to change
+
+- `src/routes/app.index.tsx` — full restructure per layout above; remove `FlowDiagram`, add `ExpectedVsActual` hero, `ActiveIncidents`, `ImpactBySystem`, `WhyThisMatters`, `CorrectnessTimeline`, `RecentEvidence` sections. Quiet `ReportCard`.
+- `src/components/app/AppSidebar.tsx` — relabel + reorder nav items.
+- `src/lib/verity-fixtures.ts` — read-only; derive expected/actual checks, per-system totals, 30-day series from existing `events`. No schema changes.
 
 ## Out of scope
 
-- Real PDF generation, share links, email delivery.
-- Persisting onboarding state server-side (localStorage only — acceptable for the demo).
-- Any change to Steps 1–4 or Step 6.
-
-## Files touched
-
-- `src/routes/onboarding.tsx` — Step 5 body: add timestamps sub-line, Affected Systems panel, What Happens Next block. Step 6: set `localStorage` flag on Launch.
-- `src/routes/app.index.tsx` — render dismissible Revenue Integrity Report card at top when flag is set.
+- Backend / data model changes.
+- New routes or dependencies.
+- Real timeline chart library — plain divs only.

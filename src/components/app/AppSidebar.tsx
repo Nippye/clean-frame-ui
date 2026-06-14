@@ -1,11 +1,10 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import {
   LayoutDashboard,
-  Activity,
   AlertOctagon,
-  ScrollText,
-  Wand2,
+  FileCheck2,
   ListChecks,
+  Wand2,
   Plug,
   ShieldCheck,
 } from "lucide-react";
@@ -28,18 +27,18 @@ const groups = [
     items: [
       { title: "Dashboard", url: "/app", icon: LayoutDashboard, match: "exact" as const },
       { title: "Incidents", url: "/app/incidents", icon: AlertOctagon },
-      { title: "Events", url: "/app/events", icon: Activity },
+      { title: "Evidence", url: "/app/events", icon: FileCheck2 },
     ],
   },
   {
     label: "Trust",
     items: [
-      { title: "Recovery", url: "/app/recovery", icon: Wand2 },
+      { title: "Rules", url: "/app/rules", icon: ListChecks },
+      { title: "Resolution", url: "/app/recovery", icon: Wand2 },
+      { title: "Systems", url: "/app/connectors", icon: Plug },
     ],
   },
 ];
-// Unused imports retained for future menu items
-void ScrollText; void ListChecks; void Plug;
 
 export function AppSidebar() {
   const { state } = useSidebar();
