@@ -343,25 +343,47 @@ function ImpactBySystem({ events: list }: { events: typeof events }) {
 }
 
 /* ------------------------------------------------------------------ */
-/* Why this matters — 3 bullets, no card                               */
+/* Potential impact — derived from active incidents                    */
 /* ------------------------------------------------------------------ */
 
-function WhyThisMatters() {
-  const items = [
-    "Onboarding blocked — customers paid but can't access the product.",
-    "Entitlements missing — paid features stay locked behind a free plan.",
-    "Finance reconciliation delayed — ledger drifts from the source of truth.",
-  ];
+function PotentialImpact({ events: list }: { events: typeof events }) {
+  // Aggregate by failing system family
+  const counts = { crm: 0, entitlement: 0, email: 0, ledger: 0 };
+  let financeDelta = 0;
+  for (const e of list) {
+    for (const r of e.rows.filter((x) => x.actualTone === "bad")) {
+      if (r.system === "hubspot" || r.system === "salesforce") counts.crm += 1;
+      else if (r.system === "entitlements" || r.system === "auth0") counts.entitlement += 1;
+      else if (r.system === "sendgrid") counts.email += 1;
+      else if (r.system === "postgres" || r.system === "firebase") {
+        counts.ledger += 1;
+        financeDelta += e.revenueAtRisk;
+      }
+    }
+  }
+
+  const items: string[] = [];
+  if (counts.email > 0)
+    items.push(`${counts.email} ${counts.email === 1 ? "customer" : "customers"} may not receive onboarding emails`);
+  if (counts.entitlement > 0)
+    items.push(`${counts.entitlement} upgraded ${counts.entitlement === 1 ? "customer lacks entitlements" : "customers lack entitlements"}`);
+  if (counts.crm > 0)
+    items.push(`${counts.crm} ${counts.crm === 1 ? "deal is" : "deals are"} missing from the CRM pipeline`);
+  if (financeDelta > 0)
+    items.push(`Finance reconciliation may be off by $${financeDelta.toLocaleString("en-US")}`);
+
+  if (items.length === 0) return null;
+
   return (
     <section className="mb-14">
       <div className="text-[10px] font-medium uppercase tracking-[0.18em] text-zinc-500">
-        Why this matters
+        Potential impact
       </div>
       <ul className="mt-3 space-y-2">
         {items.map((t) => (
           <li
             key={t}
-            className="flex items-start gap-3 text-[13.5px] text-zinc-400"
+            className="flex items-start gap-3 text-[13.5px] text-zinc-300"
           >
             <span className="mt-[9px] h-[3px] w-[3px] shrink-0 rounded-full bg-zinc-500" />
             <span>{t}</span>
