@@ -269,7 +269,11 @@ function ActiveIncidents({ events: list }: { events: typeof events }) {
                   <div className="truncate text-[13px] text-zinc-100">
                     {e.source} → {failedSystem ? systemLabel(failedSystem.system) : "downstream"}
                   </div>
-                  <div className="truncate text-[11.5px] text-zinc-500">{customer}</div>
+                  <div className="truncate text-[11.5px] text-zinc-500">
+                    {failedSystem ? incidentReason(failedSystem.system) : "Downstream system out of sync"}
+                    <span className="px-1.5 text-zinc-700">·</span>
+                    {customer}
+                  </div>
                 </div>
                 <div className="text-right">
                   <div className="font-mono text-[13px] tabular-nums text-zinc-200">
