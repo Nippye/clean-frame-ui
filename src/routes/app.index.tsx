@@ -37,8 +37,6 @@ function DashboardPage() {
 
   return (
     <div className="mx-auto max-w-[1400px] px-6 py-10 lg:px-10">
-      <ReportCard />
-
       <Header
         atRisk={totalAtRisk}
         divergences={divergent.length}
@@ -51,7 +49,7 @@ function DashboardPage() {
         <ImpactBySystem events={divergent} />
       </section>
 
-      <WhyThisMatters />
+      <PotentialImpact events={divergent} />
 
       <CorrectnessTimeline />
 
