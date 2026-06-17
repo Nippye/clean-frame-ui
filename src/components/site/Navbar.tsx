@@ -22,7 +22,7 @@ export function Navbar() {
             to="/auth"
             className="inline-flex h-9 items-center rounded-md bg-primary px-3.5 text-[13px] font-semibold text-primary-foreground transition-colors hover:brightness-110"
           >
-            Find My Leaks <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
+            Verify Revenue Flow <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
           </Link>
         </div>
       </nav>

@@ -99,12 +99,9 @@ export function RevenueFailures() {
     <section className="mx-auto max-w-[1280px] px-6 pt-8 pb-12 lg:px-10 lg:pt-10 lg:pb-14">
       <div className="mx-auto max-w-[900px] text-center">
         <h2 className="text-[32px] font-semibold tracking-[-0.02em] text-white sm:text-[40px]">
-          Usage-based billing leaks{" "}
-          <span className="text-primary">3–9% of revenue.</span>
+          Most revenue failures{" "}
+          <span className="text-primary">don&apos;t look like outages.</span>
         </h2>
-        <p className="mx-auto mt-4 max-w-[38rem] text-[15px] leading-relaxed text-zinc-400">
-          Metering-to-billing gaps don&apos;t trigger alerts. They silently compound — month after month — while finance treats the loss as expected churn.
-        </p>
       </div>
 
       <div className="relative mx-auto mt-16 max-w-[760px]">
