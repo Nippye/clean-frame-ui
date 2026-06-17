@@ -11,13 +11,13 @@ export const Route = createFileRoute("/solutions")({
       {
         name: "description",
         content:
-          "Continuous revenue reconciliation for FinTech, SaaS billing, and marketplace teams — catch silent ledger drift before customers and finance do.",
+          "Automated revenue recovery for usage-based SaaS — find and fix the metering-to-billing gaps that silently drain 3–9% of your ARR.",
       },
       { property: "og:title", content: "Solutions — RevTether" },
       {
         property: "og:description",
         content:
-          "FinTech, SaaS billing, and marketplaces — every team where every event is revenue.",
+          "Stop losing 3–9% of revenue to metering-to-billing gaps. RevTether recovers it automatically.",
       },
     ],
   }),
@@ -51,17 +51,17 @@ const solutions: Solution[] = [
   },
   {
     icon: CreditCard,
-    eyebrow: "SaaS billing",
-    title: "Invoice paid, entitlement never granted.",
-    body: "Verify that every successful payment results in the right subscription state, seats, and feature flags downstream.",
+    eyebrow: "Usage-based SaaS",
+    title: "4,218 calls metered. 3,891 billed. $2,740 lost.",
+    body: "Reconcile every metered event against every invoice line item. Find the gaps. Recover the revenue. Automatically.",
     catches: [
-      "Invoice paid · entitlement service silent",
-      "Subscription cancelled in Stripe · still active in product",
-      "Plan upgrade billed · seats not provisioned",
+      "Metered usage events dropped before reaching billing",
+      "Usage aggregation rounding errors compounding monthly",
+      "Plan upgrade billed · usage tier not updated",
     ],
     findings: [
-      { label: "Invoice paid · entitlement missing", meta: "Acme Co. · 1h ago" },
-      { label: "Subscription state divergence", meta: "14 accounts · today" },
+      { label: "Metering gap · under-billed", meta: "$2,740/mo · recovered" },
+      { label: "Aggregation drift", meta: "23 accounts · auto-fixed" },
     ],
   },
   {
@@ -82,9 +82,9 @@ const solutions: Solution[] = [
 ];
 
 const roles = [
-  { label: "CFO", body: "Numbers that match across processor, ledger, and ERP — every close." },
-  { label: "CTO", body: "Continuous proof the integration layer is doing what it's paid to do." },
-  { label: "Platform Eng", body: "Findings with expected vs actual and the exact event that diverged." },
+  { label: "CFO", body: "Know exactly how much revenue your billing stack drops — and see it recovered before month-end." },
+  { label: "CTO", body: "Stop burning engineering sprints on manual reconciliation. RevTether automates the fix." },
+  { label: "Platform Eng", body: "Exact diffs between metered usage and billed amounts, down to the event that diverged." },
 ];
 
 function SolutionsPage() {
@@ -96,12 +96,12 @@ function SolutionsPage() {
         <div className="text-[11px] font-semibold uppercase tracking-[0.22em] text-zinc-500">
           Solutions
         </div>
-        <h1 className="mx-auto mt-7 max-w-[22ch] text-[44px] font-bold leading-[1.05] tracking-[-0.02em] text-white sm:text-[56px]">
-          Built for teams where every event is revenue.
+        <h1 className="mx-auto mt-7 max-w-[24ch] text-[44px] font-bold leading-[1.05] tracking-[-0.02em] text-white sm:text-[56px]">
+          Revenue recovery for every billing model.
         </h1>
         <p className="mx-auto mt-6 max-w-[40rem] text-[17px] leading-relaxed text-zinc-400">
-          Three shapes of the same problem — silent divergence between systems
-          that everyone assumed were in sync.
+          Three shapes of the same problem — metering, billing, and settlement
+          systems that silently disagree, costing you money every month.
         </p>
       </section>
 
@@ -160,9 +160,9 @@ function SolutionsPage() {
       <section className="mx-auto max-w-[1200px] px-6 py-12 lg:px-10">
         <div className="grid grid-cols-1 gap-px overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.08] sm:grid-cols-3">
           {[
-            { stat: "< 1 day", label: "to first verified finding" },
-            { stat: "90 days", label: "of history replayed on connect" },
-            { stat: "100%", label: "of events reconciled, not sampled" },
+            { stat: "< 24 hrs", label: "to first recovered dollars" },
+            { stat: "11x", label: "average return on investment" },
+            { stat: "3–9%", label: "of ARR recovered on average" },
           ].map((m) => (
             <div key={m.label} className="bg-background p-8 text-center">
               <div className="text-[34px] font-semibold tracking-[-0.02em] text-white">

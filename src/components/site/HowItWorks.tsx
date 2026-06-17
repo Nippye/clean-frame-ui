@@ -302,9 +302,9 @@ export function HowItWorks() {
     <section className="mx-auto max-w-[1280px] px-6 py-8 lg:px-10 lg:py-10">
       <div className="mx-auto max-w-[820px] text-center">
         <h2 className="text-[32px] font-semibold tracking-[-0.02em] text-white sm:text-[44px] sm:leading-[1.1]">
-          RevTether <span className="text-primary">checks the chain</span>
+          RevTether <span className="text-primary">closes the gap</span>
           <br />
-          after every critical revenue event.
+          between what you metered and what you billed.
         </h2>
       </div>
 

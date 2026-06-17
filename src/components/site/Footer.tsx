@@ -7,8 +7,8 @@ export function ClosingStatement() {
     <section className="mx-auto max-w-[1280px] px-6 pb-6 pt-2 text-center lg:px-10">
       <ShieldCheck className="mx-auto h-4 w-4 text-zinc-500" />
       <p className="mt-2 text-[13px] leading-relaxed text-zinc-400">
-        Built for teams who run revenue across{" "}
-        <span className="text-primary">too many systems</span> to trust any single dashboard.
+        Built for usage-based SaaS teams who are{" "}
+        <span className="text-primary">tired of losing revenue</span> to billing gaps they can't see.
       </p>
     </section>
   );
@@ -21,7 +21,7 @@ export function Footer() {
         <div className="max-w-xs">
           <Logo />
           <p className="mt-2 text-[12px] leading-relaxed text-zinc-500">
-            Revenue integrity for<br />modern SaaS systems.
+            Automated revenue recovery<br />for usage-based SaaS.
           </p>
         </div>
         <nav className="flex flex-wrap items-center gap-x-7 gap-y-3 text-[13px] text-zinc-400">

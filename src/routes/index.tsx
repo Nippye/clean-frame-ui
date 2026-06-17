@@ -11,17 +11,17 @@ import { ClosingStatement, Footer } from "@/components/site/Footer";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "RevTether — Revenue Integrity Platform" },
+      { title: "RevTether — Stop Losing 3–9% of Revenue to Billing Gaps" },
       {
         name: "description",
         content:
-          "Know when revenue breaks. Before finance does. RevTether verifies that payments, upgrades, refunds, and trial conversions propagate correctly across CRM, provisioning, analytics, and finance systems.",
+          "Usage-based SaaS companies lose 3–9% of revenue through metering-to-billing gaps. RevTether finds the leaks, quantifies the loss, and recovers the money automatically.",
       },
-      { property: "og:title", content: "RevTether — Revenue Integrity Platform" },
+      { property: "og:title", content: "RevTether — Stop Losing 3–9% of Revenue to Billing Gaps" },
       {
         property: "og:description",
         content:
-          "Catch silent revenue failures before finance discovers them.",
+          "Find, quantify, and recover the 3–9% of revenue your billing stack silently drops.",
       },
     ],
   }),

@@ -20,15 +20,14 @@ export function CtaBanner() {
         <div className="relative grid grid-cols-1 items-center gap-10 lg:grid-cols-[1.2fr_1fr]">
           <div>
             <h2 className="text-[30px] font-semibold leading-[1.15] tracking-[-0.01em] text-white sm:text-[40px]">
-              The payment succeeded.<br />
-              The <span className="text-primary">customer</span> never did.
+              Your billing stack is<br />
+              <span className="text-primary">silently losing money.</span>
             </h2>
             <p className="mt-5 max-w-[44ch] text-[14px] leading-relaxed text-zinc-300/90">
-              Somewhere between Stripe, your CRM, entitlements, and onboarding systems, something broke.
+              Every month, metering-to-billing gaps compound. Finance masks the loss as expected churn. Engineering doesn't know where to look.
             </p>
             <p className="mt-3 max-w-[44ch] text-[14px] leading-relaxed text-zinc-300/90">
-              RevTether continuously verifies every revenue event and alerts you before customers disappear
-              and finance starts asking questions.
+              RevTether finds the gaps, quantifies the impact, and recovers the revenue — before your next close.
             </p>
           </div>
           <div className="flex flex-col items-start gap-3 lg:items-center">
@@ -36,9 +35,9 @@ export function CtaBanner() {
               to="/auth"
               className="inline-flex h-11 items-center rounded-md bg-primary px-5 text-sm font-semibold text-primary-foreground shadow-[0_0_0_1px_oklch(0.86_0.18_155_/_0.4),0_10px_30px_-10px_oklch(0.76_0.18_155_/_0.7)] hover:brightness-110"
             >
-              Verify Revenue Flow <ArrowRight className="ml-1.5 h-4 w-4" />
+              Find My Revenue Leaks <ArrowRight className="ml-1.5 h-4 w-4" />
             </Link>
-            <span className="text-[12px] text-zinc-400">No credit card required.</span>
+            <span className="text-[12px] text-zinc-400">SOC 2 compliant. Read-only access. Results in 24 hours.</span>
           </div>
         </div>
       </div>
